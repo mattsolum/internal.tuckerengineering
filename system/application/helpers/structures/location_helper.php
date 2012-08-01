@@ -21,19 +21,20 @@ class StructLocation
 	//unit numbers when the address is presented as '123-A Generic St.'
 	function set_street_1()
 	{
-	
+		//todo
 	}
 	
 	//Takes an address string and passes it to google
-	//And sets itself with the result.
+	//and sets itself with the result.
 	function set_from_string()
 	{
-		
+		//todo
 	}
 	
-	function geocode_address()
+	//Retreives the latitude and longitude for this address
+	function geocode()
 	{
-		
+		//todo
 	}
 	
 	function is_valid()
