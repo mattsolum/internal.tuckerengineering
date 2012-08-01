@@ -17,4 +17,26 @@ class StructProperty
 		$this->info = new stdClass;
 		$this->assets = new stdClass;
 	}
+	
+	is_valid()
+	{
+		return ($this->location->is_valid() && $this->meta_valid());
+		//TODO add support for assets.
+	}
+	
+	private function meta_valid()
+	{
+		//Keys need to be in a format acceptable as a variable name
+		//Values can be anything you want, they will be sanitized prior to
+		//Being inserted in the database.
+		foreach($this->info AS $key => $value)
+		{
+			if(!preg_match('/^[a-zA-Z_]$/', $key)
+			{
+				return FALSE;
+			}
+		}
+		
+		return TRUE;
+	}
 }

@@ -103,6 +103,7 @@ class Map extends Model {
 			//Getting around google ignoring two-part street numbers
 			//i.e. 9504-b
 			$location = new StructLocation();
+			$location->number = '0';
 			
 			$matches = array();
 			
