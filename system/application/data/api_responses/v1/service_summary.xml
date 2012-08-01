@@ -1,0 +1,29 @@
+<TE_API_Response>
+	<service id="" status="">
+		<description></description>
+		<amount></amount>
+		<credits></credits>
+		<due></due>
+		<address id="">
+			<street_1></street_1>
+			<street_2></street_2>
+			<city></city>
+			<state></state>
+			<zip></zip>
+		</address>
+	</service>
+	<billing>
+		<amount></amount>
+		<credits></credits>
+		<adjustment></adjustment>
+		<due></due>
+	</billing>
+	<client id="" represents="">
+		<name></name>
+		<title></title>
+	</client>
+	<requester id="" represents="">
+		<name></name>
+		<title></title>
+	</requester>
+</TE_API_Response>

@@ -1,0 +1,495 @@
+@variables colors {
+	headerBackground: #507282;
+	navigation: #ffffff;
+	
+	bodyBackground: #e5dac0;
+	bodyBackgroundDark: #ccc3a9;
+	
+	highlightGreen: #a8d256;
+	highlightRed: #bf492f;
+	
+	formBackground: #ffffff;
+	formDehighlight: #9a9a9a;
+	
+	heading: #000000;
+	subHeading: #5b473b;
+	body: #5b473b;
+	
+	rule: #a0907d;
+	
+	scheduleItemGreenBackground: #b5c77e;
+	scheduleItemGreenText: #ffffff;
+	
+	scheduleItemYellowBackground: #f2d974;
+	scheduleItemYellowText: #ffffff;
+}
+
+@variables constants {
+	borderRadius: 5px;
+	baseline: 16px;
+}
+
+@import 'mixins.css';
+@import 'reset.css';
+@import 'forms.css';
+@import 'fonts.css';
+@import 'typography.css';
+@import 'grid.css';
+
+.hide {
+	display: none;
+}
+
+html {
+	min-width: 960px;
+}
+
+body {
+	background-color: colors.bodyBackground;
+	min-width: 960px;
+}
+
+header {
+	@include container;
+	height: 48px;
+	background-color: colors.headerBackground;
+	font-size: 18px;
+	
+	nav {
+		@include grid_6;
+		height: 48px;
+		
+		ul {
+			list-style-type: none;
+			li {
+				display: inline-block;
+				margin: 0;
+				padding: 0;
+				a {
+					line-height: 42px;
+					display: block;
+					color: #fff;
+					height: 42px;
+					padding: 0 4px;
+					margin: 3px 4px;
+					text-decoration: none;
+					
+					&:hover,
+					&.here {
+						margin-bottom:1px;
+						border-bottom: 2px solid #fff;
+					}
+				}
+				
+				&:first-child {
+					padding-left: 0;
+				}
+			}
+		}
+	}
+	
+	section {
+		@include grid_6;
+		text-align: right;
+		height: 48px;
+		
+		a.account_controls {
+			display: inline-block;
+			color: #b9c7cd;
+			height: 42px;
+			line-height: 42px;
+			margin-top: 3px;
+			padding-right: 16px;
+			margin-bottom: 3px;
+			border-right: 1px solid #44616f;
+			text-decoration: none;
+			
+			&:hover {
+				color:#fff;
+			}
+		}
+		
+		form {
+			display: inline-block;
+			height: 48px;
+			margin-left: 16px;
+			
+			input[type="text"] {
+				@include afs-museo;
+				font-size: 18px;
+				height: 30px;
+				padding: 0;
+				margin: 0;
+				border: 1px solid #9a9a9a;
+				border-right: none;
+				padding-left: 8px;
+				vertical-align:baseline;
+				color: #000;
+				
+				&.blur {
+					color: #9a9a9a;
+				}
+			}
+			
+			input[type="submit"] {
+				@include afs-museo;
+				font-size: 18px;
+				height: 32px;
+				width: 32px;
+				padding: 0;
+				margin: 0;
+				border: 1px solid #9a9a9a;
+				border-left: none;
+				background-color: #ffffff;
+				background-image: url("../img/searchIcon.png");
+				background-repeat: no-repeat;
+				background-position: center center;
+				text-indent: -300%;
+				vertical-align: bottom;
+				margin-left: -5px;
+				
+				&:hover {
+					cursor:pointer;
+				}
+			}
+		}
+	}
+}
+
+.config {
+	position: absolute;
+	top: 96px;
+	left: 16px;
+	right: 16px;
+	height: 32px;
+	min-width: 960px;
+	
+	h1 {
+		float: left;
+		width: 50%;
+		bottom: 0;
+	}
+}
+
+ul.nav2 {
+	width: 100%;
+	height: 32px;
+	background-color: #5c4d40;
+	li {
+		display: inline-block;
+		position: relative;
+		padding: 0;
+		margin: 0 8px;
+		
+		font-size: 18px;
+		
+		a {
+			display: block;
+			padding: 0 8px;
+			line-height: 31px;
+			height: 31px;
+			border-top: 1px solid #5c4d40;
+			color: colors.bodyBackground;
+			@include afs-museo;
+			text-decoration: none;
+		}
+		
+		&.here a,
+		a:hover {
+			color: #5c4d40;
+			background-color: colors.bodyBackground;
+		}
+	}
+}
+
+article {
+	clear: both;
+	@include container
+}
+
+#schedule {
+	margin-top: 0;
+	clear: both;
+	background-color: colors.bodyBackground;
+	
+	#dates {
+		@include container;
+		margin-top: 0;
+		background-color: #5c4d40;
+		height: 32px;
+		line-height: 32px;
+		color: colors.bodyBackground;
+		
+		#date {
+			@include grid_2;
+		}
+		
+		ul {
+			@include grid_10;
+			margin-bottom: 0;
+			
+			li {
+				display: inline-block;
+				position: relative;
+				padding: 0;
+				margin: 0;
+				width: 13.7%;
+				text-align: center;
+				
+				a {
+					display: block;
+					color: colors.bodyBackground;
+					text-decoration: none;
+					height: 30px;
+					margin: 0 1px 0 0;
+					padding: 0 0 1px 0;
+					line-height: 30px;
+					
+					&:hover, &.active {
+						color: #5c4d40;
+						background-color: colors.bodyBackgroundDark;
+					}
+				}
+			}
+		}
+	}
+}
+
+#daily {
+	width: 100%;
+	display: block;
+	border-bottom: 1px solid colors.bodyBackground;
+	background-image: url("../img/16pxbodyBackgroundDark.png");
+	background-repeat: repeat-x;
+	
+	.inspectors {
+		border-top: 16px solid colors.bodyBackgroundDark;
+		margin: 0;
+		padding: 0;
+		@include grid_2;
+		list-style-type: none;
+		li {
+			height: 32px;
+			line-height: 32px;
+			padding-left: 8px;
+			margin: 16px 0 0px -2px;
+			border-left: 2px solid colors.bodyBackground;
+			
+			&:first-child {
+				margin-top: 8px;
+			}
+			
+			&.blue {
+				border-left: 2px solid #507282;
+			}
+			
+			&.red {
+				border-left: 2px solid #bf492f;
+			}
+			
+			&.purple {
+				border-left: 2px solid #7056a4;
+			}
+			
+			&.orange {
+				border-left: 2px solid #da7828;
+			}
+			
+			&.green {
+				border-left: 2px solid #8eb640;
+			}
+		}
+	}
+	
+	#scheduleContainer {
+		margin-left: 1%;
+		width: 82.333%;
+		float: left;
+		display: inline;
+		overflow: hidden;
+		
+		#scheduleDeviders {
+			background-image: url("../img/timeDeviders.png");
+			background-position: 14px top;
+			width: 3854px;
+			margin-left: -1574px;
+			
+			#times {
+				display: block;
+				height: 16px;
+				font-size: 12px;
+				margin-bottom: 0;
+				width: 3855px;
+				background-color: colors.bodyBackgroundDark;
+				
+				li {
+					width: 160px;
+					text-align: center;
+					margin: 0;
+					padding: 0;
+					text-indent: 0;
+					border: 0;
+					list-style-type: none;
+					display: block;
+					float: left;
+					
+					&:first-child {
+						margin-left:-65px;
+					}
+				}
+			}
+		}
+	}
+	
+	.schedule {
+		margin: 1px 0 0 0;
+		padding: 0;
+		height: 48px;
+		list-style-type: none;
+		width: 3855px;
+		
+		li {
+			margin: 0;
+			font-size: 12px;
+			display: inline-block;
+			
+			a {
+				display: block;
+				padding: 0 8px;
+				height: 48px;
+				margin: 0;
+				width: 144px;
+				@include border-radius(8px);
+			}
+			
+			line-height: 24px;	
+		}
+		
+		.green {
+			a {
+				width: 144px;
+				background-color: colors.scheduleItemGreenBackground;
+				color: colors.scheduleItemGreenText;
+				text-decoration: none;	
+			}
+		}
+		
+		.yellow {
+			a {
+				width: 104px;
+				background-color: colors.scheduleItemYellowBackground;
+				color: colors.scheduleItemYellowText;
+				text-decoration: none;	
+			}
+		}
+	}
+}
+
+#map {
+	position: relative;
+	
+	
+	#map_canvas {
+		width: 100%;
+		height: 100%;
+	}
+	
+	#shadow_top {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 4px;
+		background: url('../img/shadow_top.png') repeat-x left top;
+		z-index: 900;
+	}
+	
+	#shadow_bottom {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 4px;
+		background: url('../img/shadow_bottom.png') repeat-x left top;
+		z-index: 900;
+	}
+}
+
+#scheduleNew {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 48px;
+	background-color: colors.bodyBackground;
+	
+	form#schedule {
+		margin-top: 8px;
+	}
+	
+	input[type="text"]:first-child {
+		display: inline;
+		float: left;
+		width: 384px;
+		margin:  0 8px;
+	}
+		
+	input.ui-autocomplete-input {
+		width: 224px;
+		margin: 0 0 0 8px;
+		float: left;
+	}
+	
+	button.ui-button {
+		float: left;
+		width: 25px;
+		margin-left: -2px;
+		margin-right: 8px;
+	}
+	
+	input[type="submit"] {
+		@include afs-museo;
+		@include border-radius(3px);
+		float: left;
+		border: 1px solid #a09380;
+		background-color: transparent;
+		height: 32px;
+		vertical-align:bottom;
+		margin: 0 8px;
+		font-size: 18px;
+		color: #a09380;
+		
+		&:hover {
+			cursor:pointer;
+			border: 1px solid #5c4d40;
+			color: #5c4d40;
+		}
+	}
+}
+
+.ui-autocomplete {
+	list-style-type: none;
+	margin: 0;
+	z-index: 1000;
+	position: absolute;
+	
+	li {
+		text-indent: 0;
+		margin: 0;
+		a {
+			text-indent: 8px;
+			display: block;
+			height: 24px;
+			line-height: 24px;
+			background-color: #fff;
+			width: 100%;
+			
+			&:hover {
+				cursor: pointer;
+				background-color: #5c4d40;
+				color: colors.bodyBackground;
+			}
+		}
+	}
+}
+
+.clear {
+	clear: both;
+}

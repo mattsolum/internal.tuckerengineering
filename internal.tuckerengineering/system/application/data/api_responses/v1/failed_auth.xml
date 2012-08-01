@@ -1,0 +1,5 @@
+<TE_API_Response>
+	<acknowledgement>failed</acknowledgement>
+	<short_message>Authentication failed.</short_message>
+	<long_message>Wrong user name or authentication token.</long_message>
+</TE_API_Response>

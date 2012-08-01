@@ -1,0 +1,174 @@
+input[type="text"] {
+	@include afs-museo;
+	font-size: 18px;
+	height: 30px;
+	padding: 0;
+	margin: 0;
+	border: 1px solid #9a9a9a;
+	padding-left: 8px;
+	vertical-align:baseline;
+	color: #000;
+	
+	&.blur {
+		color: #9a9a9a;
+	}
+}
+
+input.ui-autocomplete-input {
+	border-right: 0;
+	margin-right: 0;
+	@include afs-museo;
+	font-size: 18px;
+	height: 30px;
+	padding: 0;
+	margin: 0;
+	border: 1px solid #9a9a9a;
+	padding-left: 8px;
+	vertical-align:baseline;
+	color: #000;
+	
+	&.blur {
+		color: #9a9a9a;
+	}
+}
+
+button.ui-button {
+	border: 1px solid #9a9a9a;
+	border-left: 0;
+	padding: 0;
+	margin-left: -2px;
+	background-color: #fff;
+	height: 32px;
+	width: 32px;
+	vertical-align: bottom;
+	background-image: url('../img/downArrowIcon.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	
+	&:hover {
+		cursor:pointer;
+	}
+}
+
+#config {
+	
+	input[type="text"]
+	{
+		width: 50%;
+		float: left;
+		border: 0;
+		margin: 0;
+		padding: 0;
+		height: 31px;
+		border-bottom: 1px solid colors.bodyBackground;
+		text-indent: 8px;
+	}
+	
+	input[type="text"]:first-child {
+		margin-right: 1px;
+		margin-left: -1px;
+	}
+	
+	fieldset {
+	
+		input[type="text"] {
+			border: none;
+			height: 32px;
+			width: 50%;
+			
+			&:first-child {
+				width:50%;
+			}
+		}
+		min-width: 960px;
+		overflow: hidden;
+		position: absolute;
+		left: 16px;
+		right: 16px;
+		top: 144px;
+		height: 32px;
+	}
+	
+	button {
+		@include afs-museo;
+		@include border-radius(3px);
+		border: 1px solid #a09380;
+		background-color: transparent;
+		height: 32px;
+		width: 128px;
+		vertical-align:bottom;
+		margin: 0;
+		font-size: 18px;
+		color: #a09380;
+		
+		float: right;
+		
+		&:hover {
+			cursor:pointer;
+			border: 1px solid #5c4d40;
+			color: #5c4d40;
+		}
+	}
+	
+	ul {
+		overflow-x: hidden;
+		overflow-y: scroll;
+		position: absolute;
+		min-width: 960px;
+		left: 16px;
+		right: 16px;
+		top: 192px;
+		bottom: 0;
+		
+		li {
+			list-style-type: none;
+			width: 100%;
+			float: left;
+			height: 32px;
+			margin: 0;
+			padding: 0;
+		}
+		
+		li.odd input[type="text"] {
+			background-color: #f8f6ef;
+		}
+		
+		a {
+			background-color: none;
+			background-repeat: no-repeat;
+			background-position: 50% 50%;
+			overflow: hidden;
+			text-indent: 100px;
+			display: none;
+			height: 32px;
+			width: 32px;
+			text-align: center;
+			line-height: 32px;
+			position: absolute;
+			z-index: 100;
+			
+			background-image: url('../img/delete16px_inactive.png');
+			
+			&:hover {
+				background-image: url('../img/delete16px.png');
+			}
+			
+			right: 0;
+		}
+		
+		a.save {
+			background-image: url('../img/add16px_inactive.png');
+			right: 24px;
+			
+			&:hover {
+				background-image: url('../img/add16px.png');
+			}
+		}
+		
+		li:hover {
+			a {
+				display: block;
+			}
+		}
+	}
+}

@@ -1,0 +1,5 @@
+<TE_API_Response>
+	<acknowledgement>failed</acknowledgement>
+	<short_message>Unknown error.</short_message>
+	<long_message>An unknown error has occured, our appologies. This event has been logged and will be looked in to.</long_message>
+</TE_API_Response>

@@ -1,0 +1,16 @@
+<TE_API_Response>
+	<address_id></address_id>
+	<address>
+		<street_1></street_1>
+		<street_2></street_2>
+		<city></city>
+		<state></state>
+		<zip></zip>
+	</address>
+	<services>
+		<service status="" date="" id="">
+			<client_id></client_id>
+			<client_name></client_name>
+		</service>
+	</services>
+</TE_API_Response>

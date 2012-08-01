@@ -1,0 +1,35 @@
+@mixin afs-museo { font-family: "Museo", "Palatino", "Hoefler Text", "Baskerville", "Georgia", "Times New Roman", serif; }
+
+@mixin afs-museo-slab { font-family: "Museo Slab", Rockwell, serif; }
+
+
+@font-face {
+  font-family: 'Museo';
+  src: url('../fonts/Museo300-Regular-webfont.ttf');
+  font-weight: 200;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Museo';
+  src: url('../fonts/Museo500-Regular-webfont.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Museo Slab';
+  src:url('../fonts/museo_slab_500-webfont.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Museo Slab';
+  src: url('../fonts/museo_slab_500italic-webfont.ttf');
+  font-weight: 500;
+  font-style: italic;
+}
