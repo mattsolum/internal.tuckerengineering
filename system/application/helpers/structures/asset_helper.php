@@ -8,18 +8,18 @@ class StructAsset
 	$date_added 	= NULL;
 	$date_updated 	= NULL;
 	
-	public function get_data()
+	public function data()
 	{
-		
+		//todo: return the file's data.
 	}
 	
-	public function get_mime_type()
+	public function mime_type()
 	{
-		
+		//todo: return the file's mime-type
 	}
 	
 	public function __toString()
 	{
-	
+		//todo: return keywords.
 	}
 }

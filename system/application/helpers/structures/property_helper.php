@@ -7,6 +7,7 @@ class StructProperty
 	public $location 		= NULL;
 	public $info			= NULL;
 	public $assets 			= NULL;
+	public $notes			= NULL;
 	
 	public $date_added 		= NULL;
 	public $date_updated 	= NULL;
@@ -16,6 +17,7 @@ class StructProperty
 		$this->location = new StructLocation();
 		$this->info = new stdClass;
 		$this->assets = new stdClass;
+		$this->notes = new stdClass;
 	}
 	
 	public function is_valid()
@@ -51,7 +53,8 @@ class StructProperty
 			$string .= ' ' . str_replace('_', ' ', $key) . ': ' . $value . ';';
 		}
 		
-		//todo: stringifiy assets
+		//todo: stringify assets
+		//todo: stringify notes
 		
 		return $string;
 	}

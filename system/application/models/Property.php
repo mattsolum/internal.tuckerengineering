@@ -8,7 +8,7 @@ class Property extends Model {
 	{
 		parent::__construct();
 		$this->CI =& get_instance();
-		$this->CI->load->model('Meta');	
+		$this->CI->load->model('Meta');
 	}
 	
 	
@@ -20,10 +20,14 @@ class Property extends Model {
 		{
 			$this->CI->db->trans_start();
 			
+			$data = array();
+			
 			$id = $this->exists($property);
+			
 			if($id !== FALSE)
 			{
-				$data['id'] = $id;
+				$data['id'] 		= $id;
+				$data['date_added']	= $property->date_added;
 				$this->delete($id);
 			}
 			else
@@ -31,11 +35,31 @@ class Property extends Model {
 					
 			}
 			
-			foreach($property AS $key => $value)
+			$data['street_number']					= $property->location->number;
+			$data['route']							= $property->location->route;
+			$data['subpremise']						= $property->location->subpremis;
+			$data['locality']						= $property->location->locality;
+			$data['administrative_area_level_1']	= $property->location->admin_level_1;
+			$data['administrative_area_level_2']	= $property->location->admin_level_2;
+			$data['postal_code']					= $property->location->postal_code;
+			$data['neighborhood']					= $property->location->neighborhood;
+			$data['latitude']						= $property->location->latitude;
+			$data['longitude']						= $property->location->longitude;
+			
+			$data['date_added']						= (isset($data['date_added']))?$data['date_added']:now();
+			$data['date_updated']					= now();
+			
+			$query = $this->CI->db->insert('properties', $data);
+			
+			if($id == FALSE && $this->CI->db->affected_rows() == 1)
 			{
-				
+				$id = $this->exists($property);
 			}
 			
+			foreach($property->info AS $key => $value)
+			{
+				$this->CI->Meta->insert($id, 'property', $key, $value);
+			}
 			
 			$this->CI->db->trans_complete();
 			

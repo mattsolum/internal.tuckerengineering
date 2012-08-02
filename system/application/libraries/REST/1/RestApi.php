@@ -403,19 +403,18 @@ class RestApi
 		
 		if($property != FALSE)
 		{
-			echo($property);
 			$this->_output($property);
 		}
 		else $this->error('No property exists with the id \'' . $this->id . '\'.');
 	}
 	
-	public function address_delete()
+	public function property_delete()
 	{
-		if($this->CI->Address->delete($this->id))
+		if($this->CI->Property->delete($this->id))
 		{
 			$this->_output();
 		}
-		else $this->_error("Failure deleting address ID '{$this->id}'.");
+		else $this->_error("Failure deleting property ID '{$this->id}'.");
 	}
 	
 	public function address_post()

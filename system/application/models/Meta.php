@@ -13,6 +13,7 @@ class Meta extends Model {
 	
 	//Return the ID on success
 	//and FALSE on failure
+	//$name and $value have a maximum length of 64 characters
 	public function insert($id, $type, $name, $value)
 	{
 		$data = array();
@@ -27,8 +28,8 @@ class Meta extends Model {
 		
 		$data['id'] 	= preg_replace('/[^0-9]/', '', $id);
 		$data['type'] 	= preg_replace('/[^a-zA-Z]/', '', strtolower($type));
-		$data['name']	= strtolower($name);
-		$data['value']	= $value; //Codeigniter's active record class sanitizes inputs, so we are trusting that for safety here.
+		$data['name']	= substr(preg_replace('/[^a-zA-Z_]/', '', str_replace(' ', '_', $name)), 0, 64);
+		$data['value']	= substr($value, 0, 64); //Codeigniter's active record class sanitizes inputs, so we are trusting that for safety here.
 		
 		$query = $this->CI->db->insert('meta', $data);
 		
