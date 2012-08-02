@@ -4,14 +4,14 @@
 //If a value is provided as well it sets the setting.
 function setting($name, $value = null) {
 	$CI =& get_instance();
-	$CI->load->model('Settings');
+	$CI->load->model('Setting');
 	
 	if($value == null)
 	{
-		return $CI->Settings->get($name);	
+		return $CI->Setting->get($name);	
 	}
 	else
 	{
-		return $CI->Settings->set($name, $value);	
+		return $CI->Setting->set($name, $value);	
 	}
 }

@@ -17,4 +17,9 @@ class StructAsset
 	{
 		
 	}
+	
+	public function __toString()
+	{
+	
+	}
 }

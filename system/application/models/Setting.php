@@ -1,10 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Settings extends Model {
+class Setting extends Model {
 	
 	var $CI = NULL;
 	
-	public function Settings()
+	public function Setting()
 	{
 		parent::__construct();
 		$this->CI =& get_instance();	

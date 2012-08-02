@@ -18,7 +18,7 @@ class StructProperty
 		$this->assets = new stdClass;
 	}
 	
-	is_valid()
+	public function is_valid()
 	{
 		return ($this->location->is_valid() && $this->meta_valid());
 		//TODO add support for assets.
@@ -31,12 +31,28 @@ class StructProperty
 		//Being inserted in the database.
 		foreach($this->info AS $key => $value)
 		{
-			if(!preg_match('/^[a-zA-Z_]$/', $key)
+			if(!preg_match('/^[a-zA-Z_]$/', $key))
 			{
 				return FALSE;
 			}
 		}
 		
 		return TRUE;
+	}
+	
+	public function __toString()
+	{
+		$string 	= '#' . $this->id . ';';
+		$string		.= ' ' . (string)$this->location . ';';
+		
+		//Stringify the meta data
+		foreach($this->info AS $key => $value)
+		{
+			$string .= ' ' . str_replace('_', ' ', $key) . ': ' . $value . ';';
+		}
+		
+		//todo: stringifiy assets
+		
+		return $string;
 	}
 }

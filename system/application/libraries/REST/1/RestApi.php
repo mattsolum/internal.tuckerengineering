@@ -289,7 +289,7 @@ class RestApi
 	//Initializes for all config functions
 	private function _config()
 	{
-		$this->CI->load->model('Settings');
+		$this->CI->load->model('Setting');
 		
 		//If start and limit are passed as arguments clear them of all unwanted characters
 		//and if they were not, set them both to NULL so we can refrence
@@ -306,7 +306,7 @@ class RestApi
 		
 		if($data['name'] && $data['value'])
 		{
-			$this->CI->Settings->set($data['name'], $data['value']);
+			$this->CI->Setting->set($data['name'], $data['value']);
 			$this->_output();
 		}
 		else
@@ -337,7 +337,7 @@ class RestApi
 	
 	public function config_delete() 
 	{
-		if($this->CI->Settings->delete($this->id))
+		if($this->CI->Setting->delete($this->id))
 		{
 			$this->_output();
 		}
@@ -345,7 +345,7 @@ class RestApi
 	
 	public function config_filter_get()
 	{	
-		$items = $this->CI->Settings->filter($this->id, $this->arguments['start'], $this->arguments['limit']);
+		$items = $this->CI->Setting->filter($this->id, $this->arguments['start'], $this->arguments['limit']);
 		
 		if($items !== FALSE)
 		{
@@ -360,7 +360,7 @@ class RestApi
 	
 	public function config_all_get()
 	{
-		$items = $this->CI->Settings->get_all($this->arguments['start'], $this->arguments['limit']);
+		$items = $this->CI->Setting->get_all($this->arguments['start'], $this->arguments['limit']);
 		
 		if($items !== FALSE)
 		{
@@ -398,11 +398,12 @@ class RestApi
 		}
 		else
 		{
-			
+			//todo: if the ID is a string
 		}
 		
 		if($property != FALSE)
 		{
+			echo($property);
 			$this->_output($property);
 		}
 		else $this->error('No property exists with the id \'' . $this->id . '\'.');

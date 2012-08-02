@@ -14,11 +14,11 @@ class Admin extends Controller {
 	
 	function config()
 	{
-		$this->load->model('Settings');
+		$this->load->model('Setting');
 		
 		$data = array('results' => null);
 		
-		$data['results'] = $this->Settings->get_all();
+		$data['results'] = $this->Setting->get_all();
 		
 		$this->load->view('config', $data);
 	}
