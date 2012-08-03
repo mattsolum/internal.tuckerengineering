@@ -51,7 +51,7 @@ $autoload['libraries'] = array('database');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('structures/client', 'structures/contact','structures/invoice','structures/job','structures/location','structures/search_result', 'structures/property', 'settings', 'date' );
+$autoload['helper'] = array('structures/client', 'structures/contact','structures/invoice','structures/job','structures/location','structures/search_result', 'structures/property', 'setting', 'date' );
 
 
 /*

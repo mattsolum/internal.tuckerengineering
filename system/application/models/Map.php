@@ -22,7 +22,7 @@ class Map extends Model {
 	{
 		if(is_object($addr) && get_class($addr) == 'StructLocation')
 		{
-			$data = $this->gmaps_request((string)$addr);
+			$data = $this->gmaps_request(array('address' => (string)$addr));
 		}
 		elseif (is_string($addr))
 		{
@@ -57,7 +57,7 @@ class Map extends Model {
 	{
 		if(is_object($addr) && get_class($addr) == 'StructLocation')
 		{
-			$data = $this->gmaps_request((string)$addr);
+			$data = $this->gmaps_request(array('address' => (string)$addr));
 		}
 		elseif (is_string($addr))
 		{
@@ -94,7 +94,7 @@ class Map extends Model {
 	{
 		if(is_object($addr) && get_class($addr) == 'StructLocation')
 		{
-			$data = $this->gmaps_request((string)$addr);
+			$data = $this->gmaps_request(array('address' => (string)$addr));
 		}
 		elseif (is_string($addr))
 		{

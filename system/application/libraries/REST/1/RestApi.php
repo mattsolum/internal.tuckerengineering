@@ -396,16 +396,28 @@ class RestApi
 			//If the ID is a number
 			$property = $this->CI->Property->get($this->id);
 		}
-		else
+		else if ($this->id != '')
 		{
-			//todo: if the ID is a string
+			$property = new StructProperty();
+			
+			$property->location = $this->CI->Map->parse_address($this->id);
+			
+			$id = $this->CI->Property->exists($property);
+			if($id !== FALSE)
+			{
+				$property = $this->CI->Property->get($id);
+			}
+			else
+			{
+				$property = FALSE;
+			}
 		}
 		
-		if($property != FALSE)
+		if(isset($property) && $property != FALSE)
 		{
 			$this->_output($property);
 		}
-		else $this->error('No property exists with the id \'' . $this->id . '\'.');
+		else $this->_error('No property exists with the id \'' . $this->id . '\'.');
 	}
 	
 	public function property_delete()
@@ -417,14 +429,78 @@ class RestApi
 		else $this->_error("Failure deleting property ID '{$this->id}'.");
 	}
 	
-	public function address_post()
-	{
+	public function property_post()
+	{	
+		$data = json_decode(urldecode($this->CI->input->post('data')));
+		$property = new StructProperty();
 		
+		$this->id = preg_replace('/[^0-9]/', '', $this->id);
+		
+		$property->id 						= ($this->id != '')?$id:NULL; 
+		
+		$property->location->number 		= (isset($data->location->number))?$data->location->number:'0';
+		$property->location->route			= (isset($data->location->route))?$data->location->route:'';
+		$property->location->subpremise		= (isset($data->location->subpremise))?$data->location->subpremise:'';
+		$property->location->locality		= (isset($data->location->locality))?$data->location->locality:'';
+		$property->location->admin_level_1	= (isset($data->location->admin_level_1))?$data->location->admin_level_1:'';
+		$property->location->admin_level_2	= (isset($data->location->admin_level_2))?$data->location->admin_level_2:'';
+		$property->location->postal_code	= (isset($data->location->postal_code))?$data->location->postal_code:'';
+		$property->location->neighborhood	= (isset($data->location->neighborhood))?$data->location->neighborhood:'';
+		$property->location->latitude		= (isset($data->location->latitude))?$data->location->latitude:'';
+		$property->location->longitude		= (isset($data->location->longitude))?$data->location->longitude:'';
+		
+		//If there is no latitude there probably is not a longitude either
+		//no point checking.
+		//Geocode and parse if no lat/lon provided.
+		if($property->location->latitude == '')
+		{
+			$parsed_location = $this->CI->Map->parse_address((string)$property->location);
+			
+			if(!is_array($parsed_location) && get_class($parsed_location) == 'StructLocation')
+			{
+				$property->location = $parsed_location;
+			}
+			
+			unset($parsed_location);
+		}
+		
+		//Add info to our property object
+		if(isset($data->info))
+		{
+			foreach($data->info AS $name => $value)
+			{
+				$property->info->$name = $value;
+			}
+		}
+		
+		//todo: Support Notes
+		
+		if($property->is_valid())
+		{
+			if($this->CI->Property->insert($property))
+			{
+				if($property->id != '')
+				{
+					$result = array('id' => $property->id);
+				}
+				else
+				{
+					$result = array('id' => $this->CI->Property->exists($property));
+				}
+				
+				$this->_output($result);
+			}
+			else $this->_error('Failed to insert property into database.');
+		}
+		else
+		{
+			$this->_error('Data received is invalid: ' . (string)$property);	
+		}
 	}
 	
-	public function address_put()
+	public function property_put()
 	{
-		$this->address_post();
+		$this->property_post();
 	}
 	
 	//Returns latitude and longitude only

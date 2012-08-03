@@ -20,18 +20,21 @@ class Meta extends Model {
 		
 		$this->CI->db->trans_start();
 		
-		$id = $this->exists($id, $type, $name);
-		if($id !== FALSE)
+		$exists = $this->exists($id, $type, $name);
+		if($exists == TRUE)
 		{
-			$this->delete();
+			$this->delete($id, $type, $name);
 		}
 		
 		$data['id'] 	= preg_replace('/[^0-9]/', '', $id);
+		
 		$data['type'] 	= preg_replace('/[^a-zA-Z]/', '', strtolower($type));
-		$data['name']	= substr(preg_replace('/[^a-zA-Z_]/', '', str_replace(' ', '_', $name)), 0, 64);
+		$data['name']	= strtolower(substr(preg_replace('/[^a-zA-Z_]/', '', str_replace(' ', '_', $name)), 0, 64));
 		$data['value']	= substr($value, 0, 64); //Codeigniter's active record class sanitizes inputs, so we are trusting that for safety here.
 		
 		$query = $this->CI->db->insert('meta', $data);
+		
+		
 		
 		$this->CI->db->trans_complete();
 		
@@ -52,11 +55,11 @@ class Meta extends Model {
 		
 		$where['id'] 	= preg_replace('/[^0-9]/', '', $id);
 		$where['type'] 	= preg_replace('/[^a-zA-Z]/', '', strtolower($type));
-		$where['name']	= strtolower($name);
+		$where['name']	= strtolower(substr(preg_replace('/[^a-zA-Z_]/', '', str_replace(' ', '_', $name)), 0, 64));
 				
 		$this->CI->db->trans_start();
 		
-		if($this->exists($id, $type, $name)) $this->CI->db->delete('meta', $where);
+		$this->CI->db->delete('meta', $where);
 		
 		$this->CI->db->trans_complete();
 		
@@ -102,7 +105,7 @@ class Meta extends Model {
 		
 		$where['id'] 	= preg_replace('/[^0-9]/', '', $id);
 		$where['type'] 	= preg_replace('/[^a-zA-Z]/', '', $type);
-		$where['name']	= strtolower($name); //Once again relying on the active record class for safety 
+		$where['name']	= preg_replace('/[^a-zA-Z_]/', '', strtolower($name)); //Once again relying on the active record class for safety 
 		
 		$query = $this->CI->db->get_where('meta', $where);
 		

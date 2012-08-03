@@ -2,15 +2,15 @@
 
 class StructProperty
 {
-	public $id 				= 0;
+	public $id;
 	
-	public $location 		= NULL;
-	public $info			= NULL;
-	public $assets 			= NULL;
-	public $notes			= NULL;
+	public $location;
+	public $info;
+	public $assets;
+	public $notes;
 	
-	public $date_added 		= NULL;
-	public $date_updated 	= NULL;
+	public $date_added;
+	public $date_updated;
 	
 	public function __construct()
 	{
@@ -22,8 +22,10 @@ class StructProperty
 	
 	public function is_valid()
 	{
-		return ($this->location->is_valid() && $this->meta_valid());
-		//TODO add support for assets.
+		$location = $this->location->is_valid();
+		$meta = $this->meta_valid();
+		
+		return ($location && $meta);
 	}
 	
 	private function meta_valid()
@@ -31,11 +33,14 @@ class StructProperty
 		//Keys need to be in a format acceptable as a variable name
 		//Values can be anything you want, they will be sanitized prior to
 		//Being inserted in the database.
-		foreach($this->info AS $key => $value)
+		if(count($this->info) > 0)
 		{
-			if(!preg_match('/^[a-zA-Z_]$/', $key))
+			foreach($this->info AS $key => $value)
 			{
-				return FALSE;
+				if(!preg_match('/^[a-zA-Z_]+$/', $key))
+				{
+					return FALSE;
+				}
 			}
 		}
 		
@@ -44,8 +49,8 @@ class StructProperty
 	
 	public function __toString()
 	{
-		$string 	= '#' . $this->id . ';';
-		$string		.= ' ' . (string)$this->location . ';';
+		$string 	= (isset($this->id))?'#' . $this->id . '; ':'';
+		$string		.= (string)$this->location . ';';
 		
 		//Stringify the meta data
 		foreach($this->info AS $key => $value)

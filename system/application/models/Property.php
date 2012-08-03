@@ -26,18 +26,18 @@ class Property extends Model {
 			
 			if($id !== FALSE)
 			{
-				$data['id'] 		= $id;
-				$data['date_added']	= $property->date_added;
+				$data['property_id'] 		= $id;
+				$data['date_added']			= $property->date_added;
 				$this->delete($id);
 			}
 			else
 			{
-					
+				$data['date_added'] = now();
 			}
 			
 			$data['street_number']					= $property->location->number;
 			$data['route']							= $property->location->route;
-			$data['subpremise']						= $property->location->subpremis;
+			$data['subpremise']						= $property->location->subpremise;
 			$data['locality']						= $property->location->locality;
 			$data['administrative_area_level_1']	= $property->location->admin_level_1;
 			$data['administrative_area_level_2']	= $property->location->admin_level_2;
@@ -46,15 +46,16 @@ class Property extends Model {
 			$data['latitude']						= $property->location->latitude;
 			$data['longitude']						= $property->location->longitude;
 			
-			$data['date_added']						= (isset($data['date_added']))?$data['date_added']:now();
 			$data['date_updated']					= now();
 			
 			$query = $this->CI->db->insert('properties', $data);
 			
-			if($id == FALSE && $this->CI->db->affected_rows() == 1)
+			if($id == FALSE)
 			{
 				$id = $this->exists($property);
 			}
+			
+			
 			
 			foreach($property->info AS $key => $value)
 			{
@@ -83,7 +84,7 @@ class Property extends Model {
 		
 		$this->CI->db->trans_start();
 		
-		$this->CI->db->delete('properties', array('id' => $id));
+		$this->CI->db->delete('properties', array('property_id' => $id));
 		
 		$this->CI->db->trans_complete();
 		
@@ -159,7 +160,7 @@ class Property extends Model {
 		
 		if($include_subpremise == TRUE)
 		{
-			$where['subpremise'] = $addr->subpremise;
+			$where['subpremise'] = $property->location->subpremise;
 		}
 		
 		$query = $this->CI->db->get_where('properties', $where);
