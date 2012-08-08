@@ -35,16 +35,16 @@ class Property extends Model {
 				$data['date_added'] = now();
 			}
 			
-			$data['street_number']					= $property->location->number;
-			$data['route']							= $property->location->route;
-			$data['subpremise']						= $property->location->subpremise;
-			$data['locality']						= $property->location->locality;
-			$data['administrative_area_level_1']	= $property->location->admin_level_1;
-			$data['administrative_area_level_2']	= $property->location->admin_level_2;
-			$data['postal_code']					= $property->location->postal_code;
-			$data['neighborhood']					= $property->location->neighborhood;
-			$data['latitude']						= $property->location->latitude;
-			$data['longitude']						= $property->location->longitude;
+			$data['street_number']					= $property->number;
+			$data['route']							= $property->route;
+			$data['subpremise']						= $property->subpremise;
+			$data['locality']						= $property->locality;
+			$data['administrative_area_level_1']	= $property->admin_level_1;
+			$data['administrative_area_level_2']	= $property->admin_level_2;
+			$data['postal_code']					= $property->postal_code;
+			$data['neighborhood']					= $property->neighborhood;
+			$data['latitude']						= $property->latitude;
+			$data['longitude']						= $property->longitude;
 			
 			$data['date_updated']					= now();
 			
@@ -111,21 +111,21 @@ class Property extends Model {
 			
 			$property = new StructProperty();
 			
-			$property->id 						= $result->property_id;
-			$property->date_added 				= $result->date_added;
-			$property->date_updated				= $result->date_updated;
+			$property->id 				= $result->property_id;
+			$property->date_added 		= $result->date_added;
+			$property->date_updated		= $result->date_updated;
 			
-			$property->location->number 		= $result->street_number;
-			$property->location->route			= $result->route;
-			$property->location->subpremise		= $result->subpremise;
-			$property->location->locality		= $result->locality;
-			$property->location->admin_level_1 	= $result->administrative_area_level_1;
-			$property->location->admin_level_2	= $result->administrative_area_level_2;
-			$property->location->postal_code	= $result->postal_code;
-			$property->location->neighborhood	= $result->neighborhood;
+			$property->number 			= $result->street_number;
+			$property->route			= $result->route;
+			$property->subpremise		= $result->subpremise;
+			$property->locality			= $result->locality;
+			$property->admin_level_1 	= $result->administrative_area_level_1;
+			$property->admin_level_2	= $result->administrative_area_level_2;
+			$property->postal_code		= $result->postal_code;
+			$property->neighborhood		= $result->neighborhood;
 			
-			$property->location->latitude		= $result->latitude;
-			$property->location->longitude		= $result->longitude;
+			$property->latitude			= $result->latitude;
+			$property->longitude		= $result->longitude;
 			
 			
 			//Get meta data
@@ -154,13 +154,13 @@ class Property extends Model {
 	{
 		$where = array();
 		
-		$where['street_number'] = $property->location->number;
-		$where['route']			= $property->location->route;
-		$where['locality'] 		= $property->location->locality;
+		$where['street_number'] = $property->number;
+		$where['route']			= $property->route;
+		$where['locality'] 		= $property->locality;
 		
 		if($include_subpremise == TRUE)
 		{
-			$where['subpremise'] = $property->location->subpremise;
+			$where['subpremise'] = $property->subpremise;
 		}
 		
 		$query = $this->CI->db->get_where('properties', $where);

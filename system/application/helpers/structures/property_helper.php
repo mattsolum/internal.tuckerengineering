@@ -4,7 +4,19 @@ class StructProperty
 {
 	public $id;
 	
-	public $location;
+	public $number 			= ''; 	//Street number
+	public $route 			= '';	//Street name
+	public $subpremise 		= '';	//Unit #, Suite #, etc.
+	public $locality 		= '';	//City
+	public $admin_level_1 	= '';	//State
+	public $admin_level_2 	= '';	//County
+	public $postal_code 	= '';	//Zip
+	
+	public $neighborhood 	= '';
+	
+	public $latitude 		= '';
+	public $longitude 		= '';
+	
 	public $info;
 	public $assets;
 	public $notes;
@@ -14,7 +26,6 @@ class StructProperty
 	
 	public function __construct()
 	{
-		$this->location = new StructLocation();
 		$this->info = new stdClass;
 		$this->assets = new stdClass;
 		$this->notes = new stdClass;
@@ -22,10 +33,29 @@ class StructProperty
 	
 	public function is_valid()
 	{
-		$location = $this->location->is_valid();
+		$location = $this->location_valid();
 		$meta = $this->meta_valid();
 		
 		return ($location && $meta);
+	}
+	
+	private function location_valid()
+	{
+		//Check that all required fields are at least set
+		if(
+			$this->number 			== '' 	||
+			$this->route 			== ''	||
+			$this->locality			== ''	||
+			$this->admin_level_1	== ''	||
+			$this->postal_code		== ''
+		) return FALSE;
+		
+		$CI =& get_instance();
+		
+		$CI->load->model('Map');
+		
+		//Since everything is set check it with Google.
+		return $CI->Map->validate_address($this);
 	}
 	
 	private function meta_valid()
@@ -50,7 +80,7 @@ class StructProperty
 	public function __toString()
 	{
 		$string 	= (isset($this->id))?'#' . $this->id . '; ':'';
-		$string		.= (string)$this->location . ';';
+		$string		.= $this->location_string() . ';';
 		
 		//Stringify the meta data
 		foreach($this->info AS $key => $value)
@@ -62,5 +92,27 @@ class StructProperty
 		//todo: stringify notes
 		
 		return $string;
+	}
+	
+	public function location_string()
+	{
+		$delineator = '';
+			
+		if($this->subpremise != '')
+		{
+			$delineator = (is_numeric($this->subpremise))?'#':'Unit ';
+		}
+	
+		$formatted =  ($this->number != '')?$this->number:'';
+		
+		$formatted .=  ($this->route != '')?' ' . $this->route:'';
+		
+		$formatted .= ($this->subpremise != '')?' ' . $delineator . $this->subpremise:'';
+		
+		$formatted .= ($this->locality != '')?', ' . $this->locality:'';
+		$formatted .= ($this->admin_level_1 != '')?', ' . $this->admin_level_1:'';
+		$formatted .= ($this->postal_code != '')?' ' . $this->postal_code:'';
+		
+		return $formatted;
 	}
 }

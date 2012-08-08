@@ -18,19 +18,19 @@ class Map extends Model {
 	//If the address doesn't exist OR it is too
 	//ambiguous (returns more than one result)
 	//it will return FALSE
-	public function geocode_address($addr)
+	public function geocode_address($prop)
 	{
-		if(is_object($addr) && get_class($addr) == 'StructLocation')
+		if(is_object($prop) && get_class($prop) == 'StructProperty')
 		{
-			$data = $this->gmaps_request(array('address' => (string)$addr));
+			$data = $this->gmaps_request(array('address' => $prop->location_string()));
 		}
-		elseif (is_string($addr))
+		elseif (is_string($prop))
 		{
-			$data = $this->gmaps_request(array('address' => $addr));
+			$data = $this->gmaps_request(array('address' => $prop));
 		}
 		else
 		{
-			log_message('error', 'Variable passed to geocode_address is ' . gettype($address) . '. StructLocation object or string expected');
+			log_message('error', 'Variable passed to geocode_address is ' . gettype($propess) . '. StructProperty object or string expected');
 			return FALSE;	
 		}
 		
@@ -53,19 +53,19 @@ class Map extends Model {
 	
 	//Returns TRUE if the address is valid and specific
 	//enough to only refer to one location.
-	public function validate_address($addr)
+	public function validate_address($prop)
 	{
-		if(is_object($addr) && get_class($addr) == 'StructLocation')
+		if(is_object($prop) && get_class($prop) == 'StructProperty')
 		{
-			$data = $this->gmaps_request(array('address' => (string)$addr));
+			$data = $this->gmaps_request(array('address' => $prop->location_string()));
 		}
-		elseif (is_string($addr))
+		elseif (is_string($prop))
 		{
-			$data = $this->gmaps_request(array('address' => $addr));
+			$data = $this->gmaps_request(array('address' => $prop));
 		}
 		else
 		{
-			log_message('error', 'Variable passed to validate_address is ' . gettype($address) . '. StructLocation object or string expected');
+			log_message('error', 'Variable passed to validate_address is ' . gettype($propess) . '. StructProperty object or string expected');
 			return FALSE;	
 		}
 		
@@ -90,24 +90,24 @@ class Map extends Model {
 	//address string along with Lat and Lon
 	//If the address is ambiguous it will 
 	//return a list of addresses.
-	public function parse_address($addr)
+	public function parse_address($prop)
 	{
-		if(is_object($addr) && get_class($addr) == 'StructLocation')
+		if(is_object($prop) && get_class($prop) == 'StructProperty')
 		{
-			$data = $this->gmaps_request(array('address' => (string)$addr));
+			$data = $this->gmaps_request(array('address' => $prop->location_string()));
 		}
-		elseif (is_string($addr))
+		elseif (is_string($prop))
 		{
-			$data = $this->gmaps_request(array('address' => $addr));
+			$data = $this->gmaps_request(array('address' => $prop));
 			
 			//Getting around google ignoring two-part street numbers
 			//i.e. 9504-b
-			$location = new StructLocation();
+			$location = new StructProperty();
 			$location->number = '0';
 			
 			$matches = array();
 			
-			if(preg_match('/^[0-9]+-[a-zA-Z0-9]+(?= )/', $addr, $matches))
+			if(preg_match('/^[0-9]+-[a-zA-Z0-9]+(?= )/', $prop, $matches))
 			{
 				$parts = explode('-', $matches[0]);
 				
@@ -117,7 +117,7 @@ class Map extends Model {
 		}
 		else
 		{
-			log_message('error', 'Variable passed to geocode_address is ' . gettype($address) . '. StructLocation object or string expected');
+			log_message('error', 'Variable passed to geocode_address is ' . gettype($propess) . '. StructProperty object or string expected');
 			return FALSE;	
 		}
 		
@@ -125,20 +125,20 @@ class Map extends Model {
 		{
 			$result = array();
 			
-			foreach ($data as $key => $address) {
+			foreach ($data as $key => $propess) {
 				
-				$result[$key] = new StructLocation();
+				$result[$key] = new StructProperty();
 				
-				$result[$key]->number 			= (isset($address['street_number']))?$address['street_number']	:$location->number;
-				$result[$key]->route 			= (isset($address['route']))		?$address['route']			:$location->route;
-				$result[$key]->subpremise 		= (isset($address['subpremise']))	?$address['subpremise']		:$location->subpremise;
-				$result[$key]->locality 		= (isset($address['locality']))		?$address['locality']		:$location->locality;
-				$result[$key]->admin_level_1 	= (isset($address['administrative_area_level_1']))?$address['administrative_area_level_1']:$location->admin_level_1;
-				$result[$key]->admin_level_2 	= (isset($address['administrative_area_level_2']))?$address['administrative_area_level_2']:$location->admin_level_2;
-				$result[$key]->postal_code		= (isset($address['postal_code']))	?$address['postal_code']	:$location->postal_code;
-				$result[$key]->neighborhood		= (isset($address['neighborhood']))	?$address['neighborhood']	:$location->neighborhood;
-				$result[$key]->latitude			= (isset($address['latitude']))		?$address['latitude']		:$location->latitude;
-				$result[$key]->longitude		= (isset($address['longitude']))	?$address['longitude']		:$location->longitude;
+				$result[$key]->number 			= (isset($propess['street_number']))?$propess['street_number']	:$location->number;
+				$result[$key]->route 			= (isset($propess['route']))		?$propess['route']			:$location->route;
+				$result[$key]->subpremise 		= (isset($propess['subpremise']))	?$propess['subpremise']		:$location->subpremise;
+				$result[$key]->locality 		= (isset($propess['locality']))		?$propess['locality']		:$location->locality;
+				$result[$key]->admin_level_1 	= (isset($propess['administrative_area_level_1']))?$propess['administrative_area_level_1']:$location->admin_level_1;
+				$result[$key]->admin_level_2 	= (isset($propess['administrative_area_level_2']))?$propess['administrative_area_level_2']:$location->admin_level_2;
+				$result[$key]->postal_code		= (isset($propess['postal_code']))	?$propess['postal_code']	:$location->postal_code;
+				$result[$key]->neighborhood		= (isset($propess['neighborhood']))	?$propess['neighborhood']	:$location->neighborhood;
+				$result[$key]->latitude			= (isset($propess['latitude']))		?$propess['latitude']		:$location->latitude;
+				$result[$key]->longitude		= (isset($propess['longitude']))	?$propess['longitude']		:$location->longitude;
 				
 			}
 			
