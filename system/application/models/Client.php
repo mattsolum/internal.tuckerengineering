@@ -1,10 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Job extends Model {
+class Client extends Model {
 	
 	private $CI = NULL;
 	
-	public function Job()
+	public function Client()
 	{
 		parent::__construct();
 		$this->CI =& get_instance();	
@@ -13,7 +13,7 @@ class Job extends Model {
 	
 	//Return the ID on success
 	//and FALSE on failure
-	public function insert($job)
+	public function insert($client)
 	{
 		$id = preg_replace('/[^0-9]/', '', $id);
 		
@@ -22,7 +22,7 @@ class Job extends Model {
 		$id = $this->exists();
 		if($id !== FALSE)
 		{
-			$data['job_id'] = $id;
+			$data['client_id'] = $id;
 			$this->delete();
 		}
 		else
@@ -30,13 +30,13 @@ class Job extends Model {
 				
 		}
 		
-		$query = $this->CI->db->insert('jobs', $data);
+		$query = $this->CI->db->insert('clients', $data);
 		
 		$this->CI->db->trans_complete();
 		
 		if($this->CI->db->trans_status() === FALSE)
 		{
-			log_message('Error', 'Error in Job method insert: transaction failed.');
+			log_message('Error', 'Error in Client method insert: transaction failed.');
 			return FALSE;
 		}
 		else
@@ -51,13 +51,13 @@ class Job extends Model {
 		
 		$this->CI->db->trans_start();
 		
-		$this->CI->db->delete('jobs', array('job_id' => $id));
+		$this->CI->db->delete('clients', array('client_id' => $id));
 		
 		$this->CI->db->trans_complete();
 		
 		if($this->CI->db->trans_status() === FALSE)
 		{
-			log_message('Error', 'Error in Job method delete: transaction failed.');
+			log_message('Error', 'Error in Client method delete: transaction failed.');
 			return FALSE;
 		}
 		else
@@ -70,7 +70,7 @@ class Job extends Model {
 	{
 		$id = preg_replace('/[^0-9]/', '', $id);
 		
-		$query = $this->CI->db->get_where('jobs', array('job_id' => $id));
+		$query = $this->CI->db->get_where('clients', array('client_id' => $id));
 		
 		if($query->num_rows() > 0)
 		{
@@ -80,19 +80,19 @@ class Job extends Model {
 		}
 		else
 		{
-			log_message('Error', 'Error in Job method get: no data found with given ID.');
+			log_message('Error', 'Error in Client method get: no data found with given ID.');
 			return FALSE;
 		}
 	}
 	
 	//Return ID on success and FALSE on failure
-	public function exists($job)
+	public function exists($client)
 	{
 		$where = array();
 		
 		$where[''] = 0;
 		
-		$query = $this->CI->db->get_where('jobs', $where);
+		$query = $this->CI->db->get_where('clients', $where);
 		
 		if($query->num_rows() > 0)
 		{
