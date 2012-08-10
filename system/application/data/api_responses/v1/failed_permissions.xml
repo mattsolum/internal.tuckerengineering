@@ -1,5 +1,0 @@
-<TE_API_Response>
-	<acknowledgement>failed</acknowledgement>
-	<short_message>Permission denied.</short_message>
-	<long_message>The user provided does not have permission to perform that action.</long_message>
-</TE_API_Response>
