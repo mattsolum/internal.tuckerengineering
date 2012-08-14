@@ -3,7 +3,7 @@
 class PrototypeAPI
 {
 	public $error = 'Unknown.';
-	private $CI;
+	public $CI;
 	
 	public function __construct()
 	{
