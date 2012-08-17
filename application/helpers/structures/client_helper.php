@@ -14,4 +14,28 @@ class StructClient
 	public $parent = NULL;
 	//Notes
 	public $note = '';
+	
+	function is_valid()
+	{
+		//TODO
+		return TRUE;
+	}
+	
+	function __toString()
+	{
+		$string = '';
+		
+		$string .=	($this->name != '')	?$this->name . ' ':'';
+		
+		foreach($this->contact AS $contact_item)
+		{
+			$string .= $contact_item['type'] . ' - ' . $contact_item['data'];
+		}
+		
+		
+		if(isset($location))
+		{
+			
+		}
+	}
 }

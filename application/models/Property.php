@@ -22,13 +22,21 @@ class Property extends CI_Model {
 			
 			$data = array();
 			
-			$id = $this->exists($property);
+			$id = ($property->id != 0)?$property->id:$this->exists($property);
 			
 			if($id !== FALSE)
 			{
-				$data['property_id'] 		= $id;
-				$data['date_added']			= $property->date_added;
-				$this->delete($id);
+				if(!is_array($id))
+				{
+					$data['property_id'] 		= $id;
+					$data['date_added']			= $property->date_added;
+					$this->delete($id);
+				}
+				else
+				{
+					log_message('Error', 'Error in Property method insert: multiple properties exists similar to given.');
+					return FALSE;	
+				}
 			}
 			else
 			{
@@ -167,8 +175,22 @@ class Property extends CI_Model {
 		
 		if($query->num_rows() > 0)
 		{
-			$result = $query->row();
-			return $result->property_id;
+			if($query->num_rows() == 1)
+			{
+				$result = $query->row();
+				return $result->property_id;
+			}
+			else
+			{
+				$final = array();
+				foreach($query->result() as $row)
+				{
+					$final[] = $row->property_id;
+				}
+				
+				return $final;
+			}
+			
 		}
 		else return FALSE;
 	}

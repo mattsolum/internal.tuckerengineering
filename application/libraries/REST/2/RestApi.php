@@ -91,7 +91,7 @@ class RestApi
 		
 		if(substr($last_segment, 0, 1) == '!')
 		{
-			$this->id = substr($last_segment, 1);
+			$this->id = urldecode(substr($last_segment, 1));
 			$this->method = implode('_', $segments);
 		}
 		else
@@ -179,11 +179,16 @@ class RestApi
 	}
 	
 	private function output($data, $error = FALSE)
-	{
-		if($data == '')
+	{	
+		if(is_string($data) && $data == '')
 		{
 			$data = array();
 		}
+		elseif (is_string($data))
+		{
+			$data = array('message' => $data);	
+		}
+		
 		if(is_array($data) && !$this->array_is_assoc($data))
 		{
 			$data = $this->paginate($data);
@@ -260,7 +265,7 @@ class RestApi
 		$final = array();
 		$final['result'] = ($error)?'error':'success';
 		
-		if(isset($data['pagination']))
+		if(is_array($data) && isset($data['pagination']))
 		{
 			$final['pagination'] = $data['pagination'];
 			unset($data['pagination']);
