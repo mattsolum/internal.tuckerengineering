@@ -79,7 +79,7 @@ class Property extends CI_Model {
 			}
 			else
 			{
-				return TRUE;
+				return $id;
 			}
 		}
 		

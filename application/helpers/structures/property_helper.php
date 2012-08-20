@@ -79,13 +79,20 @@ class StructProperty
 	
 	public function __toString()
 	{
-		$string 	= (isset($this->id))?'#' . $this->id . '; ':'';
+		$string = '';
+		
+		//$string 	.= (isset($this->id))?'#' . $this->id . '; ':'';
 		$string		.= $this->location_string() . ';';
 		
 		//Stringify the meta data
 		foreach($this->info AS $key => $value)
 		{
-			$string .= ' ' . str_replace('_', ' ', $key) . ': ' . $value . ';';
+			$string .= ' ' . str_replace('_', ' ', $key) . ' - ' . $value . ',';
+		}
+		
+		if(count($this->info) > 0)
+		{
+			$string = substr($string, 0, strlen($string) - 1) . ';';
 		}
 		
 		//todo: stringify assets

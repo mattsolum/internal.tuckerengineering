@@ -6,12 +6,12 @@ class StructClient
 	//Client Information
 	public $id = NULL;
 	public $name = '';
+	
+	public $title = '';
 	//Address
 	public $location = NULL;
 	//Contact Information
 	public $contact = array();
-	//Client that *this* client represents
-	public $parent = NULL;
 	//Notes
 	public $note = '';
 	
@@ -25,17 +25,23 @@ class StructClient
 	{
 		$string = '';
 		
-		$string .=	($this->name != '')	?$this->name . ' ':'';
+		$string .=	($this->name != '')	?$this->name . ' :: ':'';
 		
 		foreach($this->contact AS $contact_item)
 		{
-			$string .= $contact_item['type'] . ' - ' . $contact_item['data'];
+			$string .= $contact_item['type'] . ' - ' . $contact_item['info'] . ', ';
 		}
 		
-		
-		if(isset($location))
+		if(count($this->contact) > 0)
 		{
-			
+			$string = substr($string, 0, strlen($string) - 2) . '; ';
 		}
+		
+		if($this->location != NULL && get_class($this->location) == 'StructProperty')
+		{
+			$string .= (string)$this->location;
+		}
+		
+		return $string;
 	}
 }

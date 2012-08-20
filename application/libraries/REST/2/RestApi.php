@@ -2,13 +2,13 @@
 
 class RestApi
 {
-	private $auth;
-	private $type;
-	private $method;
-	private $id;
-	private $filetype;
-	private $arguments;
-	private $requestMethod;
+	public $auth;
+	public $type;
+	public $method;
+	public $id;
+	public $filetype;
+	public $arguments;
+	public $requestMethod;
 	
 	private $active_class;
 	
@@ -27,11 +27,11 @@ class RestApi
 		if($this->auth() && $this->prep())
 		{
 			$method = $this->method;
-			$result = $this->active_class->$method($this->package());
+			$result = $this->active_class->$method();
 			
 			if($result === TRUE)
 			{
-				$this->output();
+				$this->output('');
 			}	
 			else if($result !== FALSE)
 			{
@@ -144,7 +144,7 @@ class RestApi
 		//Make sure it is formatted properly
 		if(class_exists($classname))
 		{
-			$this->active_class = new $classname();
+			$this->active_class = new $classname($this);
 		} 
 		else {
 			$this->error('Module "' . $this->type . '" does not exist.');
@@ -210,6 +210,9 @@ class RestApi
 				break;
 			case 'htm':
 				$this->output_html($data, $error);
+				break;
+			case 'txt':
+				$this->output_txt($data, $error);
 				break;
 			default:
 				$this->output_xml($data, $error);
@@ -341,7 +344,7 @@ class RestApi
 	{
 		$this->CI->output->set_content_type('text/html');
 		
-		if(isset($data['pagination'])) unset($data['pagination']);
+		if(is_array($data) && isset($data['pagination'])) unset($data['pagination']);
 		
 		if($error == FALSE && isset($this->arguments->view) && view_exists($this->arguments->view))
 		{
@@ -362,7 +365,7 @@ class RestApi
 			
 			$html .= '</ul>';
 			
-			echo($html);	
+			$this->CI->output->set_output($html);	
 		}
 	}
 	
@@ -389,6 +392,34 @@ class RestApi
 		$html .= '</li>';
 		
 		return $html;
+	}
+	
+	private function output_txt($data, $error = FALSE)
+	{
+		$this->CI->output->set_content_type('text');
+		
+		$str = $this->recurse_txt($data);
+		
+		$str = str_replace('; ', ";\n", $str);
+		$str = str_replace(':: ', "::\n", $str);
+		
+		$str = trim($str);
+		
+		$this->CI->output->set_output($str);
+	}
+	
+	private function recurse_txt($data)
+	{
+		$str = '';
+		if(is_array($data))
+		{
+			foreach ($data as $key => $value) {
+				$str .= "\n" . $this->recurse_txt($value);
+			}
+		}
+		else @$str .= (string)$data;
+		
+		return $str;
 	}
 	
 	//Checks that an array is associatively keyed

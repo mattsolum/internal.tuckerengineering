@@ -3,27 +3,40 @@
 class ClientAPI extends PrototypeAPI
 {
 	
-	public function __construct()
+	public function __construct(&$API)
 	{
-		parent::__construct();
+		parent::__construct($API);
+		$this->CI->load->model('Client');
 	}
 	
-	public function get($data)
-	{
-		return 'ClientAPI Get';
+	public function get()
+	{	
+		$result = $this->CI->Client->get($this->API->id);
+		
+		if($result !== FALSE)
+		{
+			return $result;
+		}
+		else
+		{
+			$this->error = 'Client with ID "' . $this->API->id . '" does not exist.';
+			return FALSE;	
+		}
+		
+		return FALSE;
 	}
 	
-	public function post($data)
+	public function post()
 	{
-	
+		
 	}
 	
-	public function put($data)
+	public function put()
 	{
-		$this->post($data);
+		$this->post($this->API);
 	}
 	
-	public function delete($data)
+	public function delete()
 	{
 		
 	}

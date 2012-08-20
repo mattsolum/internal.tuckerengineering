@@ -3,26 +3,26 @@
 class PropertyAPI extends PrototypeAPI
 {
 	
-	function __construct()
+	function __construct(&$API)
 	{
-		parent::__construct();
+		parent::__construct($API);
 		$this->CI->load->model('Map');
 		$this->CI->load->model('Property');
 		$this->CI->load->helper('loader');
 	}
 	
-	public function get($data)
+	public function get()
 	{ 
 		$properties = array();
 		
-		if($data->id != '' && preg_match('/^[0-9]+$/', $data->id))
+		if($this->API->id != '' && preg_match('/^[0-9]+$/', $this->API->id))
 		{
 			//If the ID is a number
-			$properties = $this->CI->Property->get($data->id);
+			$properties = $this->CI->Property->get($this->API->id);
 		}
-		else if ($data->id != '')
+		else if ($this->API->id != '')
 		{	
-			$results = $this->CI->Map->parse_address($data->id);
+			$results = $this->CI->Map->parse_address($this->API->id);
 			
 			if(!is_array($results))
 			{
@@ -67,19 +67,19 @@ class PropertyAPI extends PrototypeAPI
 		}
 		else 
 		{	
-			$this->error = 'No property exists with the id \'' . $data->id . '\'.';
+			$this->error = 'No property exists with the id \'' . $this->API->id . '\'.';
 			return FALSE;
 		}
 	}
 	
-	public function post($data)
+	public function post()
 	{
 		$input = json_decode(urldecode($this->CI->input->post('data')));
 		$property = new StructProperty();
 		
-		$data->id = preg_replace('/[^0-9]/', '', $data->id);
+		$this->API->id = preg_replace('/[^0-9]/', '', $this->API->id);
 		
-		$property->id 						= ($data->id != '')							?$id								:NULL; 
+		$property->id 						= ($this->API->id != '')							?$id								:NULL; 
 		
 		$property->location->number 		= (isset($input->location->number))			?$input->location->number			:'0';
 		$property->location->route			= (isset($input->location->route))			?$input->location->route			:'';
@@ -146,20 +146,20 @@ class PropertyAPI extends PrototypeAPI
 		}
 	}
 	
-	public function put($data)
+	public function put()
 	{
-		$this->post($data);
+		$this->post($this->API);
 	}
 	
-	public function delete($data)
+	public function delete()
 	{
-		if($this->CI->Property->delete($data->id))
+		if($this->CI->Property->delete($this->API->id))
 		{
 			return TRUE;
 		}
 		else 
 		{
-			$this->error = "Failure deleting property ID '{$data->id}'.";
+			$this->error = "Failure deleting property ID '{$this->API->id}'.";
 			return FALSE;
 		}
 	}

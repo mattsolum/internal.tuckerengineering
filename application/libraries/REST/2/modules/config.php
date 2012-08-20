@@ -3,16 +3,16 @@
 class ConfigAPI extends PrototypeAPI
 {
 	
-	function __construct()
+	function __construct(&$API)
 	{
-		parent::__construct();
+		parent::__construct($API);
 		
 		$this->CI->load->model('Setting');
 	}
 	
-	public function post($data) 
+	public function post() 
 	{
-		$data['name'] = ($data->id)?$this->id:strtolower($this->CI->input->post('name'));
+		$data['name'] = ($this->API->id)?$this->API->id:strtolower($this->CI->input->post('name'));
 		$data['value'] = $this->CI->input->post('value');
 		
 		if($data['name'] && $data['value'])
@@ -27,14 +27,14 @@ class ConfigAPI extends PrototypeAPI
 		}
 	}
 	
-	public function put($data)
+	public function put()
 	{
-		$this->post($data);
+		$this->post($this->API);
 	}
 	
-	public function get($data) 
+	public function get() 
 	{
-		$items = $this->CI->Setting->filter($data->id);
+		$items = $this->CI->Setting->filter($this->API->id);
 		
 		if($items !== FALSE)
 		{
@@ -42,14 +42,14 @@ class ConfigAPI extends PrototypeAPI
 		}
 		else
 		{
-			$this->error = "No items found like '" . $data->id . "'.";
+			$this->error = "No items found like '" . $this->API->id . "'.";
 			return FALSE;	
 		}
 	}
 	
 	public function delete() 
 	{
-		if($this->CI->Setting->delete($this->id))
+		if($this->CI->Setting->delete($this->API->id))
 		{
 			return TRUE;
 		}
