@@ -79,7 +79,20 @@ class ClientAPI extends PrototypeAPI
 	
 	public function delete()
 	{
-		
+		if($this->API->id != '' && preg_match('/^[0-9]+$/', $this->API->id))
+		{
+			$this->CI->property->delete($this->API->id);
+		}
+		else if ($this->API->id != '')
+		{	
+			$client = $this->CI->Client->get($this->API->id);
+			$this->CI->property->delete($client->id);
+		}
+		else
+		{
+			$this->error = 'Numeric or String ID required. None given.';
+			return FALSE;	
+		}
 	}
 	
 	public function property_get()
