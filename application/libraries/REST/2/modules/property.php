@@ -22,43 +22,7 @@ class PropertyAPI extends PrototypeAPI
 		}
 		else if ($this->API->id != '')
 		{	
-			$results = $this->CI->Map->parse_address($this->API->id);
-			
-			if(!is_array($results))
-			{
-				$results = array($results);
-			}
-			
-			foreach($results AS $prop)
-			{
-				$include_subpremise = ($prop->subpremise != '');
-				
-				$id = $this->CI->Property->exists($prop, $include_subpremise);
-				
-				if($id !== FALSE)
-				{
-					if(is_array($id))
-					{
-						foreach($id AS $sid)
-						{
-							$properties[] = $this->CI->Property->get($sid);
-						}
-					}
-					else
-					{
-						$properties[] = $this->CI->Property->get($id);	
-					}
-				}
-			}
-			
-			if(count($properties) == 1)
-			{
-				$properties = $properties[0];
-			}
-			else if(count($properties) == 0)
-			{
-				$properties = FALSE;
-			}
+			$properties = $this->CI->Property->get_by_string($this->API->id);
 		}
 		
 		if(isset($properties) && $properties != FALSE)
@@ -77,31 +41,18 @@ class PropertyAPI extends PrototypeAPI
 		$input = json_decode(urldecode($this->CI->input->post('data')));
 		$property = new StructProperty();
 		
-		$this->API->id = preg_replace('/[^0-9]/', '', $this->API->id);
-		
-		$property->id 						= ($this->API->id != '')							?$id								:NULL; 
-		
-		$property->location->number 		= (isset($input->location->number))			?$input->location->number			:'0';
-		$property->location->route			= (isset($input->location->route))			?$input->location->route			:'';
-		$property->location->subpremise		= (isset($input->location->subpremise))		?$input->location->subpremise		:'';
-		$property->location->locality		= (isset($input->location->locality))		?$input->location->locality			:'';
-		$property->location->admin_level_1	= (isset($input->location->admin_level_1))	?$input->location->admin_level_1	:'';
-		$property->location->admin_level_2	= (isset($input->location->admin_level_2))	?$input->location->admin_level_2	:'';
-		$property->location->postal_code	= (isset($input->location->postal_code))	?$input->location->postal_code		:'';
-		$property->location->neighborhood	= (isset($input->location->neighborhood))	?$input->location->neighborhood		:'';
-		$property->location->latitude		= (isset($input->location->latitude))		?$input->location->latitude			:'';
-		$property->location->longitude		= (isset($input->location->longitude))		?$input->location->longitude		:'';
+		$property->set_from_json($input);
 		
 		//If there is no latitude there probably is not a longitude either
 		//no point checking.
 		//Geocode and parse if no lat/lon provided.
-		if($property->location->latitude == '')
+		if($property->latitude == '')
 		{
-			$parsed_location = $this->CI->Map->parse_address((string)$property->location);
+			$parsed_location = $this->CI->Map->parse_address($property->location_string());
 			
-			if(!is_array($parsed_location) && get_class($parsed_location) == 'StructLocation')
+			if(!is_array($parsed_location) && get_class($parsed_location) == 'StructProperty')
 			{
-				$property->location = $parsed_location;
+				$property->set_location($parsed_location);
 			}
 			
 			unset($parsed_location);

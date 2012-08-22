@@ -48,7 +48,10 @@ class StructProperty
 			$this->locality			== ''	||
 			$this->admin_level_1	== ''	||
 			$this->postal_code		== ''
-		) return FALSE;
+		)
+		{
+			return FALSE;
+		}
 		
 		$CI =& get_instance();
 		
@@ -121,5 +124,57 @@ class StructProperty
 		$formatted .= ($this->postal_code != '')?' ' . $this->postal_code:'';
 		
 		return $formatted;
+	}
+	
+	public function set_from_json($json)
+	{
+		if(is_string($json))
+		{
+			$json = json_decode($json);
+		}
+		
+		$this->id 				= (isset($json->id))			?$json->id				:0;
+		
+		$this->number			= (isset($json->number))		?$json->number			:0;
+		$this->route			= (isset($json->route))			?$json->route			:'';
+		$this->subpremise 		= (isset($json->subpremise))	?$json->subpremise		:'';
+		$this->locality 		= (isset($json->locality))		?$json->locality		:'';
+		$this->admin_level_1	= (isset($json->admin_level_1))	?$json->admin_level_1	:'';
+		$this->admin_level_2	= (isset($json->admin_level_2))	?$json->admin_level_2	:'';
+		$this->postal_code 		= (isset($json->postal_code))	?$json->postal_code		:'';
+		$this->neighborhood		= (isset($json->neighborhood))	?$json->neighborhood	:'';
+		$this->latitude 		= (isset($json->latitude))		?$json->latitude		:'';
+		$this->longitude 		= (isset($json->longitude))		?$json->longitude		:'';
+		
+		$this->date_added		= (isset($json->date_added))	?$json->date_added		:NULL;
+		$this->date_updated		= (isset($json->date_updated))	?$json->date_updated	:NULL;
+		
+		if(isset($json->info))
+		{
+			foreach($json->info AS $key => $value)
+			{
+				$this->info->$key = $value; 
+			}
+		}
+		
+		//TODO: Assets and notes
+		/*
+		$this->assets			=
+		$this->notes			=
+		*/
+	}
+	
+	public function set_location($property)
+	{
+		$this->number			= $property->number;
+		$this->route			= $property->route;
+		$this->subpremise 		= $property->subpremise;
+		$this->locality 		= $property->locality;
+		$this->admin_level_1	= $property->admin_level_1;
+		$this->admin_level_2	= $property->admin_level_2;
+		$this->postal_code 		= $property->postal_code;
+		$this->neighborhood		= $property->neighborhood;
+		$this->latitude 		= $property->latitude;
+		$this->longitude 		= $property->longitude;
 	}
 }

@@ -125,6 +125,7 @@ class Map extends CI_Model {
 		{
 			$result = array();
 			
+			//I forgot what the hell 'propess' was supposed to mean
 			foreach ($data as $key => $propess) {
 				
 				$result[$key] = new StructProperty();

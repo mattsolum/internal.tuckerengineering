@@ -13,15 +13,18 @@ class StructClient
 	//Contact Information
 	public $contact = array();
 	//Notes
-	public $note = '';
+	public $notes;
 	
-	function is_valid()
+	public $date_added;
+	public $date_updated;
+	
+	public function is_valid()
 	{
 		//TODO
 		return TRUE;
 	}
 	
-	function __toString()
+	public function __toString()
 	{
 		$string = '';
 		
@@ -29,7 +32,7 @@ class StructClient
 		
 		foreach($this->contact AS $contact_item)
 		{
-			$string .= $contact_item['type'] . ' - ' . $contact_item['info'] . ', ';
+			$string .= $contact_item->type . ' - ' . $contact_item->info . ', ';
 		}
 		
 		if(count($this->contact) > 0)
@@ -43,5 +46,40 @@ class StructClient
 		}
 		
 		return $string;
+	}
+	
+	public function set_from_json($json)
+	{
+		if(is_string($json))
+		{
+			$json = json_decode($json);
+		}
+		
+		$this->id		= (isset($json->id))	?$json->id		:0;
+		$this->name		= (isset($json->name))	?$json->name	:'';
+		$this->title	= (isset($json->title))	?$json->title	:'';
+		
+		if(isset($json->contact) && is_array($json->contact))
+		{
+			foreach($json->contact AS $key => $contact_item)
+			{
+				if(isset($contact_item->type) && isset($contact_item->info))
+				{
+					$type = $contact_item->type;
+					$info = $contact_item->info;
+					
+					$this->contact[$key]->type = $type;
+					$this->contact[$key]->info = $info;
+				}
+			}
+		}
+		
+		if(isset($json->location))
+		{
+			$this->location = new StructProperty();
+			$this->location->set_from_json($json->location);
+		}
+		
+		//TODO: Notes!
 	}
 }

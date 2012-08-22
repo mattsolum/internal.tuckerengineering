@@ -86,6 +86,8 @@ class Meta extends CI_Model {
 			$where['name']	= strtolower($name);
 		}
 		
+		$this->CI->db->order_by('name', 'asc');
+		
 		$query = $this->CI->db->get_where('meta', $where);
 		
 		if($query->num_rows() > 0)

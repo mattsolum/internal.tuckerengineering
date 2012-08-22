@@ -16,7 +16,7 @@ class Client extends CI_Model {
 	//and FALSE on failure
 	public function insert($client)
 	{	
-		if($property->is_valid())
+		if($client->is_valid())
 		{
 			$this->CI->db->trans_start();
 			
@@ -28,32 +28,41 @@ class Client extends CI_Model {
 			{
 				$data['client_id'] 	= $id;
 				$data['date_added']	= $client->date_added;
-				$this->delete();
+				$this->delete($id);
 			}
 			else
 			{
 				$data['date_added'] = now();	
 			}
 			
-			$property_id = $this->CI->Property->insert($client->property);
+			$property_id = $this->CI->Property->insert($client->location);
 			if($property_id === FALSE)
 			{
 				return FALSE;
 			}
 			
 			$data['name']			= $client->name;
+			$data['search_name']	= strtolower(preg_replace('/[^a-zA-Z ]/', '', $client->name));
 			$data['title']			= $client->title;
 			$data['property_id']	= $property_id;
 			$data['date_updated']	= now();
 			
 			$query = $this->CI->db->insert('clients', $data);
 			
-			$this->CI->db->trans_complete();
-			
 			if($id === FALSE)
 			{
 				$id = $this->exists($client);
 			}
+			
+			if(is_array($client->contact))
+			{
+				foreach($client->contact AS $info)
+				{
+					$this->insert_contact($id, $info);
+				}
+			}
+			
+			$this->CI->db->trans_complete();
 			
 			if($this->CI->db->trans_status() === FALSE)
 			{
@@ -67,13 +76,20 @@ class Client extends CI_Model {
 		}
 	}
 	
-	public function delete($id)
+	public function delete($id, $include_property = FALSE)
 	{
 		$id = preg_replace('/[^0-9]/', '', $id);
 		
 		$this->CI->db->trans_start();
 		
+		if($include_property === TRUE)
+		{
+			$client = $this->get($id);
+			$this->CI->Property->delete($client->location->id);
+		}
+		
 		$this->CI->db->delete('clients', array('client_id' => $id));
+		$this->delete_contact($id);
 		
 		$this->CI->db->trans_complete();
 		
@@ -102,34 +118,60 @@ class Client extends CI_Model {
 	
 	private function get_by_string($id)
 	{
-		 //For the time being we will only allow searching by name
-		 //when the id is not a number
-		 
-		 $this->CI->db->like('name', $id, 'none');
-		 
-		 $query = $this->CI->db->get('clients');
-		 
-		 if($query->num_rows() > 0)
-		 {
-		 	$clients = array();
-		 	
-		 	foreach ($query->result() as $client_result)
-		 	{
-		 		$clients[] = $this->get_by_id($client_result->client_id);
-		 	}
-		 	
-		 	if(count($clients) == 1)
-		 	{
-		 		return $clients[0];
-		 	}
-		 	else return $clients;
-		 }
-		 else
-		 {
-		 	log_message('Error', 'Error in Client method get: no data found with given numeric ID.');
-		 	return FALSE;
-		 }
-		 
+		//For the time being any id that is not a number will be treated as a name
+		$this->CI->db->like('search_name', $id, 'none');
+		$query = $this->CI->db->get('clients');
+		
+		//echo('Query: ' . $this->CI->db->last_query());
+		
+		if($query->num_rows() > 0)
+		{
+			$clients = array();
+			
+			foreach ($query->result() as $client_result)
+			{
+				$clients[] = $this->get_by_id($client_result->client_id);
+			}
+			
+			if(count($clients) == 1)
+			{
+				return $clients[0];
+			}
+			else return $clients;
+		}
+		else
+		{
+			log_message('Error', 'Error in Client method get: no data found with given string ID.');
+			return FALSE;
+		} 
+	}
+	
+	public function get_by_property_id($id)
+	{
+		$id = preg_replace('/[^0-9]/', '', $id);
+		
+		$query = $this->CI->db->get_where('clients', array('property_id' => $id));
+		
+		$return = array();
+		
+		if($query->num_rows() > 0)
+		{
+			foreach($query->result() AS $row)
+			{
+				$return[] = $this->get_by_id($row->client_id);
+			}		
+		}
+		else
+		{
+			log_message('Error', 'Error in Client method get_by_property_id: no data found with given numeric ID.');
+			return FALSE;	
+		}
+		
+		if(count($return) == 1)
+		{
+			return $return[0];
+		}
+		else return $return;
 	}
 	
 	private function get_by_id($id)
@@ -138,17 +180,22 @@ class Client extends CI_Model {
 		
 		$query = $this->CI->db->get_where('clients', array('client_id' => $id));
 		
+		//echo('Query: ' . $this->CI->db->last_query());
+		
 		if($query->num_rows() > 0)
 		{
 			$result = $query->row();
 			
 			$client = new StructClient();
 			
-			$client->id			= $result->client_id;
-			$client->name		= $result->name;
-			$client->title		= $result->title;
-			$client->location	= ($result->property_id != NULL)?$this->CI->Property->get($result->property_id):NULL;
-			$client->contact	= $this->get_contact($result->client_id);
+			$client->id				= $result->client_id;
+			$client->name			= $result->name;
+			$client->title			= $result->title;
+			$client->location		= ($result->property_id != NULL)?$this->CI->Property->get($result->property_id):NULL;
+			$client->contact		= $this->get_contact($result->client_id);
+			
+			$client->date_added 	= $result->date_added;
+			$client->date_updated 	= $result->date_updated;
 			
 			return $client;
 		}
@@ -159,9 +206,51 @@ class Client extends CI_Model {
 		}
 	}
 	
-	private function get_contact($id)
+	//Return ID on success and FALSE on failure
+	public function exists($client)
 	{
-		$where = array('client_id' => $id);
+		$this->CI->db->like('search_name', $client->name, 'none');
+		
+		$query = $this->CI->db->get('clients');
+		
+		if($query->num_rows() > 0)
+		{
+			$result = $query->row();
+			
+			return $result->client_id;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	public function insert_contact($client_id, $contact)
+	{	
+		$this->CI->db->trans_start();
+		
+		$data = array('client_id' => $client_id, 'type' => $contact->type, 'info' => $contact->info);
+		
+		$this->CI->db->insert('client_contact', $data);
+		
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Client method insert_contact: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+	
+	public function get_contact($client_id)
+	{
+		$where = array('client_id' => $client_id);
+		
+		$this->CI->db->order_by('type', 'ASC');
 		
 		$query = $this->CI->db->get_where('client_contact', $where);
 		
@@ -169,9 +258,16 @@ class Client extends CI_Model {
 		{
 			$result = array();
 			
+			
+			
 			foreach($query->result() as $row)
 			{
-				$result[] = array('type' => $row->type, 'info' => $row->info);
+				$current_contact = new stdClass;
+				$current_contact->type = $row->type;
+				$current_contact->info = $row->info;
+				
+				$result[] = $current_contact;
+				unset($current_contact);
 			}
 			
 			return $result;
@@ -180,9 +276,24 @@ class Client extends CI_Model {
 		return NULL;
 	}
 	
-	//Return ID on success and FALSE on failure
-	public function exists($id)
+	public function delete_contact($client_id)
 	{
-		 
+		$where = array('client_id' => $client_id);
+		
+		$this->CI->db->trans_start();
+		
+		$query = $this->CI->db->delete('client_contact', $where);
+		
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Client method delete_contact: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
 	}
 }

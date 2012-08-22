@@ -15,7 +15,7 @@ class Property extends CI_Model {
 	//Return the ID on success
 	//and FALSE on failure
 	public function insert($property)
-	{	
+	{
 		if($property->is_valid())
 		{
 			$this->CI->db->trans_start();
@@ -55,6 +55,10 @@ class Property extends CI_Model {
 			$data['longitude']						= $property->longitude;
 			
 			$data['date_updated']					= now();
+			
+			$sub_search = ($property->subpremise != '')?' ' . $property->subpremise:'';
+			
+			$data['search_text']					= strtolower($property->number . ' ' . $property->route . $sub_search . ' ' . $property->locality);
 			
 			$query = $this->CI->db->insert('properties', $data);
 			
@@ -154,6 +158,27 @@ class Property extends CI_Model {
 		{
 			log_message('Error', 'Error in Property method get: no data found with given ID.');
 			return FALSE;
+		}
+	}
+	
+	public function get_by_string($str)
+	{
+		$str = preg_replace('/(^| )east($| )/', ' e ', $str);
+		$str = preg_replace('/(^| )west($| )/', ' w ', $str);
+		$str = preg_replace('/(^| )north($| )/', ' n ', $str);
+		$str = preg_replace('/(^| )south($| )/', ' s ', $str);
+		
+		$where = array('search_text' => trim(strtolower($str)));
+		
+		$query = $this->CI->db->get_where('properties', $where);
+		
+		if($query->num_rows() > 0)
+		{
+			$result = $query->row();
+			
+			$id = $result->property_id;
+			
+			return $this->get($id);
 		}
 	}
 	

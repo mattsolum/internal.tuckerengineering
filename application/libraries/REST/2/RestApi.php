@@ -39,6 +39,7 @@ class RestApi
 			}
 			else
 			{
+				$this->CI->output->set_status_header(500);
 				$this->error($this->active_class->error);	
 			}
 		}
@@ -88,16 +89,9 @@ class RestApi
 		$this->type = strtolower(array_shift($segments));
 		
 		$last_segment = array_pop($segments);
-		
-		if(substr($last_segment, 0, 1) == '!')
-		{
-			$this->id = urldecode(substr($last_segment, 1));
-			$this->method = implode('_', $segments);
-		}
-		else
-		{
-			$this->method = implode('_', $segments) . '_' . $last_segment;
-		}
+
+		$this->id = $last_segment;
+		$this->method = implode('_', $segments);
 		
 		//Now get the HTTP request method
 		$request_method = $requestMethod = substr(preg_replace('/[^a-z]/','', strtolower($_SERVER['REQUEST_METHOD'])), 0, 6);
@@ -152,10 +146,22 @@ class RestApi
 		}
 		
 		//Make sure the method we want to access exists
-		if(!method_exists($this->active_class, $this->method))
+		if(method_exists($this->active_class, $this->method . '_' . $this->id))
 		{
-			$this->error('Method "' . $this->method . '" does not exist in module "' . $this->type . '".');
-			return FALSE;
+			$this->method .= '_' . (string)$this->id;
+			$this->id = '';
+		}
+		else
+		{
+			if(method_exists($this->active_class, $this->method))
+			{
+				$this->id = (string)str_replace('_', ' ', urldecode($this->id));
+			}
+			else
+			{
+				$this->error('Method "' . $this->method . '" does not exist in module "' . $this->type . '".');
+				return FALSE;
+			}
 		}
 		
 		return TRUE;
