@@ -19,7 +19,7 @@ class Job extends CI_Model {
 		
 		$this->CI->db->trans_start();
 		
-		$id = $this->exists();
+		$id = $this->exists($job);
 		if($id !== FALSE)
 		{
 			$data['job_id'] = $id;
@@ -72,11 +72,26 @@ class Job extends CI_Model {
 		
 		$query = $this->CI->db->get_where('jobs', array('job_id' => $id));
 		
+		$job = new StructJob();
+		
 		if($query->num_rows() > 0)
 		{
 			$result = $query->row();
 			
+			$job->id			= $result->job_id;
+			$job->service		= $result->service;
+			$job->amount		= $result->price;
+			$job->travel_fee	= $result->travel_fee;
+			$job->adjustment	= $result->adjustment;
+			$job->date_added	= $result->date_added;
+			$job->date_updated	= $result->date_updated;
+			$job->date_billed	= $result->date_billed;
 			
+			$job->client		= $this->CI->Client->get($result->client_id);
+			$job->requester		= $this->CI->Client->get($result->requester_id);
+			$job->location		= $this->CI->Property->get($result->property_id);
+			
+			return $job;
 		}
 		else
 		{

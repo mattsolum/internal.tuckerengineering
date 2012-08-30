@@ -4,23 +4,42 @@
 class StructClient
 {
 	//Client Information
-	public $id = NULL;
-	public $name = '';
+	public $id 		= NULL;
+	public $name 	= '';
 	
-	public $title = '';
-	//Address
+	public $title 	= '';
+	
+	//Property
 	public $location = NULL;
+	
 	//Contact Information
 	public $contact = array();
+	
 	//Notes
 	public $notes;
 	
+	//Dates
 	public $date_added;
 	public $date_updated;
 	
+	public function __construct()
+	{
+		$this->location = new StructProperty();
+	}
+	
 	public function is_valid()
 	{
-		//TODO
+		//Reasons it may be invalid
+		//All we really need is a name and a location
+		if(
+			$name == '' ||
+			$this->location == NULL ||
+			!$this->location->is_valid()
+		)
+		{
+			return FALSE;
+		}
+		
 		return TRUE;
 	}
 	

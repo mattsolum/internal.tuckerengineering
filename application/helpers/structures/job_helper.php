@@ -1,115 +1,87 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Job {
-	//CI base class
-	private $base = NULL;
+class StructJob {
 	//Job specific informatino
-	private $id = 0;
-	public $description = '';
+	public $id 				= NULL;
+	public $service 		= '';
+	
 	//Links to other information
-	public $client = NULL;
-	public $requester = NULL;
-	public $location = NULL;
+	public $client;
+	public $requester;
+	public $location;
+	
+	public $notes;
+	public $assets;
+	
 	//Amounts
-	public $amount = 0;
-	public $adjustment = 0;
-	public $credits = 0;
+	public $amount 			= 0.0;
+	public $travel_fee 		= 0.0;
+	public $adjustment 		= 0.0;
+	public $payed			= 0.0;
+	
+	public $payments;
 	//Dates
-	public $date_requested = NULL;
-	public $date_billed = NULL;
+	public $date_added;
+	public $date_updated;
+	public $date_billed;
 	
-	//Loads a job given a job_id
-	function __construct($id = NULL)
+	public function __construct()
 	{
-		$this->base =& get_instance();
-		if ($id != NULL)
+		$this->client 		= new StructClient();
+		$this->requester 	= new StructClient();
+		$this->location		= new StructProperty();
+	}
+	
+	public function set_from_json($json)
+	{
+		if(is_string($json))
 		{
-			$this->load($id);
+			$json = json_decode($json);
+		}
+		
+		$this->id			= $json->id;
+		$this->service		= $json->service;
+		
+		$this->amount		= $json->amount;
+		$this->travel_fee	= $json->travel_fee;
+		$this->adjustment	= $json->adjustment;
+		
+		$this->date_added	= $json->date_added;
+		$this->date_updated	= $json->date_updated;
+		$this->date_billed	= $json->date_billed;
+		
+		if(isset($json->client))
+		{
+			$this->client = new StructClient();
+			$this->client->set_from_json($json->client);
+		}
+		
+		if(isset($json->requester))
+		{
+			$this->requester = new StructRequester();
+			$this->requester->set_from_json($json->requester);
+		}
+		
+		if(isset($json->location))
+		{
+			$this->location = new StructProperty();
+			$this->location->set_from_json($json->location);
 		}
 	}
 	
-	/**
-	 * Loads a job and supporting information into a job class
-	 *
-	 * @author Matthew Solum
-	 * @param $id
-	 * @return BOOL
-	 */
-	public function load($id)
+	public function is_valid()
 	{
-		//code
-		if($this->exists($id))
-		{
-			$this->id = $id;
-		}
+		return TRUE;
 	}
 	
-	/**
-	 * Creates or Updates the job by need
-	 *
-	 * @author Matthew Solum
-	 * @param 
-	 * @return False on failure, ID on success
-	 */
-	public function commit()
+	public function __toString()
 	{
-		//code
-		$this->base->db->trans_start();
-		
-		$this->base->job->commit($this);
-		$this->client->commit();
-		$this->location->commit();
-		
-		if($this->requester != NULL) $this->requester->commit();
-		
-		$this->base->db->trans_complete();
-		
-		if ($this->db->trans_status() === FALSE)
-		{
-		    $this->db->_error_message();
-		} 
-	}
+		$str = '#' . $this->id . ' :: ';
+		$str .= 'Location: ' . "\n" . (string)$this->location;
+		$str .= "\n\n";
+		$str .= 'Client: ' . "\n" . (string)$this->client;
 	
-	/**
-	 * Deletes a job given a job_id
-	 *
-	 * @author Matthew Solum
-	 * @param $job_id
-	 * @return bool
-	 */
-	public function delete($id)
-	{
-		//code
-	}
 	
-	/**
-	 * Checks to see if a job exists
-	 *
-	 * @author Matthew Solum
-	 * @param $job
-	 * @return bool
-	 */
-	public function exists($id = NULL)
-	{
-		if($id == NULL)
-		{
-			
-		}
-		else
-		{
-			
-		}
-	}
-	
-	/**
-	 * Verifies that the Job has all the information required
-	 *
-	 * @author Matthew Solum
-	 * @param 
-	 * @return bool
-	 */
-	private function verify()
-	{
-		//code
+		return $str;
 	}
 }
