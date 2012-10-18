@@ -6,3 +6,10 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+.DS_Store
+
+resources/.DS_Store
+
+resources/css/.DS_Store
+
+resources/css/scaffold/.DS_Store
