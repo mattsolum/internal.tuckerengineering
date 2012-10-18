@@ -110,7 +110,7 @@ class Scaffold_Cache_File extends Scaffold_Cache
 		}
 		
 		file_put_contents($target,$data);
-		touch($target,$last_modified);
+		@touch($target,$last_modified);
 		return $target;
 	}
 

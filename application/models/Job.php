@@ -27,7 +27,7 @@ class Job extends CI_Model {
 		}
 		else
 		{
-				
+			
 		}
 		
 		$query = $this->CI->db->insert('jobs', $data);
