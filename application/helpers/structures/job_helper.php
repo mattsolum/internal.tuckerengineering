@@ -14,12 +14,9 @@ class StructJob {
 	public $assets;
 	
 	//Amounts
-	public $amount 			= 0.0;
-	public $travel_fee 		= 0.0;
-	public $adjustment 		= 0.0;
-	public $payed			= 0.0;
-	
+	public $receivable;
 	public $payments;
+	
 	//Dates
 	public $date_added;
 	public $date_updated;
@@ -29,7 +26,11 @@ class StructJob {
 	{
 		$this->client 		= new StructClient();
 		$this->requester 	= new StructClient();
+		
 		$this->location		= new StructProperty();
+
+		$this->receivable	= new StructAccounting();
+		$this->payments		= new StructAccounting();
 	}
 	
 	public function set_from_json($json)
@@ -68,9 +69,15 @@ class StructJob {
 			$this->location->set_from_json($json->location);
 		}
 	}
+
+	public function balance()
+	{
+		return $this->receivable->total - $this->payments->total;
+	}
 	
 	public function is_valid()
 	{
+		//TODO
 		return TRUE;
 	}
 	

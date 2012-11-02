@@ -10,7 +10,7 @@ class StructPayment
 	public $ledger_id;
 	
 	public $type;		//Credit Card, Check, Cash, etc.
-	public $number;	//Check number, credit card number, etc. Not needed for cash.
+	public $number;		//Check number, credit card number, etc. Not needed for cash.
 	
 	public $date;
 	public $date_posted;
@@ -56,10 +56,6 @@ class StructPayment
 	
 	public function __toString()
 	{
-		$txt = '';
-		
-		$txt .= $this->type;
-		$txt .= ($this->number != '')?' #' . $this->number:'';
-		$txt .= ' $' . number_format($this->amount, 2); 
+		return $amount;
 	}
 }

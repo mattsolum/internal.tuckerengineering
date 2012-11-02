@@ -102,8 +102,36 @@ class Payment extends CI_Model {
 		}
 		else return FALSE;
 	}
+
+	public function apply_payment_by_client($payment, $client_id)
+	{
+
+	}
+
+	public function apply_payment_by_job($payment, $jobs)
+	{
+		if(is_int($jobs))
+		{
+			$jobs = array($jobs);
+		}
+
+		foreach($jobs AS $job_id)
+		{
+
+		}
+	}
+
+	public function apply_payment_by_invoice($payment, $invoice_id)
+	{
+
+	}
 	
 	public function get_client_balance($client_id)
+	{
+		
+	}
+
+	public function get_balance_by_job($job_id)
 	{
 		
 	}
