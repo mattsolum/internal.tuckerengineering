@@ -22,9 +22,14 @@ class StructClient
 	public $date_added;
 	public $date_updated;
 	
-	public function __construct()
+	public function __construct($json = NULL)
 	{
 		$this->location = new StructProperty();
+		
+		if($json !== NULL)
+		{
+			$this->set_from_json($json);
+		}
 	}
 	
 	public function is_valid()

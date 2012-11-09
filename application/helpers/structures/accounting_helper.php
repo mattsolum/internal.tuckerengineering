@@ -12,9 +12,9 @@ class StructAccounting
 	//Iteration
 	private $iteration = array();
 	
-	public function __SET($name, $value)
+	private function set($name, $value)
 	{
-		if($name != 'iteration')
+				if($name != 'iteration')
 		{
 			if($name == 'total')
 			{
@@ -25,7 +25,7 @@ class StructAccounting
 				//Before I forget again I ought to comment this section
 				//The idea is you can iterate through the object itsself
 				//to get each individual item someone is billed for
-				if(get_class($value) == 'structLedger')
+				if(get_class($value) == 'StructLedger' || get_class($value) == 'StructPayment')
 				{
 					//As long as the value is the expected type
 					//go ahead and assign it to the given name
@@ -45,30 +45,71 @@ class StructAccounting
 						//and assigns the value to 'total'
 						$this->summarize();
 					}
-				} else trigger_error('Attempted to assign a variable that is not of class "structLedger" value to StructAccounting.');
+				} else trigger_error('Attempted to assign a variable that is not of class "StructLedger" or "StructPayment" value to StructAccounting.');
 			}
 		}
 	}
 
 	//To cut down on the amount of effort it might take to 
 	//format a string as a PHP variable when adding 
-	public function add($name, $value)
+	public function add($value, $name = NULL)
 	{
+		if ($name == NULL)
+		{
+			if(get_class($value) == 'StructLedger')
+			{
+				$name = $value->item;
+			}
+			else if (get_class($value) == 'StructPayment')
+			{
+				$name = $value->type . '_' . $value->number;
+			}
+		}
+		
 		$name = preg_replace('[^a-zA-Z0-9 -_]', '', $name);
 		$name = preg_replace('/\s\s+/', ' ', $name);
 		$name = str_replace(' ', '_', $name);
 		$name = strtolower($name);
-
-		$this->__SET($name, $value);
+		$this->set($name, $value);
+	}
+	
+	public function __toString()
+	{
+		$str = '';
+		foreach($this->iteration AS $key)
+		{
+			$str .= $this->$key->stringify() . "\n";
+			$last_string = $this->$key->stringify() . "\n";
+		}
+		
+		$total_formatted = number_format($this->total, 2);
+		
+		$prespaces = '';
+		for($i = strlen($last_string) - 17; $i > 0; $i--)
+		{
+			$prespaces .= ' ';
+		}
+		
+		$postspaces = '';
+		for($i = 8 - strlen($total_formatted); $i > 0; $i--)
+		{
+			$postspaces .= ' ';
+		}
+		
+		$str .= '---------------------------------------------' . "\n";
+		$str .= $prespaces . 'Total = ' . $postspaces . $total_formatted;
+		
+		return $str;
 	}
 	
 	private function summarize()
 	{
-		$this->total = 0;
+				$this->total = 0;
 		
 		foreach($this->iteration AS $key)
 		{
-			$this->total += $this->$key;
+			$amount = (string)$this->$key;
+						$this->total += $amount;
 		}
 	}
 	

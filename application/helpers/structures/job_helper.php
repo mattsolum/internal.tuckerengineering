@@ -22,7 +22,7 @@ class StructJob {
 	public $date_updated;
 	public $date_billed;
 	
-	public function __construct()
+	public function __construct($json = NULL)
 	{
 		$this->client 		= new StructClient();
 		$this->requester 	= new StructClient();
@@ -31,6 +31,11 @@ class StructJob {
 
 		$this->receivable	= new StructAccounting();
 		$this->payments		= new StructAccounting();
+		
+		if($json != NULL)
+		{
+			$this->set_from_json($json);
+		}
 	}
 	
 	public function set_from_json($json)
@@ -42,10 +47,6 @@ class StructJob {
 		
 		$this->id			= $json->id;
 		$this->service		= $json->service;
-		
-		$this->amount		= $json->amount;
-		$this->travel_fee	= $json->travel_fee;
-		$this->adjustment	= $json->adjustment;
 		
 		$this->date_added	= $json->date_added;
 		$this->date_updated	= $json->date_updated;
@@ -59,7 +60,7 @@ class StructJob {
 		
 		if(isset($json->requester))
 		{
-			$this->requester = new StructRequester();
+			$this->requester = new StructClient();
 			$this->requester->set_from_json($json->requester);
 		}
 		
@@ -88,7 +89,14 @@ class StructJob {
 		$str .= "\n\n";
 		$str .= 'Client: ' . "\n" . (string)$this->client;
 	
-	
+		$str .= "\n\n";
+		$str .= 'Fees: ' . "\n";
+		$str .= (string)$this->receivables;
+		$str .= "\n\n";
+		$str .= 'Payments: ' . "\n";
+		$str .= (string)$this->payments;
+		
+		
 		return $str;
 	}
 }

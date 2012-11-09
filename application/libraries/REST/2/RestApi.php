@@ -127,7 +127,7 @@ class RestApi
 		//load the prototype file
 		require_once($module_path . 'prototype.php');
 		
-		if(!file_exists($module_path . $this->type . '.php'))
+		if($this->type == 'prototype' || !file_exists($module_path . $this->type . '.php'))
 		{
 			$this->error('Module "' . $this->type . '" does not exist.');
 			return FALSE;

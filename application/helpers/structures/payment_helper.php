@@ -54,8 +54,18 @@ class StructPayment
 		return TRUE;
 	}
 	
-	public function __toString()
+	public function amount()
 	{
 		return $amount;
+	}
+	
+	public function stringify()
+	{
+		return $this->ledger_id . ' ' . $this->type . ' *' . $this->number . ' = ' . number_format($this->amount, 2);
+	}
+	
+	public function __toString()
+	{
+		return (string)$this->amount;
 	}
 }

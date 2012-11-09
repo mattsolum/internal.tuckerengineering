@@ -80,9 +80,6 @@ class Job extends CI_Model {
 			
 			$job->id			= $result->job_id;
 			$job->service		= $result->service;
-			$job->amount		= $result->price;
-			$job->travel_fee	= $result->travel_fee;
-			$job->adjustment	= $result->adjustment;
 			$job->date_added	= $result->date_added;
 			$job->date_updated	= $result->date_updated;
 			$job->date_billed	= $result->date_billed;
