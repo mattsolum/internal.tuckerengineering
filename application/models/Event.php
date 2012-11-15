@@ -12,107 +12,80 @@ class Event extends CI_Model
 		$this->CI =& get_instance();
 		
 		$this->listeners = array();
+		
+		$this->CI->load->helper('structures/listener');
+		$this->CI->load->helper('structures/event');
 	}	
 	
-	public function trigger_event($event, $data = NULL)
+	public function trigger($event, $data = NULL)
 	{
+		$event = $this->sanitize_event_name($event);
 		
-	}
-	
-	public function register_listener($callback)
-	{
-		
-	}
-	
-	private function load_package()
-	{
-		
-	}
-	
-	private function get_listeners($event)
-	{
-		
-	}
-	
-	private function create($event, $opts = NULL)
-	{
-		$data = array();
-		
-		//Read through options and parse them into the table
-		if($opts != NULL)
+		if(isset($this->listeners[$event]))
 		{
-			if(isset($opts['register']))
+			foreach($this->listeners[$event] AS $listener)
 			{
-				$data['register'] = preg_replace('/[^a-zA-Z_]/', '', $opts['register']);
-				
-				unset($opts['register']);
-			}
-			
-			if(isset($opts['user_id']))
-			{
-				$data['user_id'] = preg_replace('/[^0-9]/', '', $opts['user_id']);
-				
-				unset($opts['user_id']);
-			}
-			
-			//If, after removing the two special keywords,
-			//the options array still has any data
-			//We parse through it as conditions
-			if(count($opts) > 0)
-			{
-				$conditions = '';
-				foreach($opts AS $key => $value)
+				if($listener->extension == TRUE)
 				{
-					$conditions .= preg_replace('/[^a-zA-Z_->]/', '', $key);
+					$package = $listener->package_name;
+					$callback = $listener->callback;
 					
-					if(preg_match('/^[<>=]+/', $value, $matched))
-					{
-						$conditions .= $matched[0];
-						str_replace($matches[0], '', $value);
-					}
-					else $conditions .= '=';
+					$event_object = new StructEvent($event, $data, $listener->custom_var);
 					
-					$conditions .= preg_replace('/[^a-zA-Z0-9_ /', '', $value);
-					$conditions .= ';';
+					
+					$this->CI->Extensions->$package->$callback($event_object);
 				}
-				
-				$data['conditions'] = $conditions;
-				unset($conditions);
+				else
+				{
+					
+				}
 			}
 		}
+	}
+	
+	public function register_listener($event_name, $callback, $custom_var = NULL)
+	{
+		$trace = debug_backtrace();
 		
-		$data['event_type'] = preg_replace('/[^a-zA-Z_]/', '', $event);
+		$package_name = array();
+		$extension = NULL;
 		
-		
-		//Begin transaction and place $data into table.
-		$this->CI->db->trans_start();
-		
-		$this->CI->db->insert('event_listeners', $data);
-		
-		$this->CI->db->trans_complete();
-		
-		if($this->CI->db->trans_status() === FALSE)
+		if(strstr($trace[1]['file'], 'extensions'))
 		{
-			log_message('Error', 'Error in Event method create: transaction failed.');
-			return FALSE;
+			preg_match('/(?=extensions|third_party\/)[a-zA-Z0-9_]+?(.|\/)/', $trace[1]['file'], $package_name);
+			$extension = TRUE;
+		}
+		else
+		{
+			preg_match('/(?=models\/)[a-zA-Z0-9_]+?(.|\/)/', $trace[1]['file'], $package_name);	
+			$extension = FALSE;
 		}
 		
-		return TRUE;
-	}
-	
-	private function read($event)
-	{
+		$package_name = $this->sanitize_package_name(substr($package_name[0], 0, strlen($package_name[0]) - 1));
 		
-	}
-	
-	private function edit($event, $opts = NULL)
-	{
-	
-	}
-	
-	private function delete()
-	{
+		$event_name = $this->sanitize_event_name($event_name);
 		
+		$callback = $this->sanitize_callback_name($callback);
+		
+		$this->listeners[$event_name][] = new StructListener($package_name, $extension, $callback, $custom_var);
+	}
+	
+	private function sanitize_event_name($name)
+	{
+		strtolower(preg_replace('/[^a-zA-Z_]/', '', $name));
+		return $name;
+	}	
+	
+	private function sanitize_package_name($name)
+	{
+		preg_replace('/[^a-zA-Z_]/', '', $name);
+		return $name;
+	}
+	
+	private function sanitize_callback_name($name)
+	{
+		preg_replace('/[^a-zA-Z_]/', '', $name);
+		return $name;
 	}
 	
 }
