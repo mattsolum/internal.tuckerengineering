@@ -7,14 +7,14 @@ class StructAccounting
 	public $total 	= 0.0;
 	
 	//Itemized
-	
+	public $items = array();
 	
 	//Iteration
 	private $iteration = array();
 	
 	private function set($name, $value)
 	{
-				if($name != 'iteration')
+		if($name != 'iteration')
 		{
 			if($name == 'total')
 			{
@@ -85,7 +85,17 @@ class StructAccounting
 		$total_formatted = number_format($this->total, 2);
 		
 		$prespaces = '';
-		for($i = strlen($last_string) - 17; $i > 0; $i--)
+		
+		if(strlen($last_string) == 0)
+		{
+			$num = 29;
+		}
+		else
+		{
+			$num = strlen($last_string) - 17;	
+		}
+		
+		for($i = $num; $i > 0; $i--)
 		{
 			$prespaces .= ' ';
 		}

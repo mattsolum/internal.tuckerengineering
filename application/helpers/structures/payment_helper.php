@@ -61,7 +61,22 @@ class StructPayment
 	
 	public function stringify()
 	{
-		return $this->ledger_id . ' ' . $this->type . ' *' . $this->number . ' = ' . number_format($this->amount, 2);
+		$first = $this->ledger_id . ' ' . $this->type;
+		$first .= ($this->number != '')?' *' . $this->number:'';
+		$last = number_format($this->amount, 2);
+		
+		for($i = 34 - strlen($first); $i > 0; $i--)
+		{
+			$first .= ' ';
+		}
+		
+		for($i = 8 - strlen($last); $i > 0; $i--)
+		{
+			$last = ' ' . $last;
+		}
+		
+		return $first . ' = ' . $last;
+		
 	}
 	
 	public function __toString()

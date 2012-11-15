@@ -46,15 +46,14 @@ class TestAPI extends PrototypeAPI
 		$payment->type = 'Credit';
 		$payment->number = '1234';
 		$payment->ledger_id = '1534';
-		$payment->amount = 600.00;
-		
-		$receivables = new StructAccounting();
-		$receivables->add($ledger[0]);
-		$receivables->add($ledger[1]);
-		$receivables->add($ledger[2]);
+		$payment->amount = 300.00;
+
 		$job = new StructJob('{"id":"1","service":"Structural Inspection Report","client":{"id":"2","name":"Tucker Engineering, Inc","title":null,"location":{"id":"1","number":"1311","route":"Chisholm Trail Rd","subpremise":"303","locality":"Round Rock","admin_level_1":"Texas","admin_level_2":"Williamson","postal_code":"78681","neighborhood":null,"latitude":null,"longitude":null,"info":{"foundation":"slab","reinforcement":"post-tension cables","roof_framing":"factory-built trusses"},"assets":{},"notes":{},"date_added":"1230811200","date_updated":"1343822400"},"contact":null,"notes":null,"date_added":"1275930000","date_updated":null},"requester":{"id":"2","name":"Tucker Engineering, Inc","title":null,"location":{"id":"1","number":"1311","route":"Chisholm Trail Rd","subpremise":"303","locality":"Round Rock","admin_level_1":"Texas","admin_level_2":"Williamson","postal_code":"78681","neighborhood":null,"latitude":null,"longitude":null,"info":{"foundation":"slab","reinforcement":"post-tension cables","roof_framing":"factory-built trusses"},"assets":{},"notes":{},"date_added":"1230811200","date_updated":"1343822400"},"contact":null,"notes":null,"date_added":"1275930000","date_updated":null},"location":{"id":"10","number":"13107","route":"Dessau Rd","subpremise":"400","locality":"Austin","admin_level_1":"Texas","admin_level_2":"","postal_code":"78754","neighborhood":"","latitude":"","longitude":"","info":{"foundation":"slab","reinforcement":"post-tension cables","roof_framing":"conventionally framed"},"assets":{},"notes":{},"date_added":"1345597698","date_updated":"1345607353"},"notes":null,"assets":null,"receivable":{"total":0},"payments":{"total":0},"date_added":"1345654800","date_updated":"1345654800","date_billed":null}');
-		$job->receivables = $receivables;
-		$job->payments->add($payment);
+		$job->debits->add($ledger[0]);
+		$job->debits->add($ledger[1]);
+		$job->debits->add($ledger[2]);
+		
+		$job->credits->add($payment);
 		
 		return $job;
 	}

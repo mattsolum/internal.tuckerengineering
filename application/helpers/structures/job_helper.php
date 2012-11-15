@@ -14,8 +14,8 @@ class StructJob {
 	public $assets;
 	
 	//Amounts
-	public $receivable;
-	public $payments;
+	public $debits;
+	public $credits;
 	
 	//Dates
 	public $date_added;
@@ -29,8 +29,8 @@ class StructJob {
 		
 		$this->location		= new StructProperty();
 
-		$this->receivable	= new StructAccounting();
-		$this->payments		= new StructAccounting();
+		$this->debits	= new StructAccounting();
+		$this->credits		= new StructAccounting();
 		
 		if($json != NULL)
 		{
@@ -73,7 +73,7 @@ class StructJob {
 
 	public function balance()
 	{
-		return $this->receivable->total - $this->payments->total;
+		return $this->debits->total - $this->credits->total;
 	}
 	
 	public function is_valid()
@@ -90,11 +90,21 @@ class StructJob {
 		$str .= 'Client: ' . "\n" . (string)$this->client;
 	
 		$str .= "\n\n";
-		$str .= 'Fees: ' . "\n";
-		$str .= (string)$this->receivables;
+		$str .= 'Debits: ' . "\n";
+		$str .= (string)$this->debits;
 		$str .= "\n\n";
-		$str .= 'Payments: ' . "\n";
-		$str .= (string)$this->payments;
+		$str .= 'Credits: ' . "\n";
+		$str .= (string)$this->credits;
+		$str .= "\n\n";
+		
+		$total = number_format($this->debits->total - $this->credits->total, 2);
+		
+		for($i = 8 - strlen($total); $i > 0; $i--)
+		{
+			$total = ' ' . $total;
+		}
+		
+		$str .= 'Balance due:                         ' . $total . "\n";
 		
 		
 		return $str;

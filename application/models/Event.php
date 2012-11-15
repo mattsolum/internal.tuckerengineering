@@ -4,10 +4,14 @@ class Event extends CI_Model
 {
 	private $CI = NULL;
 	
+	private $listeners
+	
 	public function Event()
 	{
 		parent::__construct();
-		$this->CI =& get_instance();	
+		$this->CI =& get_instance();
+		
+		$this->listeners = array();
 	}	
 	
 	public function trigger_event($event, $data = NULL)
