@@ -17,28 +17,20 @@ class Event extends CI_Model
 		$this->CI->load->helper('structures/event');
 	}	
 	
-	public function trigger($event, $data = NULL)
+	public function trigger($event, &$data = NULL)
 	{
+		//Organize everything
 		$event = $this->sanitize_event_name($event);
 		
+		$event_object = new StructEvent($event, $data);
+		
+		
+		//Find any registered listeners
 		if(isset($this->listeners[$event]))
 		{
 			foreach($this->listeners[$event] AS $listener)
 			{
-				if($listener->extension == TRUE)
-				{
-					$package = $listener->package_name;
-					$callback = $listener->callback;
-					
-					$event_object = new StructEvent($event, $data, $listener->custom_var);
-					
-					
-					$this->CI->Extensions->$package->$callback($event_object);
-				}
-				else
-				{
-					
-				}
+				$this->activate_listener($listener, $event_object);
 			}
 		}
 	}
@@ -52,12 +44,12 @@ class Event extends CI_Model
 		
 		if(strstr($trace[1]['file'], 'extensions'))
 		{
-			preg_match('/(?=extensions|third_party\/)[a-zA-Z0-9_]+?(.|\/)/', $trace[1]['file'], $package_name);
+			preg_match('/(?=extensions|third_party\/)[a-zA-Z0-9_]+?(\/)/', $trace[1]['file'], $package_name);
 			$extension = TRUE;
 		}
 		else
 		{
-			preg_match('/(?=models\/)[a-zA-Z0-9_]+?(.|\/)/', $trace[1]['file'], $package_name);	
+			preg_match('/(?=models\/)[a-zA-Z0-9_]+?(\/|.)/', $trace[1]['file'], $package_name);	
 			$extension = FALSE;
 		}
 		
@@ -88,4 +80,47 @@ class Event extends CI_Model
 		return $name;
 	}
 	
+	private function activate_lister($listener, $e)
+	{
+		//Add any data the listener wanted handed back
+		$e->custom = $listener->custom_var;
+			
+		//Check if it is an extension or an internal class
+		//And then ship it off to the right place.
+		if($listener->extension == TRUE)
+		{
+			$this->activate_extension($listener, $e);
+		}
+		else
+		{
+			$this->activate_local($listener, $e);
+		}
+	}
+	
+	private function activate_extension($listener, $e)
+	{
+		//PHP doesn't like using properties as property or method names
+		$package = $listener->package_name;
+		$callback = $listener->callback;
+		
+		//The only way for an item to register itself as a listener is to be loaded and run...
+		//So, the check that it is set is potentialy unecessary.
+		//This could change if I add another method of registering an event listener.
+		if(isset($this->CI->Extensions->$package) && method_exists($this->CI->Extensions->$package, $callback))
+		{
+			$this->CI->Extensions->$package->$callback($e);
+		}
+	}
+	
+	private function activate_local($listener, $e)
+	{
+		$package = $listener->package_name;
+		$callback = $listener->callback;
+		
+		//In order to register an event listener the model has to be loaded.
+		if(isset($this->CI->$package) && method_exists($this->CI->$package, $callback))
+		{
+			$this->CI->$package->$callback($e);
+		}
+	}
 }
