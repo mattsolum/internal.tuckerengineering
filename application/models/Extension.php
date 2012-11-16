@@ -13,7 +13,7 @@ class Extension extends CI_Model
 		$this->location = APPPATH . setting('application.extensions.location');
 		
 		//Load activated extensions
-		$files = scandir($location);
+		$files = scandir($this->location);
 		
 		foreach($files AS $file)
 		{
@@ -92,13 +92,13 @@ class Extension extends CI_Model
 		while (false !== $entry = $dir->read())
 		{
 			// Skip pointers
-			if ($entry == ‘.’ || $entry == ‘..’)
+			if ($entry == '.' || $entry == '..')
 			{
 				continue;
 			}
 		
 			// Recurse
-			$this->rmdirr(“$dirname/$entry”);
+			$this->rmdirr("$dirname/$entry");
 		}
 		
 		// Clean up
@@ -128,7 +128,7 @@ class Extension extends CI_Model
 				$this->activate($package_name);
 				
 				//Inside the extension directory, does the main file exist?
-				if(!file_exists(file_exists($this->location . $package_name .'/' . $package_name . '.php'))
+				if(!file_exists($this->location . $package_name .'/' . $package_name . '.php'))
 				{
 					$valid = FALSE;
 				}
