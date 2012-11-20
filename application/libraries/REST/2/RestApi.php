@@ -8,7 +8,7 @@ class RestApi
 	public $id;
 	public $filetype;
 	public $arguments;
-	public $requestMethod;
+	public $request_method;
 	
 	private $active_class;
 	
@@ -94,10 +94,10 @@ class RestApi
 		$this->method = implode('_', $segments);
 		
 		//Now get the HTTP request method
-		$request_method = $requestMethod = substr(preg_replace('/[^a-z]/','', strtolower($_SERVER['REQUEST_METHOD'])), 0, 6);
+		$this->request_method = substr(preg_replace('/[^a-z]/','', strtolower($_SERVER['REQUEST_METHOD'])), 0, 6);
 		
 		//Assemble the API method.
-		$this->method = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->method) . '_' . $request_method);
+		$this->method = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->method));
 		
 		$this->method = preg_replace('/^( *)_+/', '', $this->method);
 		
@@ -146,16 +146,22 @@ class RestApi
 		}
 		
 		//Make sure the method we want to access exists
-		if(method_exists($this->active_class, $this->method . '_' . $this->id))
+		
+		//To determine if the last segment is truly an ID and not a further method name
+		//We check if the method exists using the ID as part of the method name
+		if(method_exists($this->active_class, trim($this->method . '_' . $this->id . '_' . $this->request_method, '_')))
 		{
-			$this->method .= '_' . (string)$this->id;
+			$this->method .= trim($this->method . '_' . $this->id . '_' . $this->request_method, '_');
 			$this->id = '';
 		}
 		else
 		{
-			if(method_exists($this->active_class, $this->method))
+			//If it does not exist in the long format, try the method name without it
+			if(method_exists($this->active_class, trim($this->method . '_' . $this->request_method, '_')))
 			{
+				//The ID is truly an ID, format it.
 				$this->id = (string)str_replace('_', ' ', urldecode($this->id));
+				$this->method = trim($this->method . '_' . $this->request_method, '_');
 			}
 			else
 			{

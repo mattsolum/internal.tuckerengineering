@@ -100,7 +100,7 @@ class Event extends CI_Model
 	{		
 		//Check if it is an extension or an internal class
 		//And then ship it off to the right place.
-		if($listener->extension == TRUE)
+		if(!model_exists($listener->package))
 		{
 			$this->activate_extension($listener, $e);
 		}
@@ -130,8 +130,16 @@ class Event extends CI_Model
 		$package = $listener->package;
 		$callback = $listener->callback;
 		
-		//In order to register an event listener the model has to be loaded.
-		if(isset($this->CI->$package) && method_exists($this->CI->$package, $callback))
+		//Due to the check prior to this in activate_listener we will assume the file exists
+		//This method of check, though, ignores the idea that the model may have been renamed
+		//when it was loaded. Someone may want to make this handle that case.
+		if(!isset($this->CI->$package))
+		{
+			$this->CI->load->model($package);
+		}
+		
+		//In order to fail gracefully we check if the method actualy exists before calling it
+		if(method_exists($this->CI->$package, $callback))
 		{
 			$this->CI->$package->$callback($e);
 		}

@@ -27,3 +27,47 @@ function view_exists($view)
 	
 	return FALSE;
 }
+
+/**
+* Model Exists
+*
+* This function is used to check if a "model" file exists.
+*
+* @author	Matthew Solum
+* @param	string
+*/
+function model_exists($model)
+{
+	$CI =& get_instance();
+	
+	$paths = $CI->load->get_package_paths();
+	
+	if ($model == '')
+	{
+		return FALSE;
+	}
+
+	$path = '';
+
+	// Is the model in a sub-folder? If so, parse out the filename and path.
+	if (($last_slash = strrpos($model, '/')) !== FALSE)
+	{
+		// The path is in front of the last slash
+		$path = substr($model, 0, $last_slash + 1);
+
+		// And the model name behind it
+		$model = substr($model, $last_slash + 1);
+	}
+	
+	$model = strtolower($model);
+	
+	foreach ($paths as $mod_path)
+	{
+		if (file_exists($mod_path.'models/'.$path.$model.'.php'))
+		{
+			return TRUE;
+		}
+	}
+	
+	return FALSE;
+}
