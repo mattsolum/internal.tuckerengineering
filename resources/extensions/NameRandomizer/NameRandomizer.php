@@ -13,7 +13,7 @@ class NameRandomizer
 	
 	public function client_handler($e)
 	{
-		$e->data->name = str_shuffle($e->data->name);
+		$e->name = str_shuffle($e->name);
 		echo('client_handler called!' . "\n");
 	}
 }

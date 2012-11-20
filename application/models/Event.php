@@ -17,12 +17,13 @@ class Event extends CI_Model
 		$this->CI->load->helper('structures/event');
 	}	
 	
+	//Changed this so that the "Event object" is JUST the data packet passed by the event triggerer. No other information passed.
 	public function trigger($event, &$data = NULL)
 	{
 		//Organize everything
 		$event = $this->sanitize_event_name($event);
 		
-		$event_object = new StructEvent($event, $data);
+		$event_object = $data;
 		
 		//Find any registered listeners
 		if(isset($this->listeners[$event]))
@@ -34,31 +35,47 @@ class Event extends CI_Model
 		}
 	}
 	
-	public function register($event_name, $callback, $custom_var = NULL)
+	
+	public function register($event_name, $callback, $package = NULL)
 	{
 		$trace = debug_backtrace();
 		
+		//will eventualy hold results from a regex query
 		$package_name = array();
+		
+		//If true the package will be located in the extensions folder
+		//Otherwise it will be located in the models folder.
+		//This will be depreciated when the finding algorithm is emplemented.
 		$extension = NULL;
 		
-		if(strstr($trace[0]['file'], 'extensions'))
+		if($package != NULL)
 		{
-			preg_match('/(?<=extensions\/)[a-zA-Z0-9_]+?(\/)/', $trace[0]['file'], $package_name);
-			$extension = TRUE;
+			$package_name = $this->sanitize_package_name($package);
 		}
 		else
 		{
-			preg_match('/(?<=models\/)[a-zA-Z0-9_]+?(\/|.)/', $trace[0]['file'], $package_name);	
-			$extension = FALSE;
+			if(strstr($trace[0]['file'], 'extensions'))
+			{
+				preg_match('/(?<=extensions\/)[a-zA-Z0-9_]+?(\/)/', $trace[0]['file'], $package_name);
+				$extension = TRUE;
+			}
+			else
+			{
+				//This method is limited because it does not allow packages in sub-folders
+				//Someone may want to work with this.
+				//I'm not going to, I'm lazy.
+				preg_match('/(?<=models\/)[a-zA-Z0-9_]+?(\/|.)/', $trace[0]['file'], $package_name);	
+				$extension = FALSE;
+			}
+			
+			$package_name = $this->sanitize_package_name(substr($package_name[0], 0, strlen($package_name[0]) - 1));
 		}
-		
-		$package_name = $this->sanitize_package_name(substr($package_name[0], 0, strlen($package_name[0]) - 1));
 		
 		$event_name = $this->sanitize_event_name($event_name);
 		
 		$callback = $this->sanitize_callback_name($callback);
 		
-		$this->listeners[$event_name][] = new StructListener($package_name, $extension, $callback, $custom_var);
+		$this->listeners[$event_name][] = new StructListener($package_name, $extension, $callback);
 	}
 	
 	private function sanitize_event_name($name)
@@ -80,10 +97,7 @@ class Event extends CI_Model
 	}
 	
 	private function activate_listener($listener, $e)
-	{
-		//Add any data the listener wanted handed back
-		$e->custom = $listener->custom_var;
-			
+	{		
 		//Check if it is an extension or an internal class
 		//And then ship it off to the right place.
 		if($listener->extension == TRUE)
