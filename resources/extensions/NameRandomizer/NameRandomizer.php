@@ -8,7 +8,7 @@ class NameRandomizer
 	{
 		$this->CI =& get_instance();
 		
-		$this->CI->Event->register('clientCreate', 'client_handler');
+		//$this->CI->Event->register('clientCreate', 'client_handler');
 	}
 	
 	public function client_handler($e)

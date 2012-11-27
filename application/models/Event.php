@@ -26,9 +26,12 @@ class Event extends CI_Model
 		$event_object = $data;
 		
 		//Find any registered listeners
-		if(isset($this->listeners[$event]))
+		$where = array('event' => $event);
+		$query = $this->CI->db->get_where('listeners', $where);
+		
+		if($query->num_rows() > 0)
 		{
-			foreach($this->listeners[$event] AS $listener)
+			foreach($query->result() AS $listener)
 			{
 				$this->activate_listener($listener, $event_object);
 			}
@@ -38,38 +41,54 @@ class Event extends CI_Model
 	
 	public function register($event_name, $callback, $package = NULL)
 	{
-		$trace = debug_backtrace();
-		
-		//will eventualy hold results from a regex query
-		$package_name = array();
-		
 		if($package != NULL)
 		{
 			$package_name = $this->sanitize_package_name($package);
 		}
 		else
 		{
-			//No longer necessary, should re-write a better REGEX expression to handle all cases.
-			if(strstr($trace[0]['file'], 'extensions'))
-			{
-				preg_match('/(?<=extensions\/)[a-zA-Z0-9_]+?(\/)/', $trace[0]['file'], $package_name);
-			}
-			else
-			{
-				//This method is limited because it does not allow packages in sub-folders
-				//Someone may want to work with this.
-				//I'm not going to, I'm lazy.
-				preg_match('/(?<=models\/)[a-zA-Z0-9_]+?(\/|.)/', $trace[0]['file'], $package_name);
-			}
-			
-			$package_name = $this->sanitize_package_name(substr($package_name[0], 0, strlen($package_name[0]) - 1));
+			$package_name = $this->parse_package_name();
 		}
 		
 		$event_name = $this->sanitize_event_name($event_name);
 		
 		$callback = $this->sanitize_callback_name($callback);
 		
-		$this->listeners[$event_name][] = new StructListener($package_name, $extension, $callback);
+		if(!$this->is_registered($event_name, $callback, $package_name))
+		{
+			$data = array('event' => $event_name, 'callback' => $callback, 'package' => $package_name);
+			$this->CI->db->insert('listeners', $data);
+		}
+		
+		//$this->listeners[$event_name][] = new StructListener($package_name, $extension, $callback);
+	}
+	
+	public function unregister($event_name = NULL, $callback = NULL, $package = NULL)
+	{
+		$where = array();
+		//If everything is set to NULL it will guess the package based on the trackback
+		//and then unregister ALL listeners for the pacakge.
+		
+		$where['package'] = ($package == NULL)?$this->parse_package_name():$this->sanitize_package_name($package);
+				
+		if($event_name != NULL) $where['event'] 	= $this->sanitize_event_name($event_name);
+		if($callback != NULL) 	$where['callback'] 	= $this->sanitize_callback_name($callback);
+		
+		//DATABASE STUFF!
+		//TRANSACTIONS!
+		$this->CI->db->transaction_start();
+		
+		$this->CI->db->delete_where('listener', $where);
+		
+		$this->CI->db->transaction_complete();
+		
+		if($this->CI->db->transaction_status() === FALSE)
+		{
+			//SOMETHING FAILED!
+			//Wat do?
+		}
+		
+		return TRUE;
 	}
 	
 	private function is_registered($event_name, $callback, $package)
@@ -83,6 +102,23 @@ class Event extends CI_Model
 		}
 		
 		return FALSE;
+	}
+	
+	private function parse_package_name()
+	{
+		$trace = debug_backtrace();
+		
+		//Return the last segment of the URI
+		//This does not account for models or extensions in subfolders
+		//Also, it occurs to me that there is a security hole here.
+		//Because something could presumably register a listener from
+		//anywhere and run the code on another element.
+		//Maybe we should add a check to make sure the request is at least coming from a relatively secure area of our directory structure?
+		$last_segment = array_pop(explode('/', $trace[1]['file']));
+		
+		$package_name = substr($last_segment, 0, strpos($last_segment, '.') + 1);
+		
+		return $this->sanitize_package_name($package_name);
 	}
 	
 	private function sanitize_event_name($name)
