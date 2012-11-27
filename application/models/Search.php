@@ -2,12 +2,12 @@
 require_once APPPATH . 'libraries/Search_result.php'
 
 class Search_model extends CI_Model {
-	$base = NULL;
+	$CI = NULL;
 	
 	public function Search_model()
 	{
 		parent::construct();
-		$self->base =& get_instance();	
+		$this->CI =& get_instance();	
 	}
 	
 	/**
@@ -33,7 +33,7 @@ class Search_model extends CI_Model {
 	public function commit($search)
 	{
 		//code
-		if($self->exists($search))
+		if($this->exists($search))
 		{
 			$this->create($search);
 		}

@@ -43,29 +43,23 @@ class Event extends CI_Model
 		//will eventualy hold results from a regex query
 		$package_name = array();
 		
-		//If true the package will be located in the extensions folder
-		//Otherwise it will be located in the models folder.
-		//This will be depreciated when the finding algorithm is emplemented.
-		$extension = NULL;
-		
 		if($package != NULL)
 		{
 			$package_name = $this->sanitize_package_name($package);
 		}
 		else
 		{
+			//No longer necessary, should re-write a better REGEX expression to handle all cases.
 			if(strstr($trace[0]['file'], 'extensions'))
 			{
 				preg_match('/(?<=extensions\/)[a-zA-Z0-9_]+?(\/)/', $trace[0]['file'], $package_name);
-				$extension = TRUE;
 			}
 			else
 			{
 				//This method is limited because it does not allow packages in sub-folders
 				//Someone may want to work with this.
 				//I'm not going to, I'm lazy.
-				preg_match('/(?<=models\/)[a-zA-Z0-9_]+?(\/|.)/', $trace[0]['file'], $package_name);	
-				$extension = FALSE;
+				preg_match('/(?<=models\/)[a-zA-Z0-9_]+?(\/|.)/', $trace[0]['file'], $package_name);
 			}
 			
 			$package_name = $this->sanitize_package_name(substr($package_name[0], 0, strlen($package_name[0]) - 1));
@@ -76,6 +70,19 @@ class Event extends CI_Model
 		$callback = $this->sanitize_callback_name($callback);
 		
 		$this->listeners[$event_name][] = new StructListener($package_name, $extension, $callback);
+	}
+	
+	private function is_registered($event_name, $callback, $package)
+	{
+		$where = array('event' => $event_name, 'callback' => $callback, 'package' => $package);
+		$query = $this->CI->db->get_where('listeners');
+		
+		if($query->num_rows() > 0)
+		{
+			return TRUE;
+		}
+		
+		return FALSE;
 	}
 	
 	private function sanitize_event_name($name)
