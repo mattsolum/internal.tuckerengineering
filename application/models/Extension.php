@@ -44,6 +44,9 @@ class Extension extends CI_Model
 				mkdir($this->location . $package_name . '/');
 				$zip->extractTo($this->location . $package_name . '/');
 				$zip->close();
+				
+				$this->load_extension($package_name);
+				$this->$package_name->install();
 				return TRUE;
 			}
 			else
@@ -62,6 +65,7 @@ class Extension extends CI_Model
 	{
 		//The zip file for an extension is never deleted, so
 		//to deactive an extension just delete the extension folder
+		$this->$package_name->uninstall();
 		return $this->rmdirr($this->location . $package_name . '/');
 	}
 	

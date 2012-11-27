@@ -23,7 +23,11 @@ class TestAPI extends PrototypeAPI
 		var_dump($client);
 		echo("\n\n\n");
 		
+		$this->CI->Extension->NameRandomizer->install();
+		
 		$this->CI->Event->trigger('clientCreate', $client);
+		
+		$this->CI->Extension->NameRandomizer->uninstall();
 		
 		echo("\n\n\n");
 		

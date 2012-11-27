@@ -12,9 +12,6 @@ class Event extends CI_Model
 		$this->CI =& get_instance();
 		
 		$this->listeners = array();
-		
-		$this->CI->load->helper('structures/listener');
-		$this->CI->load->helper('structures/event');
 	}	
 	
 	//Changed this so that the "Event object" is JUST the data packet passed by the event triggerer. No other information passed.
@@ -76,13 +73,13 @@ class Event extends CI_Model
 		
 		//DATABASE STUFF!
 		//TRANSACTIONS!
-		$this->CI->db->transaction_start();
+		$this->CI->db->trans_start();
 		
-		$this->CI->db->delete_where('listener', $where);
+		$this->CI->db->delete('listeners', $where);
 		
-		$this->CI->db->transaction_complete();
+		$this->CI->db->trans_complete();
 		
-		if($this->CI->db->transaction_status() === FALSE)
+		if($this->CI->db->trans_status() === FALSE)
 		{
 			//SOMETHING FAILED!
 			//Wat do?
@@ -116,7 +113,7 @@ class Event extends CI_Model
 		//Maybe we should add a check to make sure the request is at least coming from a relatively secure area of our directory structure?
 		$last_segment = array_pop(explode('/', $trace[1]['file']));
 		
-		$package_name = substr($last_segment, 0, strpos($last_segment, '.') + 1);
+		$package_name = substr($last_segment, 0, strpos($last_segment, '.'));
 		
 		return $this->sanitize_package_name($package_name);
 	}
