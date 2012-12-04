@@ -22,9 +22,9 @@ class TestAPI extends PrototypeAPI
 		
 		$search = new StructSearch($client);
 		
-		$search->description('brady austin texas');
+		return preg_replace('/<\/b>(\s?)<b>/', '$1', preg_replace('/(repair|austin|texas)/', '<b>$1</b>', $search->description('repair austin texas')));
 		
-		return 'Testing extensions and events!';
+		//return 'Testing extensions and events!';
 	}
 	
 	private function payment_test()
