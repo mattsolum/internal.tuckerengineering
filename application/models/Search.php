@@ -1,12 +1,11 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-require_once APPPATH . 'libraries/Search_result.php'
 
-class Search_model extends CI_Model {
-	$CI = NULL;
+class Search extends CI_Model {
+	private $CI = NULL;
 	
-	public function Search_model()
+	public function Search()
 	{
-		parent::construct();
+		parent::__construct();
 		$this->CI =& get_instance();	
 	}
 	
@@ -120,10 +119,16 @@ class Search_model extends CI_Model {
 	 * @param $query, $page = 0, $per_page = NULL, $modifiers = NULL
 	 * @return Array of search_results
 	 */
-	public function search($query, $page = 0, $modifiers = NULL)
+	public function find($query, $page = 0, $modifiers = NULL)
 	{
 		//code
 		
 	}
-
+	
+	public function client_handler($client)
+	{
+		$search_result = new StructSearch($client);
+		
+		echo $search_result->description('');
+	}
 }

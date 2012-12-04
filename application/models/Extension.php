@@ -65,6 +65,8 @@ class Extension extends CI_Model
 	{
 		//The zip file for an extension is never deleted, so
 		//to deactive an extension just delete the extension folder
+		
+		//Also... Uninstall the package.
 		$this->$package_name->uninstall();
 		return $this->rmdirr($this->location . $package_name . '/');
 	}
@@ -77,6 +79,8 @@ class Extension extends CI_Model
 	* @param string $dirname Directory to delete
 	* @return bool Returns TRUE on success, FALSE on failure
 	*/
+	
+	//I just realized CodeIgniter has a built in Zip library. Will move to that... Eventualy.
 	private function rmdirr($dirname)
 	{
 		// Sanity check
@@ -116,14 +120,11 @@ class Extension extends CI_Model
 		//was activated when we began the check
 		$activated = TRUE;
 		
-		//If something goes wrong it is set to false
-		$valid = TRUE;
-		
 		if(!is_dir($this->location . $package_name .'/'))
 		{
 			if(!file_exists($this->location . $package_name . '.zip'))
 			{
-				$valid = FALSE;
+				return FALSE;
 			}
 			else
 			{
@@ -134,14 +135,14 @@ class Extension extends CI_Model
 				//Inside the extension directory, does the main file exist?
 				if(!file_exists($this->location . $package_name .'/' . $package_name . '.php'))
 				{
-					$valid = FALSE;
+					return FALSE;
 				}
 				else 
 				{
 					include($this->location . $package_name .'/' . $package_name . '.php');
 					
 					//The file exists, does the classname exist?	
-					if(!class_exists($package_name)) $valid = FALSE;
+					if(!class_exists($package_name)) return FALSE;
 				}
 			}
 		}
@@ -149,6 +150,6 @@ class Extension extends CI_Model
 		//Put the extension back the way we found it.
 		if($activated == FALSE) $this->deactivate($package_name);
 		
-		return $valid;
+		return TRUE;
 	}
 }
