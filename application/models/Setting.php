@@ -24,6 +24,14 @@ class Setting extends CI_Model {
 			
 				return $row->value;
 			}
+			else
+			{
+				return FALSE;	
+			}
+		}
+		else
+		{
+			return FALSE;	
 		}
 	}
 	

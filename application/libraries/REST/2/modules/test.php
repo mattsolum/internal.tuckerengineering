@@ -20,11 +20,7 @@ class TestAPI extends PrototypeAPI
 	{
 		$client = new StructClient('{"id":"4","name":"Brady Barnet","title":"Owner","location":{"id":"10","number":"13107","route":"Dessau Rd","subpremise":"400","locality":"Austin","admin_level_1":"Texas","admin_level_2":"","postal_code":"78754","neighborhood":"","latitude":"","longitude":"","info":{"foundation":"slab","reinforcement":"post-tension cables","roof_framing":"conventionally framed"},"assets":{},"notes":{},"date_added":"1345597698","date_updated":"1345607353"},"contact":[{"type":"email","info":"brady@superiorfoundationrepair.com"},{"type":"phone","info":"512-476-7700"}],"notes":null,"date_added":null,"date_updated":"1345607353"}');
 		
-		$search = new StructSearch($client);
-		
-		return preg_replace('/<\/b>(\s?)<b>/', '$1', preg_replace('/(repair|austin|texas)/', '<b>$1</b>', $search->description('repair austin texas')));
-		
-		//return 'Testing extensions and events!';
+		return $client;
 	}
 	
 	private function payment_test()
