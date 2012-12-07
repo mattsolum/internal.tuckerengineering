@@ -136,7 +136,7 @@ class StructSearch
 		
 		//It was sorted in ascending order so get the last $lines number of elements
 		//So that we have the $lines highest keyword density segments
-		$excerpts = array_slice($excerpts, $lines * -1);
+		$excerpts = array_slice($excerpts, $this->lines * -1);
 		
 		//Sort it again by offset, so that it appears in the right order.
 		$excerpts = $this->sort_by_offset($excerpts);

@@ -209,26 +209,41 @@ class RestApi
 				return FALSE;
 			}
 		}
-	
-		switch ($this->filetype) {
-			case 'xml':
-				$this->output_xml($data, $error);
-				break;
-			case 'json':
-				$this->output_json($data, $error);
-				break;
-			case 'html':
-				$this->output_html($data, $error);
-				break;
-			case 'htm':
-				$this->output_html($data, $error);
-				break;
-			case 'txt':
-				$this->output_txt($data, $error);
-				break;
-			default:
-				$this->output_xml($data, $error);
-				break;
+		
+		$formats_path = APPPATH . 'libraries/REST/2/formats/';
+		
+		if(file_exists($formats_path . strtolower($this->filetype) . '.php'))
+		{
+			include $formats_path . strtolower($this->filetype) . '.php';
+			
+			$output_class = 'Api' . ucfirst(strtolower($filetype));
+			
+			if(class_exists($output_class))
+			{
+				$output = new $output_class($data, $error);
+				
+				$this->CI->output->set_content_type($output->mime);
+				$this->CI->output->set_output($output->data);
+			}
+		}
+		elseif(file_exists($formats_path . 'xml.php'))
+		{
+			include $formats_path . 'xml.php';
+			
+			$output_class = 'ApiXml';
+			
+			if(class_exists($output_class))
+			{
+				$output = new $output_class($data, $error);
+				
+				$this->CI->output->set_content_type($output->mime);
+				$this->CI->output->set_output($output->data);
+			}	
+		}
+		else
+		{
+			$this->CI->output->set_content_type('text/xml');
+			$this->CI->output->set_output('<APIResponse><error>Output file not installed!</error></APIResponse>');
 		}
 	}
 	
