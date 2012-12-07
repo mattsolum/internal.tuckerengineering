@@ -4,8 +4,14 @@ class ApiHtm
 {
 	public $mime = 'application/html';
 	public $data = 'HTML module does not exist.';
-	
-	function __construct($data, $error)
+	private $API;
+			
+	function __construct(&$API)
+	{	
+		$this->API =& $API;
+	}
+
+	public function format($data, $error)
 	{	
 		if(file_exists('html.php'))
 		{
@@ -13,7 +19,9 @@ class ApiHtm
 			
 			if(class_exists('ApiHtml'))
 			{
-				return new ApiHtml($data, $error);
+				$htm = new ApiHtml($this->API);
+				return $htm->format($data, $error);
+				
 			}
 		}
 	}

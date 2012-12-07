@@ -3,9 +3,14 @@
 class ApiTxt
 {
 	public $mime = 'text';
-	public $data = '';
+	private $API;
 	
-	function __construct($data, $error)
+	function __construct(&$API)
+	{	
+		$this->API =& $API;
+	}
+
+	public function format($data, $error)
 	{	
 		$str = $this->recurse($data);
 		
@@ -14,7 +19,7 @@ class ApiTxt
 		
 		$str = trim($str);
 		
-		$this->data = $str;
+		return $str;
 	}
 	
 	private function recurse($data)
@@ -23,7 +28,14 @@ class ApiTxt
 		if(is_array($data))
 		{
 			foreach ($data as $key => $value) {
-				$str .= "\n" . $this->recurse_txt($value);
+				$str .= "\n";
+				
+				if(!preg_match('/^[0-9]+$/', $key))
+				{
+					$str .= $key . ' : ';
+				}
+				
+				$str .= $this->recurse($value);
 			}
 		}
 		else @$str .= (string)$data;

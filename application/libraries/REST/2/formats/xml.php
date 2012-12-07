@@ -3,10 +3,15 @@
 class ApiXml
 {
 	public $mime = 'text/xml';
-	public $data = '';
+	private $API;
 	
-	function __construct($data, $error)
+	function __construct(&$API)
 	{	
+		$this->API =& $API;
+	}
+	
+	public function format($data, $error)
+	{
 		$xml = '<APIResponse><result>';
 		$xml .= ($error)?'error</result>':'success</result>';
 		
@@ -17,7 +22,7 @@ class ApiXml
 			//use the request type as the tag name
 			if(preg_match('/^[0-9]/', $key))
 			{
-				$xml .= $this->recurse($this->type, $value );
+				$xml .= $this->recurse($this->API->type, $value );
 			}
 			else 
 			{
@@ -27,7 +32,7 @@ class ApiXml
 		
 		$xml .= '</APIResponse>';
 		
-		$this->data = $xml;
+		return $xml;
 	}
 	
 	private function recurse($key, $value)

@@ -216,14 +216,14 @@ class RestApi
 		{
 			include $formats_path . strtolower($this->filetype) . '.php';
 			
-			$output_class = 'Api' . ucfirst(strtolower($filetype));
+			$output_class = 'Api' . ucfirst(strtolower($this->filetype));
 			
 			if(class_exists($output_class))
 			{
-				$output = new $output_class($data, $error);
+				$output = new $output_class($this);
 				
 				$this->CI->output->set_content_type($output->mime);
-				$this->CI->output->set_output($output->data);
+				$this->CI->output->set_output($output->format($data, $error));
 			}
 		}
 		elseif(file_exists($formats_path . 'xml.php'))
@@ -286,167 +286,6 @@ class RestApi
 			$this->error('Pagination is out of range for result. Number of elements returned: ' . $elements . '.');
 			return FALSE;	
 		}
-	}
-	
-	private function output_json($data, $error)
-	{
-		$this->CI->output->set_content_type('application/json');
-		
-		$final = array();
-		$final['result'] = ($error)?'error':'success';
-		
-		if(is_array($data) && isset($data['pagination']))
-		{
-			$final['pagination'] = $data['pagination'];
-			unset($data['pagination']);
-		}
-		
-		$final['data'] = $data;
-		
-		$this->CI->output->set_output(json_encode($final));
-	}
-	
-	private function output_xml($data, $error)
-	{
-		$this->CI->output->set_content_type('text/xml');
-		
-		$xml = '<APIResponse><result>';
-		$xml .= ($error)?'error</result>':'success</result>';
-		
-		foreach($data as $key => $value)
-		{
-			//If the root array is numerically indexed, 
-			//which would be improper for XML,
-			//use the request type as the tag name
-			if(preg_match('/^[0-9]/', $key))
-			{
-				$xml .= $this->recurse_xml($this->type, $value );
-			}
-			else 
-			{
-				$xml .= $this->recurse_xml($key, $value);
-			}
-		}
-		
-		$xml .= '</APIResponse>';
-		
-		$this->CI->output->set_output($xml);
-	}
-	
-	private function recurse_xml($key, $value)
-	{
-		$xml = "<$key>";
-		$flag = false;
-		
-		if(is_array($value) || is_object($value))
-		{
-			foreach ($value as $key2 => $value2) {
-				if(preg_match('/^[0-9]+$/', $key2))
-				{
-					if(!$flag)
-					{
-						$xml = '';
-						$flag = true;
-					}
-					
-					$xml .= $this->recurse_xml($key, $value2);
-				}
-				else
-				{
-					$xml .= $this->recurse_xml($key2, $value2);	
-				}
-			}
-		}
-		else 
-		{
-			$xml .= $value;	
-		}
-		
-		if(!$flag) $xml .= "</$key>";
-		
-		return $xml;
-	}
-	
-	private function output_html($data, $error)
-	{
-		$this->CI->output->set_content_type('text/html');
-		
-		if(is_array($data) && isset($data['pagination'])) unset($data['pagination']);
-		
-		if($error == FALSE && isset($this->arguments->view) && view_exists($this->arguments->view))
-		{
-			
-			$this->CI->load->view($this->arguments->view, array($this->type => $data));
-		}
-		else
-		{
-			$html  = '<span class="result">';
-			$html .= ($error)?'error</span>':'success</span>';
-			
-			$html .= '<ul>';
-			
-			foreach($data as $value)
-			{
-				$html .= $this->recurse_html($value);
-			}
-			
-			$html .= '</ul>';
-			
-			$this->CI->output->set_output($html);	
-		}
-	}
-	
-	private function recurse_html($value)
-	{
-		$html = '<li>';
-		$flag = false;
-		
-		if(is_array($value) || is_object($value))
-		{
-			$html .= '<ul>';
-			
-			foreach ($value as $value2) {
-				$html .= $this->recurse_html($value2);
-			}
-			
-			$html .= '</ul>';
-		}
-		else 
-		{
-			$html .= $value;	
-		}
-		
-		$html .= '</li>';
-		
-		return $html;
-	}
-	
-	private function output_txt($data, $error = FALSE)
-	{
-		$this->CI->output->set_content_type('text');
-		
-		$str = $this->recurse_txt($data);
-		
-		$str = str_replace('; ', ";\n", $str);
-		$str = str_replace(':: ', "::\n", $str);
-		
-		$str = trim($str);
-		
-		$this->CI->output->set_output($str);
-	}
-	
-	private function recurse_txt($data)
-	{
-		$str = '';
-		if(is_array($data))
-		{
-			foreach ($data as $key => $value) {
-				$str .= "\n" . $this->recurse_txt($value);
-			}
-		}
-		else @$str .= (string)$data;
-		
-		return $str;
 	}
 	
 	//Checks that an array is associatively keyed

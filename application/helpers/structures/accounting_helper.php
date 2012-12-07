@@ -3,154 +3,37 @@
 //Stores a list of ledger items
 class StructAccounting
 {
-	//Summary totals
-	public $total 	= 0.0;
-	
 	//Itemized
 	public $items = array();
 	
-	//Iteration
-	private $iteration = array();
-	
-	private function set($name, $value)
+	public function __construct($json = NULL)
 	{
-		if($name != 'iteration')
+		if($json !== NULL)
 		{
-			if($name == 'total')
+			$json = json_decode($json);
+			
+			if($json !== NULL && get_classname($json) == 'StructAccounting')
 			{
-				
-			}
-			else
-			{
-				//Before I forget again I ought to comment this section
-				//The idea is you can iterate through the object itsself
-				//to get each individual item someone is billed for
-				if(get_class($value) == 'StructLedger' || get_class($value) == 'StructPayment')
-				{
-					//As long as the value is the expected type
-					//go ahead and assign it to the given name
-					$this->$name = $value;
-					
-					//Now put a pointer in the iteration array
-					//but only if it is not already there
-					if(!array_search($name, $this->iteration))
-					{
-						$this->iteration[] = $name;
-						
-						//Go ahead and sort it so that life is
-						//dandy
-						sort($this->iteration);
-						
-						//Summarize totals up all the items
-						//and assigns the value to 'total'
-						$this->summarize();
-					}
-				} else trigger_error('Attempted to assign a variable that is not of class "StructLedger" or "StructPayment" value to StructAccounting.');
+				$this->items = $json->items;
 			}
 		}
 	}
-
-	//To cut down on the amount of effort it might take to 
-	//format a string as a PHP variable when adding 
-	public function add($value, $name = NULL)
+		
+	public function total()
 	{
-		if ($name == NULL)
+		$total = 0;
+		
+		foreach($items AS $item)
 		{
-			if(get_class($value) == 'StructLedger')
-			{
-				$name = $value->item;
-			}
-			else if (get_class($value) == 'StructPayment')
-			{
-				$name = $value->type . '_' . $value->number;
-			}
+			$total += $item->amount;
 		}
 		
-		$name = preg_replace('[^a-zA-Z0-9 -_]', '', $name);
-		$name = preg_replace('/\s\s+/', ' ', $name);
-		$name = str_replace(' ', '_', $name);
-		$name = strtolower($name);
-		$this->set($name, $value);
+		return $total;
 	}
 	
-	public function __toString()
+	public function is_valid()
 	{
-		$str = '';
-		foreach($this->iteration AS $key)
-		{
-			$str .= $this->$key->stringify() . "\n";
-			$last_string = $this->$key->stringify() . "\n";
-		}
-		
-		$total_formatted = number_format($this->total, 2);
-		
-		$prespaces = '';
-		
-		if(strlen($last_string) == 0)
-		{
-			$num = 29;
-		}
-		else
-		{
-			$num = strlen($last_string) - 17;	
-		}
-		
-		for($i = $num; $i > 0; $i--)
-		{
-			$prespaces .= ' ';
-		}
-		
-		$postspaces = '';
-		for($i = 8 - strlen($total_formatted); $i > 0; $i--)
-		{
-			$postspaces .= ' ';
-		}
-		
-		$str .= '---------------------------------------------' . "\n";
-		$str .= $prespaces . 'Total = ' . $postspaces . $total_formatted;
-		
-		return $str;
-	}
-	
-	private function summarize()
-	{
-				$this->total = 0;
-		
-		foreach($this->iteration AS $key)
-		{
-			$amount = (string)$this->$key;
-						$this->total += $amount;
-		}
-	}
-	
-	//Iteration functions
-	//Allows the object to be looped through
-	//like an array
-	public function rewind()
-	{
-		reset($this->iteration);
-	}
-	
-	public function current()
-	{
-		$name = current($this->iteration);
-		return($this->$name);
-	}
-	
-	public function key()
-	{
-		return key($this->iteration);
-	}
-	
-	public function next()
-	{
-		$name = next($this->iteration);
-		return($this->$name);
-	}
-	
-	public function valid()
-	{
-		$key = key($this->iteration);
-		return ($key !== NULL && $key !== FALSE);	
+		//todo
+		return TRUE;
 	}
 }

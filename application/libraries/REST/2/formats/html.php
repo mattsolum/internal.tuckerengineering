@@ -3,10 +3,15 @@
 class ApiXml
 {
 	public $mime 	= 'text/html';
-	public $data 	= '';
 	private $CI 	= NULL;
-	
-	function __construct($data, $error)
+	private $API;
+		
+	function __construct(&$API)
+	{	
+		$this->API =& $API;
+	}
+
+	public function format($data, $error)
 	{
 		$this->CI =& get_instance();
 			
@@ -15,7 +20,7 @@ class ApiXml
 		if($error == FALSE && isset($this->arguments->view) && view_exists($this->arguments->view))
 		{
 			
-			$this->data = $this->CI->load->view($this->arguments->view, array($this->type => $data), TRUE);
+			return $this->CI->load->view($this->arguments->view, array($this->type => $data), TRUE);
 		}
 		else
 		{
@@ -31,7 +36,7 @@ class ApiXml
 			
 			$html .= '</ul>';
 			
-			$this->data = $html;	
+			return $html;	
 		}
 	}
 	

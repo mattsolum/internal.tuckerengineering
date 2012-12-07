@@ -3,9 +3,14 @@
 class ApiJson
 {
 	public $mime = 'application/json';
-	public $data = '';
-	
-	function __construct($data, $error)
+	private $API;
+		
+	function __construct(&$API)
+	{	
+		$this->API =& $API;
+	}
+
+	public function format($data, $error)
 	{	
 		$final = array();
 		$final['result'] = ($error)?'error':'success';
@@ -18,6 +23,6 @@ class ApiJson
 		
 		$final['data'] = $data;
 		
-		$this->data = json_encode($final);
+		return json_encode($final);
 	}
 }

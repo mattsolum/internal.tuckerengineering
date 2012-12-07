@@ -27,19 +27,4 @@ class JobAPI extends PrototypeAPI
 			return FALSE;
 		}
 	}
-	
-	public function set()
-	{
-		
-	}
-	
-	public function put()
-	{
-	
-	}
-	
-	public function delete()
-	{
-	
-	}
 }
