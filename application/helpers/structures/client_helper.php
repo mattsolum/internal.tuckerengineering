@@ -9,6 +9,8 @@ class StructClient
 	
 	public $title 	= '';
 	
+	public $balance	= 0;
+	
 	//Property
 	public $location = NULL;
 	
@@ -52,7 +54,9 @@ class StructClient
 	{
 		$string = '';
 		
-		$string .=	($this->name != '')	?$this->name . ' :: ':'';
+		$string .=	($this->name != '')?$this->name . ' :: ':'';
+		
+		$string .= 'Balance: $' . number_format($this->balance, 2) . ";\n";
 		
 		foreach($this->contact AS $contact_item)
 		{

@@ -161,7 +161,7 @@ class Accounting extends CI_Model
 		}
 		
 		//Compile our where statement.
-		$where = implode(' AND client_id = ', $client_id);
+		$where = implode(' OR t1.client_id = ', $client_id);
 		
 		//Have each job summed individualy
 		//Then sum up the payments that a client has made
@@ -190,12 +190,19 @@ class Accounting extends CI_Model
 			FROM ledger
 			JOIN jobs ON ledger.job_id = jobs.job_id 
 			WHERE jobs.client_id != ledger.client_id 	GROUP BY ledger.client_id
-		) t3 on (t2.client_id = t3.client_id) WHERE client_id = ' . $where);
+		) t3 on (t2.client_id = t3.client_id) WHERE t1.client_id = ' . $where);
 		
 		if($query->num_rows() > 0)
 		{
-			$row = $query->row(0);
-			return $row->final_balance;
+			$result = array();
+			
+			foreach($query->result() AS $key => $row)
+			{
+				$result[$key]['client_id'] 	= $row->client_id;
+				$result[$key]['balance'] 	= $row->balance;
+			}
+			
+			return $result;
 		}
 		
 		log_message('error', 'Error in accounting model, method get_balance_by_client: no results found for given ID.');
