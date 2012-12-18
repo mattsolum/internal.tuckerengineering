@@ -38,7 +38,7 @@ class Accounting extends CI_Model
 		
 		if($this->CI->db->trans_satus() === FALSE)
 		{
-			log_message('Error in model Accounting committing object.');
+			log_message('error', 'Error in model Accounting committing object.');
 			return FALSE;
 		}
 		else return TRUE;
@@ -61,7 +61,7 @@ class Accounting extends CI_Model
 		return $accounting;
 	}
 	
-	public function get_credits_by_job($job_id)
+	private function get_credits_by_job($job_id)
 	{
 		$this->CI->db->select('*');
 		$this->CI->db->from('ledger');
@@ -106,7 +106,7 @@ class Accounting extends CI_Model
 		return FALSE;
 	}
 	
-	public function get_debits_by_job($job_id)
+	private function get_debits_by_job($job_id)
 	{
 		$where = array('amount <' => '0', 'job_id' => $job_id);
 		
@@ -140,12 +140,28 @@ class Accounting extends CI_Model
 		return FALSE;
 	}
 	
-	public function get_balance_client($client_id)
+	public function get_balance_by_client($client_id)
 	{
-		if(!preg_match('/^[0-9]+$/', $client_id))
+		//If it isn't an array, make it an array.
+		//Makes it simpler to handle arrays or single values.
+		if(!is_array($client_id))
 		{
-			return FALSE;
+			$client_id = array($client_id);	
 		}
+		
+		//Now validate it all. Can't have a sneaky developer trying to 
+		//get something into the database that shouldn't be.
+		foreach($client_id AS $id)
+		{
+			if(!preg_match('/^[0-9]+$/', $id))
+			{
+				log_message('error', 'Error in accounting model method get_balance_by_client: numeric ID required, "' . $id . '" given.');
+				return FALSE;
+			}
+		}
+		
+		//Compile our where statement.
+		$where = implode(' AND client_id = ', $client_id);
 		
 		//Have each job summed individualy
 		//Then sum up the payments that a client has made
@@ -174,7 +190,7 @@ class Accounting extends CI_Model
 			FROM ledger
 			JOIN jobs ON ledger.job_id = jobs.job_id 
 			WHERE jobs.client_id != ledger.client_id 	GROUP BY ledger.client_id
-		) t3 on (t2.client_id = t3.client_id) WHERE client_id = ' . $client_id);
+		) t3 on (t2.client_id = t3.client_id) WHERE client_id = ' . $where);
 		
 		if($query->num_rows() > 0)
 		{
@@ -182,6 +198,7 @@ class Accounting extends CI_Model
 			return $row->final_balance;
 		}
 		
+		log_message('error', 'Error in accounting model, method get_balance_by_client: no results found for given ID.');
 		return FALSE;
 	}
 	
