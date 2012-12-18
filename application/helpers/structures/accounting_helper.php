@@ -4,11 +4,13 @@
 class StructAccounting
 {
 	//Itemized
-	public $credits = array();
-	public $debits	= array();
+	public $credits = NULL;
+	public $debits	= NULL;
 	
 	public function __construct($json = NULL)
 	{
+		$this->credits = array();
+		$this->debits  = array();
 		if(is_string($json))
 		{
 			$this->set_from_json($json);

@@ -25,6 +25,27 @@ class TestAPI extends PrototypeAPI
 		return $search->excerpt('brady austin texas');
 	}
 	
+	public function database_get()
+	{
+		$this->CI->db->select('*');
+		$this->CI->db->from('search');
+		$this->CI->db->order_by('id', 'DESC');
+		$this->CI->db->limit(1);
+		
+		$query = $this->CI->db->get();
+		
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row(0);
+			
+			return $row->id + 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
 	private function payment_test()
 	{
 		$this->CI->load->model('Payment');

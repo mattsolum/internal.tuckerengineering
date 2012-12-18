@@ -12,68 +12,76 @@ class Client extends CI_Model {
 		$this->CI->load->model('Accounting');
 	}
 	
+	//Changed my mind on what the default name should be for
+	//Insert/Update
+	public function insert($client)
+	{
+		return $this->insert($client);
+	}
 	
 	//Return the ID on success
 	//and FALSE on failure
-	public function insert($client)
+	public function commit($client)
 	{	
-		if($client->is_valid())
+		if(!$client->is_valid())
 		{
-			$this->CI->db->trans_start();
-			
-			$data = array();
-			
-			$id = ($client->id != 0)?$client->id:$this->exists($client);
-			
-			if($id !== FALSE)
+			return FALSE;
+		}
+		
+		$this->CI->db->trans_start();
+		
+		$data = array();
+		
+		$id = ($client->id != 0)?$client->id:$this->exists($client);
+		
+		if($id !== FALSE)
+		{
+			$data['client_id'] 	= $id;
+			$data['date_added']	= $client->date_added;
+			$this->delete($id);
+		}
+		else
+		{
+			$data['date_added'] = now();	
+		}
+		
+		$property_id = $this->CI->Property->insert($client->location);
+		if($property_id === FALSE)
+		{
+			return FALSE;
+		}
+		
+		$data['name']			= $client->name;
+		$data['search_name']	= strtolower(preg_replace('/[^a-zA-Z ]/', '', $client->name));
+		$data['title']			= $client->title;
+		$data['property_id']	= $property_id;
+		$data['date_updated']	= now();
+		
+		$query = $this->CI->db->insert('clients', $data);
+		
+		if($id === FALSE)
+		{
+			$id = $this->exists($client);
+		}
+		
+		if(is_array($client->contact))
+		{
+			foreach($client->contact AS $info)
 			{
-				$data['client_id'] 	= $id;
-				$data['date_added']	= $client->date_added;
-				$this->delete($id);
+				$this->insert_contact($id, $info);
 			}
-			else
-			{
-				$data['date_added'] = now();	
-			}
-			
-			$property_id = $this->CI->Property->insert($client->location);
-			if($property_id === FALSE)
-			{
-				return FALSE;
-			}
-			
-			$data['name']			= $client->name;
-			$data['search_name']	= strtolower(preg_replace('/[^a-zA-Z ]/', '', $client->name));
-			$data['title']			= $client->title;
-			$data['property_id']	= $property_id;
-			$data['date_updated']	= now();
-			
-			$query = $this->CI->db->insert('clients', $data);
-			
-			if($id === FALSE)
-			{
-				$id = $this->exists($client);
-			}
-			
-			if(is_array($client->contact))
-			{
-				foreach($client->contact AS $info)
-				{
-					$this->insert_contact($id, $info);
-				}
-			}
-			
-			$this->CI->db->trans_complete();
-			
-			if($this->CI->db->trans_status() === FALSE)
-			{
-				log_message('Error', 'Error in Client method insert: transaction failed.');
-				return FALSE;
-			}
-			else
-			{
-				return $id;
-			}
+		}
+		
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Client method insert: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return $id;
 		}
 	}
 	

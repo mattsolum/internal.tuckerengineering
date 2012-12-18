@@ -12,8 +12,14 @@ class Accounting extends CI_Model
 		$this->CI->load->model('Payment');
 	}
 	
+	//Returns TRUE on success.
 	public function commit($accounting)
 	{
+		if(!$accounting->is_valid())
+		{
+			return FALSE;
+		}
+		
 		$this->CI->db->trans_start();
 		
 		if($this->exists($accounting))
@@ -23,22 +29,101 @@ class Accounting extends CI_Model
 		
 		//Get rid of 'Positive Balance' items
 		//They will be recreated later.
+		//If an existing job is edited and the client is changed
+		//we need to make sure that the positive balance 
+		//from the previous client does not get applied.
 		//Yes, I have trust issues. Users are always using me.
+		$date_added = now();
 		foreach($accounting->items AS $key => $item)
 		{
 			if($item->item = 'Positive Balance')
 			{
+				$date_added = $item->date_added;
 				unset($accounting->items[$key]);
 			}
 		}
 		
-		$this->create($accounting);
+		//Let's check their balance!
+		$bal = $this->get_balance_by_client($accounting->debits[0]->client_id);
+		$bal = $bal[0]['balance'];
+		
+		//Look, there is money in the account!
+		if($bal > 0)
+		{
+			//Make a NEW positive balance credit
+			$positive_balance = new StructCredit();
+			
+			$positive_balance->client_id 	= $accounting->debits[0]->client_id;
+			$positive_balance->job_id 		= $accounting->debits[0]->job_id;
+			$positive_balance->item			= 'Positive Balance';
+			$positive_balance->date_added	= $date_added;
+			$positive_balance->date_updated	= now();
+			
+			//Use whatever is lower: the positive balance or the total for this job.
+			$positive_balance->amount		= min($bal, $accounting->total() * -1);
+			
+			//The payment being applied is assumed to be 
+			//the last payment we received from this client.
+			$positive_balance->payment 		= $this->CI->Payment->get_client_last($positive_balance->client_id);
+			
+			//add it to the credits
+			$accounting->credits[] = $positive_balance;
+		}
+		
+		//Put everything in one array so it can be looped through all at once
+		$all = array_merge($accounting->debits, $accounting->credits);
+		
+		foreach($all as $item)
+		{
+			$this->create_ledger_item($item);
+		}
 		
 		$this->CI->db->trans_complete();
 		
 		if($this->CI->db->trans_satus() === FALSE)
 		{
 			log_message('error', 'Error in model Accounting committing object.');
+			return FALSE;
+		}
+		else return TRUE;
+	}
+	
+	private function create_ledger_item($ledger)
+	{
+		if(!$ledger->is_valid())
+		{
+			return FALSE;
+		}
+		
+		$this->CI->db->trans_start();
+		
+		$data = array();
+		
+		if(isset($ledger->ledger_id))
+		{
+			$data['date_added'] = $ledger->date_added;
+			$data['ledger_id']	= $ledger->ledger_id;
+		}
+		else
+		{
+			$data['date_added'] = now();
+		}
+		
+		if(isset($ledger->payment_id))
+		{
+			$data['payment_id']	= $ledger->payment_id;
+		}
+		
+		$data['job_id']		= $ledger->job_id;
+		$data['client_id']	= $ledger->client_id;
+		$data['item']		= $ledger->item;
+		$data['amount']		= $ledger->amount;
+		
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_satus() === FALSE)
+		{
+			log_message('error', 'Error in model Accounting method create_ledger_item.');
 			return FALSE;
 		}
 		else return TRUE;
@@ -55,8 +140,14 @@ class Accounting extends CI_Model
 	{
 		$accounting = new StructAccounting();
 		
-		$accounting->credits 	= $this->get_credits_by_job($job_id);
-		$accounting->debits		= $this->get_debits_by_job($job_id);
+		$credits 	= $this->get_credits_by_job($job_id);
+		$debits		= $this->get_debits_by_job($job_id);
+		
+		if($credits !== FALSE)
+			$accounting->credits	= $credits;
+			
+		if($debits !== FALSE)
+			$accounting->debits		= $debits;
 		
 		return $accounting;
 	}
@@ -205,8 +296,9 @@ class Accounting extends CI_Model
 			return $result;
 		}
 		
-		log_message('error', 'Error in accounting model, method get_balance_by_client: no results found for given ID.');
-		return FALSE;
+		//If nothing is found the most likely reason is
+		//that the client is new and has no balance.
+		return array(array('client_id' => $client_id[0], 'balance' => 0));
 	}
 	
 	private function read()

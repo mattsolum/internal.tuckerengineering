@@ -16,7 +16,7 @@ class AccountingAPI extends PrototypeAPI
 	
 	public function payment_put()
 	{
-		
+	
 	}
 	
 	public function job_get()

@@ -11,30 +11,76 @@ class Job extends CI_Model {
 		$this->CI->load->model('Accounting');
 	}
 	
-	
 	//Return the ID on success
 	//and FALSE on failure
 	public function insert($job)
 	{
-		$id = preg_replace('/[^0-9]/', '', $id);
-		
+		//First ensure the job is valid
+		if(!$job->is_valid())
+		{
+			log_message('error', 'Error commiting job: job is invalid.');
+			return FALSE;
+		}
+		//Everything should be encapsulated in a transaction
 		$this->CI->db->trans_start();
 		
+		//Are we updating or creating a job?
 		$id = $this->exists($job);
 		if($id !== FALSE)
 		{
-			$data['job_id'] = $id;
-			$this->delete();
+			//It exists, keep the date added and assign the old ID
+			$data['job_id'] 	= $id;
+			$data['date_added']	= $job->date_added;
+			
+			//Delete the old one.
+			$this->delete($id);
 		}
 		else
 		{
-			
+			//It does not exist. Set date_added to now.
+			$data['job_id'] 	= $this->get_next_index();
+			$data['date_added']	= now();	
 		}
 		
+		//The ID for client and property will be returned by their
+		//respective commit functions.
+		$data['client_id']			= $this->CI->Client->commit($job->client);
+		$data['property_id']		= $this->CI->Property->commit($job->property);
+		$data['requester_relation']	= $job->requester_relation;
+		$data['date_billed']		= $job->date_billed;
+		$data['date_updated']		= now();
+		
+		//Set job and client ID for accounting items
+		$this->accounting->set_job_id($data['job_id']);
+		$this->accounting->set_client_id($data['client_id']);
+		
+		//Commit accounting and store result
+		$accounting = $this->CI->accounting->commit($this->accounting);
+		
+		//If the requester is not set assume that the client is the requester
+		if($job->requester->name = '' || $job->requester->name == $job->client->name)
+		{
+			$data['requester_id']	= $data['client_id'];
+		}
+		else
+		{
+			$data['requester_id']	= $this->CI->Client->commit($job->requester);
+		}
+		
+		//Check for failures. Strict boolean FALSE because the ID returned might be 0.
+		if($data['property_id'] === FALSE || $data['client_id'] === FALSE || $data['requester_id'] === FALSE || $accounting === FALSE)
+		{
+			$this->CI->db->trans_complete();
+			return FALSE;
+		}
+		
+		//Insert the data into the jobs table
 		$query = $this->CI->db->insert('jobs', $data);
 		
+		//End the transaction
 		$this->CI->db->trans_complete();
 		
+		//Handle errors in the jobs transaction.
 		if($this->CI->db->trans_status() === FALSE)
 		{
 			log_message('Error', 'Error in Job method insert: transaction failed.');
@@ -42,7 +88,7 @@ class Job extends CI_Model {
 		}
 		else
 		{
-			return TRUE;
+			return $data['job_id'];
 		}
 	}
 	
@@ -80,7 +126,6 @@ class Job extends CI_Model {
 			$result = $query->row();
 			
 			$job->id			= $result->job_id;
-			$job->service		= $result->service;
 			$job->date_added	= $result->date_added;
 			$job->date_updated	= $result->date_updated;
 			$job->date_billed	= $result->date_billed;
@@ -117,5 +162,25 @@ class Job extends CI_Model {
 			return TRUE;
 		}
 		else return FALSE;
+	}
+	
+	private function get_next_index()
+	{
+		$this->CI->db->from('jobs');
+		$this->CI->db->order_by('job_id', 'DESC');
+		$this->CI->db->limit(1);
+		
+		$query = $this->CI->db->get();
+		
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row(0);
+			
+			return $row->job_id + 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 }
