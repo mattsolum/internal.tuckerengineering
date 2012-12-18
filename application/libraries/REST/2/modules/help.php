@@ -35,20 +35,25 @@ class HelpAPI extends PrototypeAPI
 					{
 						if(!strstr($method, '__') && $method != 'set')
 						{
-							$method = preg_replace_callback(
-												'/(get|post|put|delete)/', 
-												create_function(
-												            // single quotes are essential here,
-												            // or alternative escape all $ as \$
-												            '$matches',
-												            'return \' [\' . strtoupper($matches[1]) . \']\';'
-												        ), 
-												$method
-											);
+							preg_match('/(get|head|options|trace|connect|patch|post|put|delete)/i', $method, $matched);
+							$method	= str_replace($matched[0], '', $method);
 							
+							$method = strtolower($type) . '/' . str_replace('_', '/', $method);
 							
-						
-							$help[$type]['method'][] = trim(str_replace('_', '/', $method));
+							if(!isset($help[$type]['method']))
+							{
+								$help[$type]['method'] = array();
+							}
+							
+							$index = $this->get_index($help[$type]['method'], $method);
+							
+							if(!isset($help[$type]['method'][$index]))
+							{
+								$help[$type]['method'][$index] = array();
+							}
+							
+							$help[$type]['method'][$index]['method_name'] = $method;
+							$help[$type]['method'][$index]['request'][] = strtoupper($matched[0]);
 						}
 					}
 				}
@@ -56,6 +61,19 @@ class HelpAPI extends PrototypeAPI
 		}
 		
 		return $help;
+	}
+	
+	private function get_index($methods, $method_name)
+	{
+		foreach($methods AS $key => $method)
+		{
+			if($method['method_name'] == $method_name)
+			{
+				return $key;	
+			}
+		}
+		
+		return count($methods);
 	}
 	
 }

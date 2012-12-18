@@ -234,10 +234,10 @@ class RestApi
 			
 			if(class_exists($output_class))
 			{
-				$output = new $output_class($data, $error);
+				$output = new $output_class($this);
 				
 				$this->CI->output->set_content_type($output->mime);
-				$this->CI->output->set_output($output->data);
+				$this->CI->output->set_output($output->format($data, $error));
 			}	
 		}
 		else

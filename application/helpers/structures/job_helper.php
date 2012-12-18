@@ -3,7 +3,6 @@
 class StructJob {
 	//Job specific informatino
 	public $id 				= NULL;
-	public $service 		= '';
 	
 	//Links to other information
 	public $client;
@@ -13,9 +12,8 @@ class StructJob {
 	public $notes;
 	public $assets;
 	
-	//Amounts
-	public $debits;
-	public $credits;
+	//Accounting
+	public $accounting;
 	
 	//Dates
 	public $date_added;
@@ -29,13 +27,35 @@ class StructJob {
 		
 		$this->location		= new StructProperty();
 
-		$this->debits	= new StructAccounting();
-		$this->credits		= new StructAccounting();
+		$this->accounting	= new StructAccounting();
+		
+		$this->notes = array();
 		
 		if($json != NULL)
 		{
 			$this->set_from_json($json);
 		}
+	}
+	
+	public function set_id($id)
+	{
+		if(preg_match('/^[0-9]+$/', $id))
+		{
+			$this->accounting->set_job_id($id);
+			$this->id = $id;
+			
+			return TRUE;
+		}
+		
+		return FALSE;
+	}
+	
+	public function set_client_id($id)
+	{
+		$this->client->set_id($id);
+		$this->accounting->set_client_id($id);
+		
+		return TRUE;
 	}
 	
 	public function set_from_json($json)
@@ -46,7 +66,6 @@ class StructJob {
 		}
 		
 		$this->id			= $json->id;
-		$this->service		= $json->service;
 		
 		$this->date_added	= $json->date_added;
 		$this->date_updated	= $json->date_updated;
@@ -69,11 +88,34 @@ class StructJob {
 			$this->location = new StructProperty();
 			$this->location->set_from_json($json->location);
 		}
+		
+		if(isset($json->accounting))
+		{
+			$this->accounting->set_from_json($json->accounting);
+		}
+	}
+	
+	public function service()
+	{
+		$service = '';
+		
+		$this->accounting->sort_debits();
+				
+		$service .= (isset($this->accounting->debits[0]))?$this->accounting->debits[0]->item:'';
+		
+		//TODO: This needs to be changed to be more generic/flexible. 
+		//Right now it simply excludes "travel fee" from the service name.
+		if(isset($this->accounting->debits[1]) && strtolower($this->accounting->debits[1]->item) != 'travel fee')
+		{
+			$service .= ' and ' . $this->accounting->debits[1]->item;
+		}
+		
+		return $service;
 	}
 
 	public function balance()
 	{
-		return $this->debits->total - $this->credits->total;
+		return $this->debits->total() - $this->credits->total();
 	}
 	
 	public function is_valid()
@@ -84,28 +126,18 @@ class StructJob {
 	
 	public function __toString()
 	{
-		$str = '#' . $this->id . ' :: ';
+		$str = '#' . $this->id . ' ' . $this->service() . ' :: ';
 		$str .= 'Location: ' . "\n" . (string)$this->location;
 		$str .= "\n\n";
 		$str .= 'Client: ' . "\n" . (string)$this->client;
-	
+		
 		$str .= "\n\n";
-		$str .= 'Debits: ' . "\n";
-		$str .= (string)$this->debits;
-		$str .= "\n\n";
-		$str .= 'Credits: ' . "\n";
-		$str .= (string)$this->credits;
+		$str .= (string)$this->accounting;
 		$str .= "\n\n";
 		
-		$total = number_format($this->debits->total - $this->credits->total, 2);
+		$total = ($this->accounting->debit_total() + $this->accounting->credit_total()) * -1;
 		
-		for($i = 8 - strlen($total); $i > 0; $i--)
-		{
-			$total = ' ' . $total;
-		}
-		
-		$str .= 'Balance due:                         ' . $total . "\n";
-		
+		$str .= 'Balance due $' . number_format($total, 2);
 		
 		return $str;
 	}

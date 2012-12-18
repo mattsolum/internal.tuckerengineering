@@ -116,10 +116,35 @@ class Client extends CI_Model {
 		}
 	}
 	
+	
+	//Returns the client ID. Does not check if numeric ID's exist.
+	public function get_id($id)
+	{
+		if(preg_match('/^[0-9]+$/', $id))
+		{
+			return $id;
+		}
+		else
+		{
+			//For the time being any id that is not a number will be treated as a name
+			$this->CI->db->like('name', $id);
+			$query = $this->CI->db->get('clients');
+			
+			if($query->num_rows() > 0)
+			{
+				$row = $query->row(0);
+				
+				return $row->client_id;
+			}
+		}
+		
+		return FALSE;
+	}
+	
 	private function get_by_string($id)
 	{
 		//For the time being any id that is not a number will be treated as a name
-		$this->CI->db->like('search_name', $id, 'none');
+		$this->CI->db->like('name', $id);
 		$query = $this->CI->db->get('clients');
 		
 		//echo('Query: ' . $this->CI->db->last_query());
