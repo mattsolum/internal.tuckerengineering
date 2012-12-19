@@ -9,3 +9,10 @@ ERROR - 2012-12-19 16:08:49 --> Severity: Notice  --> Undefined property: Struct
 ERROR - 2012-12-19 16:08:49 --> Severity: Notice  --> Undefined property: StructCredit::$type /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/credit_helper.php 63
 ERROR - 2012-12-19 16:09:06 --> Severity: Notice  --> Undefined property: StructCredit::$tender /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/credit_helper.php 63
 ERROR - 2012-12-19 16:16:58 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'OUTER JOIN (SELECT payments.client_id, sum(amount) AS payments FROM payments GRO' at line 1
+ERROR - 2012-12-19 16:49:49 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'BY client_id' at line 1
+ERROR - 2012-12-19 16:50:10 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/accounting_helper.php 80
+ERROR - 2012-12-19 16:50:10 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/accounting_helper.php 80
+ERROR - 2012-12-19 16:50:10 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/accounting_helper.php 87
+ERROR - 2012-12-19 16:50:10 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/accounting_helper.php 87
+ERROR - 2012-12-19 16:50:10 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/accounting_helper.php 90
+ERROR - 2012-12-19 16:50:10 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/accounting_helper.php 90

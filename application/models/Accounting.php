@@ -46,7 +46,6 @@ class Accounting extends CI_Model
 		
 		//Let's check their balance!
 		$bal = $this->get_balance_by_client($accounting->debits[0]->client_id);
-		$bal = $bal[0]['balance'];
 		
 		//Look, there is money in the account!
 		if($bal > 0)
@@ -113,9 +112,9 @@ class Accounting extends CI_Model
 		
 		$data['date_updated'] = now();
 		
-		if(isset($ledger->payment_id))
+		if(isset($ledger->payment))
 		{
-			$data['payment_id']	= $ledger->payment_id;
+			$data['payment_id']	= $ledger->payment->id;
 		}
 		
 		$data['job_id']		= $ledger->job_id;
@@ -237,54 +236,51 @@ class Accounting extends CI_Model
 		return FALSE;
 	}
 	
+	//TODO: Make this not take three freaking queries per client.
 	public function get_balance_by_client($client_id)
 	{
-		//If it isn't an array, make it an array.
-		//Makes it simpler to handle arrays or single values.
-		if(!is_array($client_id))
+		if(!preg_match('/^[0-9]+$/', $client_id))
 		{
-			$client_id = array($client_id);	
+			log_message('Error', 'Model Accounting method get_balance_by_client: client_id is invalid.');
+			return FALSE;
 		}
 		
-		//Now validate it all. Can't have a sneaky developer trying to 
-		//get something into the database that shouldn't be.
-		foreach($client_id AS $id)
+		//Three queries because MySQL does not support full outer joins
+		//First the balance of all jobs the client is attached to
+		$balance_by_job = $this->CI->db->query('SELECT jobs.client_id, SUM(ledger.amount) AS balance FROM jobs JOIN ledger ON jobs.job_id = ledger.job_id WHERE jobs.client_id = ' . $client_id . ' AND ledger.amount < 0 GROUP BY jobs.job_id');
+		
+		//Second summation of all payments
+		$payments = $this->CI->db->query('SELECT client_id, sum(amount) AS payments FROM payments WHERE client_id = ' . $client_id . ' GROUP BY client_id');
+		
+		//Finally summation of payments on jobs the client is not listed on
+		$other_payments = $this->CI->db->query('SELECT ledger.client_id AS client_id, SUM(ledger.amount) AS other_payments FROM ledger JOIN jobs ON ledger.job_id = jobs.job_id WHERE jobs.client_id != ledger.client_id AND jobs.client_id = ' . $client_id . ' GROUP BY ledger.client_id');
+		
+		$bbj 	= 0;
+		$p		= 0;
+		$op		= 0;
+		
+		if($balance_by_job->num_rows() > 0)
 		{
-			if(!preg_match('/^[0-9]+$/', $id))
-			{
-				log_message('error', 'Error in accounting model method get_balance_by_client: numeric ID required, "' . $id . '" given.');
-				return FALSE;
-			}
+			$row 	= $balance_by_job->row(0);
+			$bbj 	= $row->balance;
 		}
 		
-		//Compile our where statement.
-		$where = implode(' OR t1.client_id = ', $client_id);
-		
-		//Have each job summed individualy
-		//Then sum up the payments that a client has made
-		//subtract the two.
-		
-		//Annoyingly complex query ensures that if more than one person pays for a job
-		//somewhere in the client's past then it will be properly counted.
-		//Maybe this will never happen, but if it does the system will not collapse on itself
-		$query = $this->CI->db->query('SELECT t1.client_id, balance, payments, other_payments, (IFNULL(balance, 0) + IFNULL(payments, 0) - IFNULL(other_payments, 0)) AS final_balance FROM (SELECT jobs.client_id, SUM(ledger.amount) AS balance FROM jobs JOIN ledger ON jobs.job_id = ledger.job_id WHERE ledger.amount < 0 GROUP BY jobs.job_id) t1 OUTER JOIN (SELECT payments.client_id, sum(amount) AS payments FROM payments GROUP BY client_id) t2 ON t1.client_id = t2.client_id OUTER JOIN (SELECT ledger.client_id AS client_id, SUM(ledger.amount) AS other_payments FROM ledger JOIN jobs ON ledger.job_id = jobs.job_id WHERE jobs.client_id != ledger.client_id GROUP BY ledger.client_id) t3 on (t2.client_id = t3.client_id) WHERE t1.client_id = ' . $where);
-		
-		if($query->num_rows() > 0)
+		if($payments->num_rows() > 0)
 		{
-			$result = array();
-			
-			foreach($query->result() AS $key => $row)
-			{
-				$result[$key]['client_id'] 	= $row->client_id;
-				$result[$key]['balance'] 	= $row->final_balance;
-			}
-			
-			return $result;
+			$row 	= $payments->row(0);
+			$p 		= $row->payments;
 		}
 		
-		//If nothing is found the most likely reason is
-		//that the client is new and has no balance.
-		return array(array('client_id' => $client_id[0], 'balance' => 0));
+		if($other_payments->num_rows() > 0)
+		{
+			$row	= $other_payments->row(0);
+			$op		= $row->other_payments;
+		}
+		
+		//Balance by jobs will always be negative,
+		//so add it to payments which will always be positive
+		//Then subtract other payments because it will always be postive
+		return $p + $bbj - $op;
 	}
 	
 	private function read()

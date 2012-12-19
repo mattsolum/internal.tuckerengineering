@@ -227,9 +227,7 @@ class Client extends CI_Model {
 			$client->name			= $result->name;
 			$client->title			= $result->title;
 			
-			$balance = $this->CI->Accounting->get_balance_by_client($client->id);
-			
-			$client->balance		= $balance[0]['balance'];
+			$client->balance 		= $this->CI->Accounting->get_balance_by_client($client->id);
 			
 			$client->location		= ($result->property_id != NULL)?$this->CI->Property->get($result->property_id):NULL;
 			$client->contact		= $this->get_contact($result->client_id);
