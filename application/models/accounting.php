@@ -17,15 +17,11 @@ class Accounting extends CI_Model
 	{
 		if(!$accounting->is_valid())
 		{
+			log_message('error', 'Error in model Accounting method commit: accounting is invalid.');
 			return FALSE;
 		}
 		
 		$this->CI->db->trans_start();
-		
-		if($this->exists($accounting))
-		{
-			$this->delete($accounting);
-		}
 		
 		//Get rid of 'Positive Balance' items
 		//They will be recreated later.
@@ -34,13 +30,18 @@ class Accounting extends CI_Model
 		//from the previous client does not get applied.
 		//Yes, I have trust issues. Users are always using me.
 		$date_added = now();
-		foreach($accounting->items AS $key => $item)
+		foreach($accounting->credits AS $key => $credit)
 		{
 			if($item->item = 'Positive Balance')
 			{
-				$date_added = $item->date_added;
-				unset($accounting->items[$key]);
+				$date_added = $credit->date_added;
+				unset($accounting->credits[$key]);
 			}
+		}
+		
+		if($this->job_exists($accounting->debits[0]->job_id))
+		{
+			$this->delete_by_job($accounting->debits[0]->job_id);
 		}
 		
 		//Let's check their balance!
@@ -80,7 +81,7 @@ class Accounting extends CI_Model
 		
 		$this->CI->db->trans_complete();
 		
-		if($this->CI->db->trans_satus() === FALSE)
+		if($this->CI->db->trans_status() === FALSE)
 		{
 			log_message('error', 'Error in model Accounting committing object.');
 			return FALSE;
@@ -92,6 +93,7 @@ class Accounting extends CI_Model
 	{
 		if(!$ledger->is_valid())
 		{
+			log_message('error', 'Model Accounting method create_ledger_item: ledger is not valid.');
 			return FALSE;
 		}
 		
@@ -109,6 +111,8 @@ class Accounting extends CI_Model
 			$data['date_added'] = now();
 		}
 		
+		$data['date_updated'] = now();
+		
 		if(isset($ledger->payment_id))
 		{
 			$data['payment_id']	= $ledger->payment_id;
@@ -119,9 +123,11 @@ class Accounting extends CI_Model
 		$data['item']		= $ledger->item;
 		$data['amount']		= $ledger->amount;
 		
+		$this->CI->db->insert('ledger', $data);
+		
 		$this->CI->db->trans_complete();
 		
-		if($this->CI->db->trans_satus() === FALSE)
+		if($this->CI->db->trans_status() === FALSE)
 		{
 			log_message('error', 'Error in model Accounting method create_ledger_item.');
 			return FALSE;
@@ -261,27 +267,7 @@ class Accounting extends CI_Model
 		//Annoyingly complex query ensures that if more than one person pays for a job
 		//somewhere in the client's past then it will be properly counted.
 		//Maybe this will never happen, but if it does the system will not collapse on itself
-		$query = $this->db->query('SELECT t1.client_id, balance, payments, other_payments, (IFNULL(balance, 0) + IFNULL(payments, 0) - IFNULL(other_payments, 0)) AS final_balance
-		FROM
-		(
-			SELECT jobs.client_id, SUM(ledger.amount) AS balance
-			FROM jobs
-			JOIN ledger ON jobs.job_id = ledger.job_id
-			WHERE ledger.amount < 0
-			GROUP BY jobs.job_id
-		) t1 LEFT JOIN
-		(
-			SELECT payments.client_id, sum(amount) AS payments
-			FROM payments 
-			GROUP BY client_id
-		) t2 ON t1.client_id = t2.client_id
-		LEFT JOIN
-		(
-			SELECT ledger.client_id AS client_id, SUM(ledger.amount) AS other_payments
-			FROM ledger
-			JOIN jobs ON ledger.job_id = jobs.job_id 
-			WHERE jobs.client_id != ledger.client_id 	GROUP BY ledger.client_id
-		) t3 on (t2.client_id = t3.client_id) WHERE t1.client_id = ' . $where);
+		$query = $this->CI->db->query('SELECT t1.client_id, balance, payments, other_payments, (IFNULL(balance, 0) + IFNULL(payments, 0) - IFNULL(other_payments, 0)) AS final_balance FROM (SELECT jobs.client_id, SUM(ledger.amount) AS balance FROM jobs JOIN ledger ON jobs.job_id = ledger.job_id WHERE ledger.amount < 0 GROUP BY jobs.job_id) t1 OUTER JOIN (SELECT payments.client_id, sum(amount) AS payments FROM payments GROUP BY client_id) t2 ON t1.client_id = t2.client_id OUTER JOIN (SELECT ledger.client_id AS client_id, SUM(ledger.amount) AS other_payments FROM ledger JOIN jobs ON ledger.job_id = jobs.job_id WHERE jobs.client_id != ledger.client_id GROUP BY ledger.client_id) t3 on (t2.client_id = t3.client_id) WHERE t1.client_id = ' . $where);
 		
 		if($query->num_rows() > 0)
 		{
@@ -290,7 +276,7 @@ class Accounting extends CI_Model
 			foreach($query->result() AS $key => $row)
 			{
 				$result[$key]['client_id'] 	= $row->client_id;
-				$result[$key]['balance'] 	= $row->balance;
+				$result[$key]['balance'] 	= $row->final_balance;
 			}
 			
 			return $result;
@@ -305,27 +291,40 @@ class Accounting extends CI_Model
 	{
 		
 	}
-	
-	private function create($accounting)
-	{
-		foreach($accounting->items AS $item)
-		{
-			
-		}
-	}
-	
+		
 	public function edit($accounting)
 	{
 		
 	}
 	
-	public function delete()
+	public function delete_by_job($job_id)
 	{
+		$this->CI->db->trans_start();
 		
+		$where = array('job_id' => $job_id);
+		$query = $this->CI->db->delete('ledger', $where);
+		
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('error', 'Error in model Accounting method delete_by_job.');
+			return FALSE;
+		}
+		else return TRUE;
 	}
 	
-	private function exists($accounting)
+	private function job_exists($job_id)
 	{
+		$where = array('job_id' => $job_id);
 		
+		$query = $this->CI->db->get_where('ledger', $where);
+		
+		if($query->num_rows() > 0)
+		{
+			return TRUE;
+		}
+		
+		return FALSE;
 	}
 }

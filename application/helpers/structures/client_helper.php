@@ -39,7 +39,7 @@ class StructClient
 		//Reasons it may be invalid
 		//All we really need is a name and a location
 		if(
-			$name == '' ||
+			$this->name == '' ||
 			$this->location == NULL ||
 			!$this->location->is_valid()
 		)
@@ -58,13 +58,13 @@ class StructClient
 		
 		$string .= 'Balance: $' . number_format($this->balance, 2) . ";\n";
 		
-		foreach($this->contact AS $contact_item)
-		{
-			$string .= $contact_item->type . ' - ' . $contact_item->info . ', ';
-		}
-		
 		if(count($this->contact) > 0)
 		{
+			foreach($this->contact AS $contact_item)
+			{
+				$string .= $contact_item->type . ' - ' . $contact_item->info . ', ';
+			}
+			
 			$string = substr($string, 0, strlen($string) - 2) . '; ';
 		}
 		

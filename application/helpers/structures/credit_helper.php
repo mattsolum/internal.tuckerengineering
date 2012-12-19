@@ -53,14 +53,28 @@ class StructCredit
 	
 	public function is_valid()
 	{
-		if(	!$this->client_id || !$this->type || $this->amount == 0)
+		if(	$this->job_id == NULL || $this->client_id == NULL || $this->amount == 0)
 		{
 			return FALSE;
 		}
 		
-		if( ($this->type == 'credit' || $this->type == 'check') && $this->number == '')
+		if($this->payment != NULL)
+		{
+			if(($this->payment->tender == 'credit' || $this->payment->tender == 'check') && $this->number == '')
+			{
+				return FALSE;
+			}
+		}
+		//I just concatinate them. Probably not the fastest method, but the least
+		//number of lines.
+		if(!preg_match('/^[0-9]+$/', $this->client_id . $this->job_id))
 		{
 			return FALSE;
+		}
+		
+		if($this->amount < 0)
+		{
+			$this->amount = $this->amount * -1;
 		}
 		
 		return TRUE;

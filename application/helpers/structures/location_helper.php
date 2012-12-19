@@ -48,12 +48,7 @@ class StructLocation
 			$this->postal_code		== ''
 		) return FALSE;
 		
-		$CI =& get_instance();
-		
-		$CI->load->model('Map');
-		
-		//Since everything is set check it with Google.
-		return $CI->Map->validate_address($this);
+		return TRUE;
 	}
 	
 	function __toString()

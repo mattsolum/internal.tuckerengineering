@@ -7,6 +7,7 @@ class StructJob {
 	//Links to other information
 	public $client;
 	public $requester;
+	public $relation;
 	public $location;
 	
 	public $notes;

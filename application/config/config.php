@@ -186,7 +186,7 @@ $config['directory_trigger']	= 'd'; // experimental not currently in use
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 4;
+$config['log_threshold'] = 1;
 
 //Moved log levels into config to help with retreival of log entries
 $config['log_levels']['ERROR'] 	= 1;

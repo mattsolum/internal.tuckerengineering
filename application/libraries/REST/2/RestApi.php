@@ -96,6 +96,12 @@ class RestApi
 		//Now get the HTTP request method
 		$this->request_method = substr(preg_replace('/[^a-z]/','', strtolower($_SERVER['REQUEST_METHOD'])), 0, 6);
 		
+		//HTTPOverride
+		if(isset($this->arguments->HTTPOverride))
+		{
+			$this->request_method = $this->arguments->HTTPOverride;
+		}
+		
 		//Assemble the API method.
 		$this->method = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->method));
 		

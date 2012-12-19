@@ -18,18 +18,20 @@ class StructAccounting
 	}
 	
 	public function set_client_id($id)
-	{
-		foreach($this->debits AS $debit)
+	{	
+		for($i = 0; $i < count($this->debits); $i++)
 		{
-			$this->debit->client_id = $id;
+			$this->debits[$i]->client_id = $id;
 		}
+		
+		return TRUE;
 	}
 	
 	public function set_job_id($id)
 	{
-		foreach($this->debits AS $debit)
+		for($i = 0; $i < count($this->debits); $i++)
 		{
-			$this->debit->job_id = $id;
+			$this->debits[$i]->job_id = $id;
 		}
 		
 		return TRUE;
@@ -150,12 +152,21 @@ class StructAccounting
 		
 	public function total()
 	{
-		return $this->credit_total + $this->debit_total;
+		return $this->credit_total() + $this->debit_total();
 	}
 	
 	public function is_valid()
 	{
-		//todo
+		foreach($this->credits AS $credit)
+		{
+			if(!$credit->is_valid()) return FALSE;
+		}
+		
+		foreach($this->debits AS $debit)
+		{
+			if(!$debit->is_valid()) return FALSE;
+		}
+		
 		return TRUE;
 	}
 	

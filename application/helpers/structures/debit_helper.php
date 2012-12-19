@@ -41,6 +41,29 @@ class StructDebit
 		}
 	}
 	
+	public function is_valid()
+	{
+		if($this->client_id == NULL || $this->job_id == NULL || $this->item == NULL)
+		{
+			return FALSE;
+		}
+		
+		//I just concatinate them. Probably not the fastest method, but the least
+		//number of lines.
+		if(!preg_match('/^[0-9]+$/', $this->client_id . $this->job_id))
+		{
+			return FALSE;
+		}
+		
+		//So... I had an issue making sure that all debits are negative.
+		if($this->amount > 0)
+		{
+			$this->amount = $this->amount * -1;
+		}
+		
+		return TRUE;
+	}
+	
 	public function amount()
 	{
 		return $this->amount;

@@ -22,9 +22,10 @@ class Client extends CI_Model {
 	//Return the ID on success
 	//and FALSE on failure
 	public function commit($client)
-	{	
+	{
 		if(!$client->is_valid())
 		{
+			log_message('error', 'Error in model Client method commit: client is not valid.');
 			return FALSE;
 		}
 		
@@ -45,9 +46,10 @@ class Client extends CI_Model {
 			$data['date_added'] = now();	
 		}
 		
-		$property_id = $this->CI->Property->insert($client->location);
+		$property_id = $this->CI->Property->commit($client->location);
 		if($property_id === FALSE)
 		{
+			log_message('error', 'Error in model Client method commit: property failed to commit.');
 			return FALSE;
 		}
 		
