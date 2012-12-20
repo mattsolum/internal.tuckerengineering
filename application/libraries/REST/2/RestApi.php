@@ -270,10 +270,16 @@ class RestApi
 		}
 		
 		$elements = count($data);
+		
+		if($elements == 0)
+		{
+			return $data;
+		}
+		
 		$pages = ceil(count($data) / $per_page);
 		
 		
-		if($elements > ($per_page * $page))
+		if($elements > ($per_page * ($page + 1)))
 		{
 			$slice = array_slice($data, $per_page * $page, $per_page);
 			$pagination = array('page' => $page + 1, 'total_pages' => $pages, 'elements_returned' => $elements, 'elements_per_page' => $per_page);

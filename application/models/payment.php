@@ -70,9 +70,44 @@ class Payment extends CI_Model {
 		return FALSE;
 	}
 	
+	public function apply_by_jobs($payment, $jobs)
+	{
+		$this->CI->db->trans_start();
+		
+		if(!$this->commit($payment))
+		{
+			log_message('Error', 'Error in Payment method apply_by_job: failed to commit payment.');
+			return FALSE;
+		}
+		
+		if(is_int($jobs))
+		{
+			$jobs = array($jobs);
+		}
+		
+		$amount_remaining = $payment->amount;
+		
+		foreach($jobs AS $job)
+		{
+			$amount_remaining -= $this->CI->Accounting->job_balance($job);
+		}
+		
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Payment method apply_by_job: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+	
 	public function commit($payment)
 	{
-	
+		
 	}
 	
 	public function delete($payment)

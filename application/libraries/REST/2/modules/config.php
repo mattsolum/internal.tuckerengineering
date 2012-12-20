@@ -29,7 +29,7 @@ class ConfigAPI extends PrototypeAPI
 	
 	public function put()
 	{
-		$this->post($this->API);
+		return $this->post();
 	}
 	
 	public function get() 

@@ -25,6 +25,29 @@ class TestAPI extends PrototypeAPI
 		return $search->excerpt('brady austin texas');
 	}
 	
+	public function hash_get()
+	{
+		$this->CI->load->model('User');
+		
+		$str = 'Not logged in.';
+		
+		if($this->CI->User->auth('matthewsolum', 'letmein2555'))
+		{
+			$str = 'User: ' . $this->CI->User->get_name();
+			
+			if($this->CI->User->read_enabled('/jobs/'))
+			{
+				$str .= "\nIs authorized to view jobs";
+			}
+			else
+			{
+				$str .= "\nIs not authorized to view jobs";
+			}
+		}
+		
+		return $str;
+	}
+	
 	public function database_get()
 	{
 		$this->CI->db->select('*');

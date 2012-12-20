@@ -88,7 +88,7 @@ class Accounting extends CI_Model
 		else return TRUE;
 	}
 	
-	private function create_ledger_item($ledger)
+	public function create_ledger_item($ledger)
 	{
 		if(!$ledger->is_valid())
 		{

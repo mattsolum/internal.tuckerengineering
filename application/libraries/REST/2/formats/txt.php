@@ -32,7 +32,12 @@ class ApiTxt
 				
 				if(!preg_match('/^[0-9]+$/', $key))
 				{
-					$str .= $key . ' : ';
+					//'message' is used by default for the output of a string
+					//Just ignore it. It adds no information to a text file
+					if($key != 'message')
+					{
+						$str .= $key . ' : ';
+					}
 				}
 				
 				$str .= $this->recurse($value);
