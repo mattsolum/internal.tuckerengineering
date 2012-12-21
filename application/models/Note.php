@@ -4,50 +4,205 @@ class Note extends Model {
 	
 	private $CI = NULL;
 	
-	public function Note()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->CI =& get_instance();	
 	}
 	
 	
-	public function get_job($id)
+	public function get_by_job($id)
 	{
 		return $this->get($id, 'job');
 	}
 	
-	public function get_property($id)
+	public function get_by_property($id)
 	{
 		return $this->get($id, 'property');
 	}
 	
-	public function get_client($id)
+	public function get_by_client($id)
 	{
 		return $this->get($id, 'client');
 	}
 	
 	public function get($id, $type)
 	{
+		$where = array('id' => $id, 'type' => $type);
 		
+		$this->CI->db->select('notes.*, users.name, users.email');
+		$this->CI->db->from('notes');
+		$this->CI->db->join('users', 'notes.user_id = users.user_id');
+		$this->CI->db->where('notes.id', $id);
+		$this->CI->db->where('notes.type', $type);
+		$this->CI->db->order_by('notes.date_added', 'DESC');
+		
+		$query = $this->CI->db->get();
+		
+		if($query->num_rows() > 0)
+		{
+			$result = array();
+			
+			foreach($query->result() AS $row)
+			{
+				$note = new StructNote();
+				
+				$note->id			= $row->note_id;
+				$note->type_id		= $row->id;
+				$note->type			= $row->type;
+				$note->text			= $row->note;
+				$note->date_added	= $row->date_added;
+				
+				$note->user->id		= $row->user_id;
+				$note->user->name	= $row->name;
+				
+				$note->user->set_email($row->email);
+				
+				$result[] = $note;
+				unset($note);
+			}
+			
+			return $result;
+		}
 	}
 	
-	public function commit($note)
+	public function commit($notes)
 	{
+		if(!is_array($notes))
+		{
+			$notes = array($notes);
+		}
+		
+		foreach($notes AS $note)
+		{
+			if($note->is_valid())
+			{
+				$this->commit_single($note);
+			}
+		}
+		
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Note method commit: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
 	
+	private function commit_single($note)
+	{
+		$this->CI->db->trans_start();
+		
+		if($note->note_id != NULL)
+		{
+			$this->update($note);
+		}
+		else
+		{
+			$this->create($note);	
+		}
+		
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Note method commit_single: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
 	}
 	
 	private function create($note)
 	{
+		$this->CI->db->trans_start();
+		
+		$data = array();
+		
+		$data['id']			= $note->type_id;
+		$data['type']		= $note->type;
+		$data['user_id']	= $note->user_id;
+		$data['note']		= $note->text;
+		$data['date_added']	= now();
+		
+		$this->CI->db->insert('notes', $data);
 	
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Note method create: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return $this->get_id($data['user_id', $data['date_added']);
+		}
 	}
 	
 	private function update($note)
 	{
+		$this->CI->db->trans_start();
 		
+		$data = array();
+		
+		$data['note']		= $note->text;
+		
+		$this->CI->db->where('note_id', $note->id);
+		$this->CI->db->update('notes', $data);
+		
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Note method update: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
 	}
 	
-	public function delete($note)
+	public function delete($note_id)
 	{
+		$this->CI->db->trans_start();
+		
+		$where = array('note_id' => $note_id);
+		
+		$this->CI->db->delete('notes', $where);
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Note method delete: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
 	
+	private function get_id($user_id, $date)
+	{
+		$where('user_id' => $user_id, 'date_added' => $date);
+		
+		$query = $this->CI->db->get_where('notes', $where);
+		
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row();
+			
+			return $row->note_id;
+		}
+		
+		return FALSE;
 	}
 }
