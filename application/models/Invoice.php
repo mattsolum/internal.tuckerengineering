@@ -1,52 +1,40 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-require_once APPPATH . 'libraries/Service.php'
-require_once APPPATH . 'libraries/Location.php'
-require_once APPPATH . 'libraries/Invoice.php'
-require_once APPPATH . 'libraries/Contact.php'
 
-class Invoice_model extends CI_Model {
+class Invoice extends CI_Model {
 	
-	$base = NULL;
+	$CI = NULL;
 	
-	public function Invoice_model()
+	public function __construct()
 	{
 		parent::construct();
-		$this->base =& get_instance();	
+		$this->CI =& get_instance();
+		
+		$this->CI->load->model('Job');
 	}
 	
 	/**
-	 * Loads an invoice and supporting information into a invoice class
+	 * Loads an invoice and supporting information into an invoice class
 	 *
 	 * @author Matthew Solum
-	 * @param $id
+	 * @param $invoice_id
 	 * @return Invoice
 	 */
-	public function load($id)
+	public function get($invoice_id)
 	{
 		//code
 		$invoice = $this->query();
 	}
 	
+	
+	
 	/**
-	 * Adds a new invoice
+	 * Creates a new invoice
 	 *
 	 * @author Matthew Solum
 	 * @param $invoice		
 	 * @return BOOL
 	 */
 	public function create($invoice)
-	{
-		//code
-	}
-	
-	/**
-	 * Reads an invoice given a invoice_id
-	 *
-	 * @author Matthew Solum
-	 * @param $invoice_id
-	 * @return Array
-	 */
-	public function read($id)
 	{
 		//code
 	}
@@ -61,8 +49,6 @@ class Invoice_model extends CI_Model {
 	public function update($invoice)
 	{
 		//code
-		$this->delete_invoice($invoice->id);
-		$this->create_invoice($invoice);
 	}
 	
 	/**
@@ -72,7 +58,7 @@ class Invoice_model extends CI_Model {
 	 * @param $invoice_id
 	 * @return bool
 	 */
-	public function delete($id)
+	public function delete($client_id, $invoice_id)
 	{
 		//code
 	}
@@ -87,27 +73,5 @@ class Invoice_model extends CI_Model {
 	public function exists($invoice)
 	{
 		//code
-		if ($invoice instanceof Invoice)
-		{
-			
-		}
-		else if (is_number($invoice))
-		{
-			
-		}
 	}
-	
-	/**
-	 * Full text search of invoices
-	 *
-	 * @author Matthew Solum
-	 * @param $query, $date_from = NULL, $date_to = NULL
-	 * @return Array
-	 */
-	public function search($query, $date_from = NULL, $date_to = NULL, $page = 0, $per_page = NULL)
-	{
-		//code
-	}
-	
-	
 }
