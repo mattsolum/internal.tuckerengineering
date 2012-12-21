@@ -24,11 +24,16 @@ class StructProperty
 	public $date_added;
 	public $date_updated;
 	
-	public function __construct()
+	public function __construct($json = NULL)
 	{
 		$this->info = new stdClass;
 		$this->assets = new stdClass;
 		$this->notes = array();
+		
+		if($json != NULL)
+		{
+			$this->set_from_json($json);
+		}
 	}
 	
 	public function is_valid()
@@ -39,7 +44,7 @@ class StructProperty
 		return ($location && $meta);
 	}
 	
-	public function set_id()
+	public function set_id($id)
 	{
 		if(preg_match('/^[0-9]+$/', $id))
 		{	

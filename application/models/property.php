@@ -9,6 +9,7 @@ class Property extends CI_Model {
 		parent::__construct();
 		$this->CI =& get_instance();
 		$this->CI->load->model('Meta');
+		$this->CI->load->model('Note');
 	}
 	
 	
@@ -76,7 +77,8 @@ class Property extends CI_Model {
 			$id = $this->exists($property);
 		}
 		
-		
+		$property->set_id($id);
+		$this->CI->Note->commit($property->notes);
 		
 		foreach($property->info AS $key => $value)
 		{
@@ -145,6 +147,7 @@ class Property extends CI_Model {
 			$property->latitude			= $result->latitude;
 			$property->longitude		= $result->longitude;
 			
+			$property->notes			= $this->CI->Note->get_by_property($property->id);
 			
 			//Get meta data
 			$meta = $this->CI->Meta->get($id, 'property');

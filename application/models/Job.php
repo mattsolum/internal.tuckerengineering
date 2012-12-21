@@ -93,7 +93,6 @@ class Job extends CI_Model {
 		}
 		
 		$job->set_id($data['job_id']);
-		log_message('error', 'Type_id: ' . $job->notes[0]->type_id);
 		$this->CI->Note->commit($job->notes);
 		
 		//End the transaction
