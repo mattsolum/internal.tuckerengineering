@@ -7,7 +7,10 @@ class StructInvoice
 	public $client		= NULL;
 	public $jobs		= NULL;
 
-	public function construct($json = NULL)
+	public $date_added	= NULL;
+	public $date_sent	= NULL;
+
+	public function __construct($json = NULL)
 	{
 		$this->jobs 	= array();
 		$this->client 	= new StructClient();
@@ -69,7 +72,22 @@ class StructInvoice
 			}
 		}
 
-		return FALSE;
+		return TRUE;
+	}
+
+	public function __toString()
+	{
+		$str  = $this->id . '-' . $this->client->id . " ::\n";
+		$str .= "Client:\n\t";
+		$str .= str_replace("\n", "\n\t", (string)$this->client) . "\n";
+		$str .= "Jobs:\n";
+
+		foreach($this->jobs AS $key => $job)
+		{
+			$str .= "\t" . str_replace("\n", "\n\t", (string)$job) . "\n\n";
+		}
+
+		return $str;
 	}
 
 	public function sort_jobs()

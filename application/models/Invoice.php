@@ -2,16 +2,15 @@
 
 class Invoice extends CI_Model {
 	
-	$CI = NULL;
+	private $CI = NULL;
 	
 	public function __construct()
 	{
-		parent::construct();
+		parent::__construct();
 		$this->CI =& get_instance();
 		
 		$this->CI->load->model('Job');
 		$this->CI->load->model('Client');
-	}
 	}
 
 	/**
@@ -21,7 +20,7 @@ class Invoice extends CI_Model {
 	 * @param $invoice_id
 	 * @return StructInvoice
 	 */
-	public function get($client_id, $invoice_id)
+	public function get($invoice_id, $client_id)
 	{
 		$invoice 			= new StructInvoice();
 
@@ -33,6 +32,11 @@ class Invoice extends CI_Model {
 
 		if($query->num_rows() > 0)
 		{
+			$row = $query->row(0);
+
+			$invoice->date_added = $row->date_added;
+			$invoice->date_sent	 = $row->date_sent;
+
 			foreach ($query->result() as $row)
 			{
 				$invoice->jobs[] = $this->CI->Job->get($row->job_id);
@@ -43,15 +47,44 @@ class Invoice extends CI_Model {
 	}
 
 	/**
+	 * Marks an invoice as sent.
+	 * @param  int $invoice_id
+	 * @param  int $client_id 
+	 * @return BOOL
+	 */
+	public function mark_sent($invoice_id, $client_id)
+	{
+		$this->CI->db->trans_start();
+
+		$data['date_sent'] = now();
+
+		$this->CI->db->where('invoice_id', $invoice_id);
+		$this->CI->db->where('client_id', $client_id);
+		$this->CI->db->update('invoices', $data);
+
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Invoice method mark_sent: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+
+	/**
 	 * Creates or updates an invoice
 	 * @param  StructInvoice $invoice
 	 * @return BOOL FALSE on failure, Int on success
 	 */
 	public function commit($invoice)
 	{
-		if(get_class($invoice) != 'StructInvoice' || !is_valid($invoice))
+		if(get_class($invoice) != 'StructInvoice' || !$invoice->is_valid())
 		{
-			log_message('error', 'Error in Invoice method commit: invoice provided is invalid.')
+			log_message('error', 'Error in Invoice method commit: invoice provided is invalid.');
 			return FALSE;
 		}
 
@@ -141,11 +174,11 @@ class Invoice extends CI_Model {
 	
 	/**
 	 * Deletes an invoice given a client and invoice ID
-	 * @param  int $client_id 
 	 * @param  int $invoice_id
+	 * @param  int $client_id 
 	 * @return BOOL
 	 */
-	public function delete($client_id, $invoice_id)
+	public function delete($invoice_id, $client_id)
 	{
 		$this->CI->db->trans_start();
 
@@ -182,12 +215,12 @@ class Invoice extends CI_Model {
 		//from a MySQL query.
 		$jobs_str = '';
 
-		$invoices->sort_jobs();
+		$invoice->sort_jobs();
 		foreach ($invoice->jobs as $job) {
 			$jobs_str .= $job->id . ' ';
 		}
 
-		$jobs_str = substr($jobs_str, 0, strlen(jobs_str) - 1);
+		$jobs_str = substr($jobs_str, 0, strlen($jobs_str) - 1);
 
 		$query = $this->CI->db->query("SELECT invoice_id, client_id, GROUP_CONCAT(job_id ORDER BY job_id ASC SEPARATOR ' ') AS jobs FROM invoices WHERE client_id = " . $invoice->client->id . " GROUP BY invoice_id, client_id");
 

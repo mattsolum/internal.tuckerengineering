@@ -15,4 +15,11 @@ class TestAPI extends PrototypeAPI
 	{
 		return "Nothing to see here.";
 	}
+
+	public function invoice_get()
+	{
+		$this->CI->load->model('Invoice');
+
+		return $this->CI->Invoice->get(0, 4);
+	}
 }
