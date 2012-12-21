@@ -186,7 +186,7 @@ class StructAccounting
 		
 		$string = substr($string, 0, strlen($string) - 2) . ' : Total $' . number_format($debit_total, 2);
 		
-		$string .= "\n\nCredits: ";
+		$string .= "\nCredits: ";
 		
 		//Now credits
 		foreach($this->credits AS $credit)
@@ -198,6 +198,6 @@ class StructAccounting
 		
 		$string = substr($string, 0, strlen($string) - 2) . ' : Total $' . number_format($credit_total, 2);
 		
-		return $string;
+		return str_replace('s :', ':', $string);
 	}
 }

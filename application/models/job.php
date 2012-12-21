@@ -9,6 +9,7 @@ class Job extends CI_Model {
 		parent::__construct();
 		$this->CI =& get_instance();
 		$this->CI->load->model('Accounting');
+		$this->CI->load->model('Note');
 	}
 	
 	public function insert($job)
@@ -149,6 +150,8 @@ class Job extends CI_Model {
 			$job->accounting	= $this->CI->Accounting->get_by_job($id);
 			
 			$job->location		= $this->CI->Property->get($result->property_id);
+			
+			$job->notes			= $this->CI->Note->get_by_job($job->id);
 			
 			return $job;
 		}

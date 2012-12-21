@@ -14,9 +14,6 @@ class ApiTxt
 	{	
 		$str = $this->recurse($data);
 		
-		$str = str_replace('; ', ";\n", $str);
-		$str = str_replace(':: ', "::\n", $str);
-		
 		$str = trim($str);
 		
 		return $str;

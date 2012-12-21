@@ -53,35 +53,38 @@ class StructClient
 	
 	public function __toString()
 	{
-		$string = '';
+		$str = '';
 		
-		$string .=	($this->name != '')?$this->name . ' :: ':'';
+		$str .=	$this->name . " ::\n";
 		
-		$string .= 'Balance: $' . number_format($this->balance, 2) . ";\n";
+		$str .= "Balance: $" . number_format($this->balance, 2) . ";\n";
 		
 		if(count($this->contact) > 0)
 		{
 			foreach($this->contact AS $contact_item)
 			{
-				$string .= $contact_item->type . ' - ' . $contact_item->info . ', ';
+				$str .= $contact_item->type . ' - ' . $contact_item->info . ', ';
 			}
 			
-			$string = substr($string, 0, strlen($string) - 2) . '; ';
+			$str = substr($str, 0, strlen($str) - 2) . ";\n";
 		}
 		
 		if($this->location != NULL && get_class($this->location) == 'StructProperty')
 		{
-			$string .= (string)$this->location;
+			$str .= (string)$this->location;
 		}
 		
-		$string .= "\nNotes:";
-		
-		foreach($this->notes AS $note)
+		if(count($this->notes) > 0)
 		{
-			$string .= "\n$note";
+			$str .= "\nNotes:";
+			
+			foreach($this->notes AS $note)
+			{
+				$str .= "\n$note";
+			}
 		}
 		
-		return $string;
+		return $str;
 	}
 	
 	public function set_from_json($json)

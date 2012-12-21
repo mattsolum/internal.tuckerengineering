@@ -127,18 +127,26 @@ class StructJob {
 	
 	public function __toString()
 	{
-		$str = '#' . $this->id . ' ' . $this->service() . ' :: ';
-		$str .= 'Location: ' . "\n" . (string)$this->location;
-		$str .= "\n\n";
-		$str .= 'Client: ' . "\n" . (string)$this->client;
+		$str = '#' . $this->id . ' ' . $this->service() . " ::\n";
+		$str .= "Location:\n\t" . str_replace("\n", "\n\t", (string)$this->location) . "\n";
 		
-		$str .= "\n\n";
-		$str .= (string)$this->accounting;
-		$str .= "\n\n";
+		$str .= "Client:\n\t" . str_replace("\n", "\n\t", (string)$this->client) . "\n";
+		
+		$str .=  (string)$this->accounting . "\n";
 		
 		$total = ($this->accounting->debit_total() + $this->accounting->credit_total()) * -1;
 		
 		$str .= 'Balance due $' . number_format($total, 2);
+		
+		if(count($this->notes) > 0)
+		{
+			$str .= "\nNotes:";
+			
+			foreach($this->notes AS $note)
+			{
+				$str .= "\n$note";
+			}
+		}
 		
 		return $str;
 	}

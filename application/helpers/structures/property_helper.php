@@ -28,7 +28,7 @@ class StructProperty
 	{
 		$this->info = new stdClass;
 		$this->assets = new stdClass;
-		$this->notes = new stdClass;
+		$this->notes = array();
 	}
 	
 	public function is_valid()
@@ -82,26 +82,35 @@ class StructProperty
 	
 	public function __toString()
 	{
-		$string = '';
+		$str = '';
 		
-		//$string 	.= (isset($this->id))?'#' . $this->id . '; ':'';
-		$string		.= $this->location_string() . ';';
+		//$str 	.= (isset($this->id))?'#' . $this->id . '; ':'';
+		$str		.= $this->location_string() . ";\n";
 		
 		//Stringify the meta data
 		foreach($this->info AS $key => $value)
 		{
-			$string .= ' ' . str_replace('_', ' ', $key) . ' - ' . $value . ',';
+			$str .= str_replace('_', ' ', $key) . ' - ' . $value . ', ';
 		}
 		
 		if(count($this->info) > 0)
 		{
-			$string = substr($string, 0, strlen($string) - 1) . ';';
+			$str = substr($str, 0, strlen($str) - 2) . ";";
+		}
+		
+		if(count($this->notes) > 0)
+		{
+			$str .= "\nNotes:";
+			
+			foreach($this->notes AS $note)
+			{
+				$str .= "\n$note";
+			}
 		}
 		
 		//todo: stringify assets
-		//todo: stringify notes
 		
-		return $string;
+		return $str;
 	}
 	
 	public function location_string()

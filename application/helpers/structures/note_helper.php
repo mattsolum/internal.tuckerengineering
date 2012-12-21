@@ -24,6 +24,6 @@ class StructNote
 	
 	public function __toString()
 	{
-		return $this->user->name . ': ' . $this->text;
+		return $this->user->name . ' - ' . str_replace("\n", ' ', $this->text);
 	}
 }
