@@ -31,19 +31,13 @@ class TestAPI extends PrototypeAPI
 		
 		$str = 'Not logged in.';
 		
-		if($this->CI->User->auth('matthewsolum', 'letmein2555'))
+		if($this->CI->User->is_authed())
 		{
 			$str = 'User: ' . $this->CI->User->get_name();
 			
-			if($this->CI->User->read_enabled('/jobs/'))
-			{
-				$str .= "\nIs authorized to view jobs";
-			}
-			else
-			{
-				$str .= "\nIs not authorized to view jobs";
-			}
-		}
+			//$str .= "\n\n" . $this->CI->User->reset_password($this->CI->User->get_user_id());
+			
+		} else($this->CI->User->auth('saven.matt@gmail.com', 'letmein2555'));
 		
 		return $str;
 	}
