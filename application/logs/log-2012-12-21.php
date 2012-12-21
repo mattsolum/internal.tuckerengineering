@@ -1,10 +1,12 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
 
-ERROR - 2012-12-21 11:17:45 --> Severity: Notice  --> Undefined property: Api::$Notes /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/client.php 233
-ERROR - 2012-12-21 11:19:32 --> Severity: Notice  --> Undefined property: Api::$Notes /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/client.php 234
-ERROR - 2012-12-21 11:44:32 --> Severity: Notice  --> Undefined variable: string /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/job_helper.php 143
-ERROR - 2012-12-21 11:45:39 --> Severity: Notice  --> Undefined variable: string /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/job_helper.php 143
-ERROR - 2012-12-21 11:45:40 --> Severity: Notice  --> Undefined variable: string /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/job_helper.php 143
-ERROR - 2012-12-21 11:46:04 --> Severity: Notice  --> Undefined variable: string /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/job_helper.php 141
-ERROR - 2012-12-21 11:46:04 --> Severity: Notice  --> Undefined variable: string /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/job_helper.php 141
-ERROR - 2012-12-21 11:46:05 --> Severity: Notice  --> Undefined variable: string /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/job_helper.php 141
+ERROR - 2012-12-21 14:13:01 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/client.php 80
+ERROR - 2012-12-21 14:13:01 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/client.php 80
+ERROR - 2012-12-21 14:13:01 --> Type_id: 
+ERROR - 2012-12-21 14:13:01 --> Severity: Notice  --> Undefined property: StructNote::$note_id /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/note.php 104
+ERROR - 2012-12-21 14:13:01 --> Severity: Notice  --> Undefined property: StructNote::$user_id /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/note.php 134
+ERROR - 2012-12-21 14:13:37 --> Type_id: 1
+ERROR - 2012-12-21 14:13:37 --> Severity: Notice  --> Undefined property: StructNote::$note_id /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/note.php 104
+ERROR - 2012-12-21 14:13:37 --> Severity: Notice  --> Undefined property: StructNote::$user_id /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/note.php 134
+ERROR - 2012-12-21 14:14:39 --> Type_id: 1
+ERROR - 2012-12-21 14:15:07 --> Type_id: 1

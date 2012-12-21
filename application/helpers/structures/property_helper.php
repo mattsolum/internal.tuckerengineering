@@ -39,6 +39,25 @@ class StructProperty
 		return ($location && $meta);
 	}
 	
+	public function set_id()
+	{
+		if(preg_match('/^[0-9]+$/', $id))
+		{	
+			for($i = 0; $i < count($this->notes); $i++)
+			{
+				$this->notes[$i]->type_id 	= $id;
+				$this->notes[$i]->type 		= 'property';
+			}
+			
+			$this->id = $id;
+			
+			return TRUE;
+		}
+		
+		return FALSE;
+		
+	}
+	
 	private function location_valid()
 	{
 		//Check that all required fields are at least set
@@ -85,7 +104,7 @@ class StructProperty
 		$str = '';
 		
 		//$str 	.= (isset($this->id))?'#' . $this->id . '; ':'';
-		$str		.= $this->location_string() . ";\n";
+		$str		.= $this->location_string() . "\n";
 		
 		//Stringify the meta data
 		foreach($this->info AS $key => $value)
@@ -95,7 +114,7 @@ class StructProperty
 		
 		if(count($this->info) > 0)
 		{
-			$str = substr($str, 0, strlen($str) - 2) . ";";
+			$str = substr($str, 0, strlen($str) - 2);
 		}
 		
 		if(count($this->notes) > 0)
@@ -166,11 +185,15 @@ class StructProperty
 			}
 		}
 		
-		//TODO: Assets and notes
-		/*
-		$this->assets			=
-		$this->notes			=
-		*/
+		//TODO: Assets
+		
+		if(isset($json->notes))
+		{
+			foreach($json->notes AS $note)
+			{
+				$this->notes[] = new StructNote($note);
+			}
+		}
 	}
 	
 	public function set_location($property)

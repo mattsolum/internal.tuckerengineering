@@ -101,7 +101,7 @@ class Note extends CI_Model {
 	{
 		$this->CI->db->trans_start();
 		
-		if($note->note_id != NULL)
+		if($note->id != NULL)
 		{
 			$this->update($note);
 		}
@@ -131,7 +131,7 @@ class Note extends CI_Model {
 		
 		$data['id']			= $note->type_id;
 		$data['type']		= $note->type;
-		$data['user_id']	= $note->user_id;
+		$data['user_id']	= $note->user->id;
 		$data['note']		= $note->text;
 		$data['date_added']	= now();
 		

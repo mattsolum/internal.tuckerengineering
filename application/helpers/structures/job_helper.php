@@ -43,6 +43,13 @@ class StructJob {
 		if(preg_match('/^[0-9]+$/', $id))
 		{
 			$this->accounting->set_job_id($id);
+			
+			for($i = 0; $i < count($this->notes); $i++)
+			{
+				$this->notes[$i]->type_id 	= $id;
+				$this->notes[$i]->type 		= 'job';
+			}
+			
 			$this->id = $id;
 			
 			return TRUE;
@@ -93,6 +100,14 @@ class StructJob {
 		if(isset($json->accounting))
 		{
 			$this->accounting->set_from_json($json->accounting);
+		}
+		
+		if(isset($json->notes))
+		{
+			foreach($json->notes AS $note)
+			{
+				$this->notes[] = new StructNote($note);
+			}
 		}
 	}
 	

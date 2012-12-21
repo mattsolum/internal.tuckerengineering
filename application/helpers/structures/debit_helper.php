@@ -14,7 +14,7 @@ class StructDebit
 	
 	public function __construct($json = NULL)
 	{
-		if(is_string($json))
+		if($json != NULL)
 		{
 			$this->set_from_json($json);
 		}
@@ -27,7 +27,7 @@ class StructDebit
 			$json = json_decode($json);
 		}
 		
-		if($json !== NULL && get_classname($json) == 'StructDebit')
+		if($json !== NULL)
 		{
 			$this->ledger_id 	= $json->ledger_id;
 			$this->client_id 	= $json->client_id;

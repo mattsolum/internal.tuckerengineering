@@ -24,6 +24,33 @@ class StructUser
 		}
 	}
 	
+	public function set_from_json($json)
+	{
+		if(is_string($json))
+		{
+			$json = json_decode($json);
+		}
+		
+		$this->id			= $json->id;
+		$this->name			= $json->name;
+		$this->office_id	= $json->office_id;
+		
+		if(isset($json->email))
+		{
+			$this->email	= $json->email;
+		}
+		
+		if(isset($json->permissions))
+		{
+			$this->permissions	= $json->permissions;
+		}
+		
+		if(isset($json->hash))
+		{
+			$this->hash			= $json->hash;
+		}
+	}
+	
 	public function is_valid()
 	{
 		if($this->email == NULL || $this->name == NULL || $this->hash == NULL)

@@ -75,6 +75,9 @@ class Client extends CI_Model {
 			}
 		}
 		
+		$client->set_id($id);
+		$this->CI->Note->commit($client->notes);
+		
 		$this->CI->db->trans_complete();
 		
 		if($this->CI->db->trans_status() === FALSE)

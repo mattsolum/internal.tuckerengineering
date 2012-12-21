@@ -15,7 +15,10 @@ class StructPayment
 	
 	public function __construct($json = NULL)
 	{
-		if($json != NULL) $this->set_from_json($json);
+		if($json != NULL)
+		{	
+			$this->set_from_json($json);
+		}
 	}
 	
 	public function set_from_json($json)

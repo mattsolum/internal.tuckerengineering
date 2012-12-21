@@ -42,6 +42,26 @@ class TestAPI extends PrototypeAPI
 		return $str;
 	}
 	
+	public function note_get()
+	{
+		$this->CI->load->model('Job');
+		$json = '{"id":"1","client":{"id":"2","name":"Ryan Solum","title":null,"balance":100,"location":{"id":"9","number":"1343","route":"Becca Teal Pl","subpremise":"","locality":"Round Rock","admin_level_1":"Texas","admin_level_2":"Williamson","postal_code":"78681","neighborhood":"Wood Glen","latitude":"30.538746","longitude":"-97.699646","info":{"foundation":"slab","reinforcement":"post-tension cables","roof_framing":"conventionally framed"},"assets":{},"notes":[],"date_added":null,"date_updated":"1344044988"},"contact":null,"notes":[],"date_added":null,"date_updated":null},"requester":{"id":"2","name":"Ryan Solum","title":null,"balance":100,"location":{"id":"9","number":"1343","route":"Becca Teal Pl","subpremise":"","locality":"Round Rock","admin_level_1":"Texas","admin_level_2":"Williamson","postal_code":"78681","neighborhood":"Wood Glen","latitude":"30.538746","longitude":"-97.699646","info":{"foundation":"slab","reinforcement":"post-tension cables","roof_framing":"conventionally framed"},"assets":{},"notes":[],"date_added":null,"date_updated":"1344044988"},"contact":null,"notes":[],"date_added":null,"date_updated":null},"relation":"Owner","location":{"id":"10","number":"13107","route":"Dessau Rd","subpremise":"400","locality":"Austin","admin_level_1":"Texas","admin_level_2":"","postal_code":"78754","neighborhood":"","latitude":"","longitude":"","info":{"foundation":"slab","reinforcement":"post-tension cables","roof_framing":"conventionally framed"},"assets":{},"notes":[],"date_added":"1345597698","date_updated":"1345607353"},"notes":[],"assets":null,"accounting":{"credits":[{"client_id":"2","job_id":"1","ledger_id":"3","payment":{"id":"3","client_id":"2","tender":"cash","number":"0","amount":"600.00","date_added":"5","date_posted":"5"},"item":"Payment","date_added":null,"date_updated":null,"amount":"500.00"}],"debits":[{"ledger_id":"1","client_id":"2","job_id":"1","item":"Structural Inspection","amount":"-450.00","date_added":null,"date_updated":null},{"ledger_id":"2","client_id":"2","job_id":"1","item":"Travel Fee","amount":"-50.00","date_added":null,"date_updated":null}]},"date_added":"1345654800","date_updated":"1345654800","date_billed":null}';
+		
+		$job = new StructJob($json);
+		
+		$note = new StructNote();
+		
+		$note->text 		= 'Note applied to job.';
+		$note->user->name	= 'Matthew Solum';
+		$note->user->id 	= 1;
+		
+		$job->notes[] = $note;
+		
+		$this->CI->Job->commit($job);
+		
+		return $job;
+	}
+	
 	public function database_get()
 	{
 		$this->CI->db->select('*');

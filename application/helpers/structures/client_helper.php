@@ -51,13 +51,31 @@ class StructClient
 		return TRUE;
 	}
 	
+	public function set_id($id)
+	{
+		if(preg_match('/^[0-9]+$/', $id))
+		{	
+			for($i = 0; $i < count($this->notes); $i++)
+			{
+				$this->notes[$i]->type_id 	= $id;
+				$this->notes[$i]->type 		= 'client';
+			}
+			
+			$this->id = $id;
+			
+			return TRUE;
+		}
+		
+		return FALSE;
+	}
+	
 	public function __toString()
 	{
 		$str = '';
 		
 		$str .=	$this->name . " ::\n";
 		
-		$str .= "Balance: $" . number_format($this->balance, 2) . ";\n";
+		$str .= "Balance: $" . number_format($this->balance, 2) . "\n";
 		
 		if(count($this->contact) > 0)
 		{
@@ -66,7 +84,7 @@ class StructClient
 				$str .= $contact_item->type . ' - ' . $contact_item->info . ', ';
 			}
 			
-			$str = substr($str, 0, strlen($str) - 2) . ";\n";
+			$str = substr($str, 0, strlen($str) - 2) . "\n";
 		}
 		
 		if($this->location != NULL && get_class($this->location) == 'StructProperty')
@@ -94,9 +112,10 @@ class StructClient
 			$json = json_decode($json);
 		}
 		
-		$this->id		= (isset($json->id))	?$json->id		:0;
-		$this->name		= (isset($json->name))	?$json->name	:'';
-		$this->title	= (isset($json->title))	?$json->title	:'';
+		$this->id		= (isset($json->id))		?$json->id		:0;
+		$this->name		= (isset($json->name))		?$json->name	:'';
+		$this->title	= (isset($json->title))		?$json->title	:'';
+		$this->balance	= (isset($json->balance))	?$json->balance	:0;
 		
 		if(isset($json->contact) && is_array($json->contact))
 		{
@@ -119,6 +138,12 @@ class StructClient
 			$this->location->set_from_json($json->location);
 		}
 		
-		//TODO: Notes!
+		if(isset($json->notes))
+		{
+			foreach($json->notes AS $note)
+			{
+				$this->notes[] = new StructNote($note);
+			}
+		}
 	}
 }

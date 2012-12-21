@@ -10,6 +10,8 @@ class Job extends CI_Model {
 		$this->CI =& get_instance();
 		$this->CI->load->model('Accounting');
 		$this->CI->load->model('Note');
+		$this->CI->load->model('Client');
+		$this->CI->load->model('Property');
 	}
 	
 	public function insert($job)
@@ -89,6 +91,10 @@ class Job extends CI_Model {
 			$this->CI->db->where('job_id', $data['job_id']);
 			$query = $this->CI->db->update('jobs', $data);	
 		}
+		
+		$job->set_id($data['job_id']);
+		log_message('error', 'Type_id: ' . $job->notes[0]->type_id);
+		$this->CI->Note->commit($job->notes);
 		
 		//End the transaction
 		$this->CI->db->trans_complete();

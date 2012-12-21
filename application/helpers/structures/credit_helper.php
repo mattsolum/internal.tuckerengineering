@@ -19,7 +19,7 @@ class StructCredit
 	
 	public function __construct($json = NULL)
 	{
-		if(is_string($json))
+		if($json != NULL)
 		{
 			$this->set_from_json($json);
 		}
@@ -46,7 +46,7 @@ class StructCredit
 			}
 			
 			$this->date_added	= $json->date_added;
-			$this->date_posted	= $json->date_posted;
+			$this->date_updated	= $json->date_updated;
 		}
 	}
 	
