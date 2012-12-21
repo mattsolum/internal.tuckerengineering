@@ -27,6 +27,7 @@ class StructClient
 	public function __construct($json = NULL)
 	{
 		$this->location = new StructProperty();
+		$this->notes	= array();
 		
 		if($json !== NULL)
 		{
@@ -71,6 +72,13 @@ class StructClient
 		if($this->location != NULL && get_class($this->location) == 'StructProperty')
 		{
 			$string .= (string)$this->location;
+		}
+		
+		$string .= "\nNotes:";
+		
+		foreach($this->notes AS $note)
+		{
+			$string .= "\n$note";
 		}
 		
 		return $string;

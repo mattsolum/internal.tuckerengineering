@@ -12,7 +12,7 @@ class StructNote
 	
 	public $date_added;
 	
-	public function __construct($json == NULL)
+	public function __construct($json = NULL)
 	{
 		$this->user = new StructUser();
 	}
@@ -24,6 +24,6 @@ class StructNote
 	
 	public function __toString()
 	{
-		return $user_id . ': ' . $text;
+		return $this->user->name . ': ' . $this->text;
 	}
 }

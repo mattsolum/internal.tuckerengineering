@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Note extends Model {
+class Note extends CI_Model {
 	
 	private $CI = NULL;
 	
@@ -26,6 +26,7 @@ class Note extends Model {
 		return $this->get($id, 'client');
 	}
 	
+	//Returns empty array if nothing is found.
 	public function get($id, $type)
 	{
 		$where = array('id' => $id, 'type' => $type);
@@ -64,6 +65,8 @@ class Note extends Model {
 			
 			return $result;
 		}
+		
+		return array();
 	}
 	
 	public function commit($notes)
@@ -143,7 +146,7 @@ class Note extends Model {
 		}
 		else
 		{
-			return $this->get_id($data['user_id', $data['date_added']);
+			return $this->get_id($data['user_id'], $data['date_added']);
 		}
 	}
 	
@@ -192,7 +195,7 @@ class Note extends Model {
 	
 	private function get_id($user_id, $date)
 	{
-		$where('user_id' => $user_id, 'date_added' => $date);
+		$where = array('user_id' => $user_id, 'date_added' => $date);
 		
 		$query = $this->CI->db->get_where('notes', $where);
 		
