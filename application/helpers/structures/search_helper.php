@@ -13,36 +13,11 @@ class StructSearch
 	private $lines			= 3;
 	private $words			= 7;
 	
-	public function __construct($item)
+	public function __construct($json = NULL)
 	{
-		if(is_string($item))
+		if($json != NULL)
 		{
-			$json = json_decode($item);
-			
-			//json_decode returns NULL if the string is not formatted correctly.
-			if($json !== NULL)
-			{
-				//Look, it *was* json! now we will overwrite $item and move along.
-				//Programmers accustomed to strictly typed languages will cry
-				$item = $json;
-				unset($json);
-			}
-		}
-		
-		//If it is an object we run a function to populate this object based
-		//on which one it is.
-		//By using a switch statement rather than parsing a function out of the
-		//classname we avoid possible security issues.
-		switch(get_class($item))
-		{
-			case 'StructClient':
-				$this->client($item);
-				break;
-			case 'StructJob':
-				$this->job($item);
-				break;
-			default:
-				$this->generic($item);
+			$this->set_from_json($json);
 		}
 		
 		$lines = setting('application.search.excerpt.lines');
@@ -50,6 +25,21 @@ class StructSearch
 		
 		$this->lines = ($lines != FALSE)?$lines:3;
 		$this->words = ($words != FALSE)?$words:7;
+	}
+
+	public function set_from_json($json)
+	{
+		if(is_string($json))
+		{
+			$json = json_decode($json);
+		}
+
+		$this->id 			= $json->id;
+		$this->type			= $json->type;
+		$this->body			= $json->body;
+		$this->link			= $json->link;
+		$this->date_added 	= $json->date_added;
+		$this->date_updated	= $json->date_updated;
 	}
 	
 	private function client($item)
@@ -264,5 +254,4 @@ class StructSearch
 	{
 		return $this->quicksort_by_property($arr, 'keywords');
 	}
-	
 }

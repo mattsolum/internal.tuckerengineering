@@ -87,6 +87,8 @@ class StructInvoice
 			$str .= "\t" . str_replace("\n", "\n\t", (string)$job) . "\n\n";
 		}
 
+		$str .= 'Total: $' . number_format($this->debits_total(), 2);
+
 		return $str;
 	}
 
@@ -146,5 +148,64 @@ class StructInvoice
 		// the array is sorted
 		 
 		return $array;
+	}
+
+	/**
+	 * Sums the totals of all included jobs
+	 * @return float
+	 */
+	public function debits_total()
+	{
+		$total = 0;
+
+		foreach($this->jobs AS $job)
+		{
+			$total += $job->accounting->debits_total();
+		}
+
+		return $total;
+	}
+
+	/**
+	 * Sums the balance of all included jobs
+	 * @return float
+	 */
+	public function balance()
+	{
+		$total = 0;
+
+		foreach($this->jobs AS $job)
+		{
+			$total += $job->balance();
+		}
+
+		return $total;
+	}
+
+	/**
+	 * Gets the date, as GMT unix timestamp, of the last payment 
+	 * applied to a job on this invoice. 
+	 * 
+	 * If no credits have been applied to any
+	 * job in this invoice it will return FALSE.
+	 * 
+	 * @return BOOL FALSE on failure, int on success
+	 */
+	public function date_paid()
+	{
+		$date_paid = FALSE;
+
+		foreach($this->jobs AS $job)
+		{
+			foreach($job->credits AS $credit)
+			{
+				if($credit->date_added > $date_paid)
+				{
+					$date_paid = $credit->date_added;
+				}
+			}
+		}
+
+		return $date_paid;
 	}
 }

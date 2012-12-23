@@ -14,7 +14,13 @@ class Event extends CI_Model
 		$this->listeners = array();
 	}	
 	
-	//Changed this so that the "Event object" is JUST the data packet passed by the event triggerer. No other information passed.
+	/**
+	 * Triggers an event and passes data to the listener.
+	 * 
+	 * @param  str $event
+	 * @param  mixed $data
+	 * @return void
+	 */
 	public function trigger($event, &$data = NULL)
 	{
 		//Organize everything
@@ -36,6 +42,16 @@ class Event extends CI_Model
 	}
 	
 	
+	/**
+	 * Registers an event listener.
+	 * If $package is not set it will try to guess the package
+	 * from the backtrace.
+	 * 
+	 * @param  str $event_name
+	 * @param  str $callback
+	 * @param  str $package
+	 * @return [type]
+	 */
 	public function register($event_name, $callback, $package = NULL)
 	{
 		if($package != NULL)
@@ -60,6 +76,16 @@ class Event extends CI_Model
 		//$this->listeners[$event_name][] = new StructListener($package_name, $extension, $callback);
 	}
 	
+	/**
+	 * Unregisters an event listener.
+	 * If no arguments are passed it will try to guess the package
+	 * based on the backtrace and unregister all listeners for that package.
+	 * 
+	 * @param  str $event_name 	= NULL
+	 * @param  str $callback 	= NULL
+	 * @param  str $package 	= NULL
+	 * @return BOOL
+	 */
 	public function unregister($event_name = NULL, $callback = NULL, $package = NULL)
 	{
 		$where = array();
@@ -83,6 +109,7 @@ class Event extends CI_Model
 		{
 			//SOMETHING FAILED!
 			//Wat do?
+			return FALSE;
 		}
 		
 		return TRUE;

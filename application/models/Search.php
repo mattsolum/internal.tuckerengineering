@@ -3,7 +3,7 @@
 class Search extends CI_Model {
 	private $CI = NULL;
 	
-	public function Search()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->CI =& get_instance();	
@@ -125,7 +125,7 @@ class Search extends CI_Model {
 		
 	}
 	
-	public function client_handler($client)
+	public function client_commit($client)
 	{
 		$search_result = new StructSearch($client);
 		

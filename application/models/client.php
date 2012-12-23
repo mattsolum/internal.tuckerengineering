@@ -13,70 +13,50 @@ class Client extends CI_Model {
 		$this->CI->load->model('Note');
 	}
 	
-	//Changed my mind on what the default name should be for
-	//Insert/Update
+	/**
+	 * Alias for commit
+	 * 
+	 * @param  structClient $client
+	 * @return Boolean FALSE on failure, Int on success
+	 */
 	public function insert($client)
 	{
 		return $this->insert($client);
 	}
 	
-	//Return the ID on success
-	//and FALSE on failure
+	/**
+	 * Creates or updates a given client
+	 * @param  StructClient $client
+	 * @return Boolean FALSE on failure, Int on success
+	 */
 	public function commit($client)
 	{
-		if(!$client->is_valid())
+		if(get_class($client) != 'StructClient' || !$client->is_valid())
 		{
 			log_message('error', 'Error in model Client method commit: client is not valid.');
 			return FALSE;
 		}
 		
+		$this->CI->Event->trigger('client_commit', $client);
+
 		$this->CI->db->trans_start();
 		
-		$data = array();
+		//Find the client's ID if it is not provided
+		$id = ($client->id != NULL)?$client->id:$this->exists($client);
 		
-		$id = ($client->id != 0)?$client->id:$this->exists($client);
-		
-		if($id !== FALSE)
+		//If the client's ID is not set and it does not exist
+		//$id will be false.
+		if($id === FALSE)
 		{
-			$data['client_id'] 	= $id;
-			$data['date_added']	= $client->date_added;
-			$this->delete($id);
+			//Client does not exist; create it.
+			$id = $this->create($client);
 		}
 		else
 		{
-			$data['date_added'] = now();	
+			//Client exists; update it.
+			$client->set_id($id);
+			$this->update($client);
 		}
-		
-		$property_id = $this->CI->Property->commit($client->location);
-		if($property_id === FALSE)
-		{
-			log_message('error', 'Error in model Client method commit: property failed to commit.');
-			return FALSE;
-		}
-		
-		$data['name']			= $client->name;
-		$data['search_name']	= strtolower(preg_replace('/[^a-zA-Z ]/', '', $client->name));
-		$data['title']			= $client->title;
-		$data['property_id']	= $property_id;
-		$data['date_updated']	= now();
-		
-		$query = $this->CI->db->insert('clients', $data);
-		
-		if($id === FALSE)
-		{
-			$id = $this->exists($client);
-		}
-		
-		if(is_array($client->contact))
-		{
-			foreach($client->contact AS $info)
-			{
-				$this->insert_contact($id, $info);
-			}
-		}
-		
-		$client->set_id($id);
-		$this->CI->Note->commit($client->notes);
 		
 		$this->CI->db->trans_complete();
 		
@@ -90,9 +70,117 @@ class Client extends CI_Model {
 			return $id;
 		}
 	}
-	
+
+	/**
+	 * Creates a new client record
+	 * 
+	 * @param  StructClient $client
+	 * @return Boolean FALSE on failure, int on success
+	 */
+	private function create($client)
+	{
+		$this->CI->db->trans_start();
+
+		$property_id = $this->CI->Property->commit($client->location);
+		if($property_id === FALSE)
+		{
+			log_message('error', 'Error in model Client method commit: property failed to commit.');
+			return FALSE;
+		}
+		
+		$data['name']			= $client->name;
+		$data['title']			= $client->title;
+		$data['property_id']	= $property_id;
+		$data['date_added'] 	= now();
+		$data['date_updated']	= now();
+		
+		//Insert the client into the database
+		$this->CI->db->insert('clients', $data);
+
+		//Get the new ID
+		$id = $this->exists($client);
+		
+		//Insert contacts
+		if(is_array($client->contact))
+		{
+			$this->commit_contacts($client->id, $client->contact);
+		}
+
+		$client->set_id($id);
+		$this->CI->Note->commit($client->notes);
+
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Client method create: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return $id;
+		}
+	}
+
+	/**
+	 * Updates a client record
+	 * 
+	 * @param  StructClient $client
+	 * @return Boolean FALSE on failure, Int on success
+	 */
+	private function update($client)
+	{
+		$this->CI->db->trans_start();
+
+		$property_id = $this->CI->Property->commit($client->location);
+		if($property_id === FALSE)
+		{
+			log_message('error', 'Error in model Client method commit: property failed to commit.');
+			return FALSE;
+		}
+		
+		$data['name']			= $client->name;
+		$data['title']			= $client->title;
+		$data['property_id']	= $property_id;
+		$data['date_updated']	= now();
+		
+		//Update the database
+		$this->CI->db->where('client_id', $client->id);
+		$this->CI->db->update('clients', $data);
+		
+		//Insert contacts
+		if(is_array($client->contact))
+		{
+			$this->commit_contacts($client->id, $client->contact);
+		}
+
+		$client->set_id($id);
+		$this->CI->Note->commit($client->notes);
+
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Client method update: transaction failed.');
+			return FALSE;
+		}
+		else
+		{
+			return $id;
+		}
+	}
+
+	/**
+	 * Deletes a client from the database
+	 * 
+	 * @param  integer $id
+	 * @param  boolean $include_property
+	 * @return boolean
+	 */
 	public function delete($id, $include_property = FALSE)
 	{
+		$this->CI->Event->trigger('client_delete', $id);
+
 		$id = preg_replace('/[^0-9]/', '', $id);
 		
 		$this->CI->db->trans_start();
@@ -104,7 +192,7 @@ class Client extends CI_Model {
 		}
 		
 		$this->CI->db->delete('clients', array('client_id' => $id));
-		$this->delete_contact($id);
+		$this->delete_contacts($id);
 		
 		$this->CI->db->trans_complete();
 		
@@ -235,7 +323,7 @@ class Client extends CI_Model {
 			
 			$client->location		= ($result->property_id != NULL)?$this->CI->Property->get($result->property_id):NULL;
 			$client->notes			= $this->CI->Note->get_by_client($client->id);
-			$client->contact		= $this->get_contact($result->client_id);
+			$client->contact		= $this->get_contacts($result->client_id);
 			
 			$client->date_added 	= $result->date_added;
 			$client->date_updated 	= $result->date_updated;
@@ -267,8 +355,26 @@ class Client extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	private function commit_contacts($client_id, $contact)
+	{
+		if($this->get_contacts($client_id) != NULL)
+		{
+			$this->delete_contacts($client_id);
+		}
+
+		foreach($contact AS $item)
+		{
+			if(!$this->insert_contacts($client_id, $contact))
+			{
+				return FALSE;
+			}
+		}
+
+		return TRUE;
+	}
 	
-	public function insert_contact($client_id, $contact)
+	public function insert_contacts($client_id, $contact)
 	{	
 		$this->CI->db->trans_start();
 		
@@ -280,7 +386,7 @@ class Client extends CI_Model {
 		
 		if($this->CI->db->trans_status() === FALSE)
 		{
-			log_message('Error', 'Error in Client method insert_contact: transaction failed.');
+			log_message('Error', 'Error in Client method insert_contacts: transaction failed.');
 			return FALSE;
 		}
 		else
@@ -289,7 +395,7 @@ class Client extends CI_Model {
 		}
 	}
 	
-	public function get_contact($client_id)
+	public function get_contacts($client_id)
 	{
 		$where = array('client_id' => $client_id);
 		
@@ -300,8 +406,6 @@ class Client extends CI_Model {
 		if($query->num_rows() > 0)
 		{
 			$result = array();
-			
-			
 			
 			foreach($query->result() as $row)
 			{
@@ -319,7 +423,7 @@ class Client extends CI_Model {
 		return NULL;
 	}
 	
-	public function delete_contact($client_id)
+	public function delete_contacts($client_id)
 	{
 		$where = array('client_id' => $client_id);
 		
@@ -331,7 +435,7 @@ class Client extends CI_Model {
 		
 		if($this->CI->db->trans_status() === FALSE)
 		{
-			log_message('Error', 'Error in Client method delete_contact: transaction failed.');
+			log_message('Error', 'Error in Client method delete_contacts: transaction failed.');
 			return FALSE;
 		}
 		else
