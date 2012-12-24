@@ -20,3 +20,5 @@ ERROR - 2012-12-24 16:32:16 --> Severity: Warning  --> array_keys() expects para
 ERROR - 2012-12-24 16:32:18 --> Severity: Warning  --> array_keys() expects parameter 1 to be array, null given /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 272
 ERROR - 2012-12-24 16:35:09 --> Severity: Warning  --> preg_replace(): No ending delimiter '/' found /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 275
 ERROR - 2012-12-24 16:35:50 --> Severity: Notice  --> Undefined variable: query /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 248
+ERROR - 2012-12-24 17:15:26 --> Severity: 4096  --> Object of class stdClass could not be converted to string /Users/matthewsolum/Sites/internal.tuckerengineering/application/libraries/REST/2/formats/txt.php 43
+ERROR - 2012-12-24 17:52:00 --> Severity: 4096  --> Object of class stdClass could not be converted to string /Users/matthewsolum/Sites/internal.tuckerengineering/application/libraries/REST/2/formats/txt.php 43

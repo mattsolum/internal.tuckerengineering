@@ -220,15 +220,18 @@ class Search extends CI_Model {
 	 * @param  string $query
 	 * @return string
 	 */
-	public function parse_query($query)
+	private function parse_query($query)
 	{
 		$phrase_matches 	= array();
 		$operator_matches 	= array();
+		$negated_words		= array();
 
 		$processed = array('like' => array(), 'notlike' => array(), 'fulltext' => array(), 'generic' => array());
 
 		preg_match_all('/-?"(.*?)"/', $query, $phrase_matches);
 		preg_match_all('/-?\[([a-z]+):(.*?)\]/', $query, $operator_matches);
+		preg_match_all('/-([a-zA-Z0-9-]+)/', $query, $negated_words);
+
 
 		foreach($phrase_matches[0] AS $key => $phrase)
 		{	
@@ -237,12 +240,18 @@ class Search extends CI_Model {
 			if(substr($phrase, 0, 1) == '-')
 			{
 				$processed['notlike'][] = array('keywords' => $like);
-				$query = str_replace($phrase, '', $query)
+				$query = str_replace($phrase, '', $query);
 			}
 			else
 			{
 				$processed['like'][] = array('keywords' => $like);
 			}
+		}
+
+		foreach($negated_words[0] AS $key => $word)
+		{
+			$processed['notlike'][] = array('keywords' => $negated_words[1][$key]);
+			$query = str_replace($word, '', $query);
 		}
 
 		foreach($operator_matches[0] AS $key => $value)
@@ -260,17 +269,12 @@ class Search extends CI_Model {
 		return $this->assemble_query($processed);
 	}
 
-	public function assemble_query($processed)
+	private function assemble_query($processed)
 	{
 		$query 		= '';
 		$fulltext 	= '';
 
 		$str = preg_replace('/[^a-zA-Z0-9 \.$@-]/', '', implode(' ', $processed['fulltext']));
-
-		if($str == '')
-		{
-			return FALSE;
-		}
 
 		$fulltext .= 'MATCH (keywords) AGAINST ("';
 		$fulltext .= $str;
@@ -314,12 +318,23 @@ class Search extends CI_Model {
 			}
 		}
 
-		$query .= 'AND ' . $fulltext . ' > 0';
+		$order_by = '';
 
+		if($str != '')
+		{
+			$query .= 'AND ' . $fulltext . ' > 0';
+			$order_by = $fulltext .' DESC, ';
+		}
+		
 		$query = preg_replace('/^AND/', '', $query);
+
+		if($query == '')
+		{
+			return FALSE;
+		}
 		
 		$query = 'WHERE ' . $query;
-		$query = 'SELECT *, ' . $fulltext . ' AS relevance FROM search ' . $query . ' ORDER BY ' . $fulltext .' DESC';
+		$query = 'SELECT * FROM search ' . $query . ' ORDER BY ' . $order_by .'date_updated DESC';
 		$query = preg_replace('/\s+/', ' ', $query);
 
 		return trim($query);
