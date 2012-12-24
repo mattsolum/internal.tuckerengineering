@@ -4,18 +4,18 @@
 class StructClient
 {
 	//Client Information
-	public $id 		= NULL;
-	public $name 	= '';
+	public $id 			= NULL;
+	public $name 		= '';
 	
-	public $title 	= '';
+	public $title 		= '';
 	
-	public $balance	= 0;
+	public $balance		= 0;
 	
 	//Property
-	public $location = NULL;
+	public $location 	= NULL;
 	
 	//Contact Information
-	public $contact = array();
+	public $contact		= array();
 	
 	//Notes
 	public $notes;

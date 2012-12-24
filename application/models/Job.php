@@ -29,6 +29,9 @@ class Job extends CI_Model {
 			log_message('error', 'Error commiting job: job is invalid.');
 			return FALSE;
 		}
+
+		$this->CI->Event->trigger('job_commit', $job)
+
 		//Everything should be encapsulated in a transaction
 		$this->CI->db->trans_start();
 		
@@ -112,6 +115,8 @@ class Job extends CI_Model {
 	
 	public function delete($id)
 	{
+		$this->CI->Event('delete_job', $id);
+
 		$id = preg_replace('/[^0-9]/', '', $id);
 		
 		$this->CI->db->trans_start();

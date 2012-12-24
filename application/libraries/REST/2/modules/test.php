@@ -22,4 +22,13 @@ class TestAPI extends PrototypeAPI
 
 		return $this->CI->Invoice->get(0, 4);
 	}
+
+	public function search_get()
+	{
+		$this->CI->load->model('Search');
+
+		$query = $this->API->id;
+
+		return $this->CI->Search->parse_query($query);
+	}
 }

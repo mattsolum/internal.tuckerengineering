@@ -12,6 +12,9 @@ class StructSearch
 	
 	private $lines			= 3;
 	private $words			= 7;
+
+	private $wrapper_open	= '<span class="search_term">';
+	private $wrapper_close	= '</span>';
 	
 	public function __construct($json = NULL)
 	{
@@ -20,11 +23,21 @@ class StructSearch
 			$this->set_from_json($json);
 		}
 		
-		$lines = setting('application.search.excerpt.lines');
-		$words = setting('application.search.excerpt.words');
+		//Number of lines to include in the excerpt
+		$lines					= setting('application.search.excerpt.lines');
+		//Number of words to include in each line
+		$words					= setting('application.search.excerpt.words');
 		
-		$this->lines = ($lines != FALSE)?$lines:3;
-		$this->words = ($words != FALSE)?$words:7;
+		$this->lines 			= ($lines != FALSE)?$lines:$this->lines;
+		$this->words 			= ($words != FALSE)?$words:$this->words;
+
+		//The opening section of the tag(s) that keywords will be wrapped in
+		$wrapper_open 			= settings('application.search.wrapper_open');
+		//The closing section of said tag(s)
+		$wrapper_close 			= settings('application.search.wrapper_close');
+
+		$this->wrapper_open 	= ($wrapper_open != FALSE)?$wrapper_open:$this->wrapper_open;
+		$this->wrapper_close 	= ($wrapper_close != FALSE)?$wrapper_close:$this->wrapper_close;
 	}
 
 	public function set_from_json($json)
@@ -41,27 +54,30 @@ class StructSearch
 		$this->date_added 	= $json->date_added;
 		$this->date_updated	= $json->date_updated;
 	}
-	
-	private function client($item)
+
+	public function is_valid()
 	{
-		$this->id 			= $item->id;
-		$this->type 		= 'client';
-		$this->body			= (string)$item;
-		$this->title		= $item->name;
-		$this->link			= BASE_URL . 'clients/' . $item->id;
+		if(!isset($this->id) || !isset($this->type) || !isset($this->body))
+		{
+			return FALSE;
+		}
+
+		return TRUE;
 	}
 	
-	private function job($item)
-	{
-		$this->$id 		= $item->id;
-		$this->type 	= 'job';
-		$this->body		= (string)$item;
-		$this->title	= $item->service . ' at ' . $item->property->route;
-		$this->link		= BASE_URL . 'jobs/' . $item->id;
-	}
-	
+	/**
+	 * Creates an excerpt of the content similar to the way Google does.
+	 * 
+	 * @param  str $keywords A list of keywords to look for separated by a space
+	 * @return string
+	 */
 	public function excerpt($keywords)
 	{
+		if($this->body == NULL)
+		{
+			return '';
+		}
+
 		$words 		= explode(' ', str_replace("\n", ' ', $this->body));
 		$keywords 	= explode(' ', preg_replace('/\W\s*/', ' ', $keywords));
 		
