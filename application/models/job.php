@@ -47,7 +47,7 @@ class Job extends CI_Model {
 		{
 			//It does not exist. Set date_added to now.
 			$data['job_id'] 	= $this->get_next_index();
-			$data['date_added']	= now();	
+			$data['date_added']	= ($job->date_added != '')?$job->date_added:now();	
 		}
 		
 		//The ID for client and property will be returned by their

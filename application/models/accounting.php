@@ -4,7 +4,7 @@ class Accounting extends CI_Model
 {
 	private $CI = NULL;
 	
-	public function Accounting()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->CI =& get_instance();
@@ -107,7 +107,7 @@ class Accounting extends CI_Model
 		}
 		else
 		{
-			$data['date_added'] = now();
+			$data['date_added'] = ($ledger->date_added != '')?$ledger->date_added:now();
 		}
 		
 		$data['date_updated'] = now();
@@ -282,15 +282,41 @@ class Accounting extends CI_Model
 		//Then subtract other payments because it will always be postive
 		return $p + $bbj - $op;
 	}
-	
-	private function read()
+
+	public function get_balance_by_jobs($jobs)
 	{
-		
-	}
-		
-	public function edit($accounting)
-	{
-		
+		if(is_int($jobs))
+		{
+			$jobs = array($jobs);
+		}
+
+		$this->CI->db->select('job_id');
+		$this->CI->db->select_sum('amount', 'balance');
+		$this->CI->db->from('ledger');
+
+		foreach ($jobs as $job)
+		{
+			$this->CI->db->or_where('job_id', $job);
+		}
+
+		$this->CI->db->group_by('job_id');
+		$this->CI->db->order_by('job_id', 'DESC');
+
+		$query = $this->CI->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			$result = array();
+
+			foreach($query->result() AS $row)
+			{
+				$result[$row->job_id] = $row->balance;
+			}
+
+			return $result;
+		}
+
+		return FALSE;
 	}
 	
 	public function delete_by_job($job_id)
@@ -322,5 +348,75 @@ class Accounting extends CI_Model
 		}
 		
 		return FALSE;
+	}
+
+	/**
+	 * Returns an array of job ID's for jobs that have a negative balance and belong to a given client.
+	 * 
+	 * @param  int $client_id
+	 * @return array
+	 */
+	public function list_unpaid_jobs_by_client_id($client_id)
+	{
+		$this->CI->db->select('jobs.job_id');
+		$this->CI->db->from('jobs');
+		$this->CI->db->join('ledger', 'jobs.job_id = ledger.job_id');
+		$this->CI->db->where('jobs.client_id', $client_id);
+		$this->CI->db->where('SUM(ledger.amount) < 0');
+
+		$query = $this->CI->db->get();
+		if($query->num_rows() > 0)
+		{
+			$result = array();
+			foreach($query->result() AS $row)
+			{
+				$result[] = $row->job_id;
+			}
+
+			return $result;
+		}
+
+		return array();
+	}
+
+	public function list_jobs_by_payment_id($payment_id)
+	{
+		$this->CI->db->select('job_id');
+		$this->CI->db->from('ledger');
+		$this->CI->db->where('payment_id', $payment_id);
+
+		$query = $this->CI->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			$result = array();
+			foreach($this->result() AS $row)
+			{
+				$result[] = $row->job_id;
+			}
+
+			return $result;
+		}
+
+		return array();
+	}
+
+	public function delete_by_payment_id($payment_id)
+	{
+		$where = array();
+		$where['payment_id'] = $payment_id;
+
+		$this->CI->db->trans_start();
+
+		$this->CI->db->delete('ledger', $where);
+
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('error', 'Error in model Accounting method delete_by_payment_id: transaction failed.');
+			return FALSE;
+		}
+		else return TRUE;
 	}
 }

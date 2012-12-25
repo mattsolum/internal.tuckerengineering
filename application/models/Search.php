@@ -52,8 +52,8 @@ class Search extends CI_Model {
 		$data['title']			= $search->title;
 		$data['link']			= $search->link;
 		$data['keywords'] 		= $search->body;
-		$data['date_added']		= now();
-		$data['date_updated']	= now();
+		$data['date_added']		= ($search->date_added != 0)?$search->date_added:now();
+		$data['date_updated']	= ($search->date_updated != 0)?$search->date_updated:now();
 
 		$this->CI->db->insert('search', $data);
 

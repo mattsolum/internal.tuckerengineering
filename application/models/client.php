@@ -91,7 +91,7 @@ class Client extends CI_Model {
 		$data['name']			= $client->name;
 		$data['title']			= $client->title;
 		$data['property_id']	= $property_id;
-		$data['date_added'] 	= now();
+		$data['date_added'] 	= ($client->date_added != '')?$client->date_added:'';
 		$data['date_updated']	= now();
 		
 		//Insert the client into the database
