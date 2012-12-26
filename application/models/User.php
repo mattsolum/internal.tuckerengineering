@@ -13,6 +13,8 @@ class User extends CI_Model {
 		$this->CI =& get_instance();
 		$this->CI->load->file(APPPATH . 'libraries/phpass/PasswordHash.php', FALSE);
 		$this->CI->load->library('session');
+
+		$this->user = new StructUser();
 		
 		$this->hasher = new PasswordHash(8, FALSE);
 		
@@ -36,22 +38,22 @@ class User extends CI_Model {
 	
 	public function is_authed()
 	{
-		return $this->user != NULL;
+		return $this->user->id != NULL;
 	}
 	
 	public function read_enabled($f)
 	{
-		return $this->user->read_enabled($f);
+		return ($this->is_authed() && $this->user->read_enabled($f));
 	}
 	
 	public function write_enabled($f)
 	{
-		return $this->user->write_enabled($f);
+		return ($this->is_authed() && $this->user->write_enabled($f));
 	}
 	
 	public function delete_enabled($f)
 	{
-		return $this->user->delete_enabled($f);
+		return ($this->is_authed() && $this->user->delete_enabled($f));
 	}
 	
 	private function sess_auth()

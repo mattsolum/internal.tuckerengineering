@@ -351,18 +351,25 @@ class Search extends CI_Model {
 		{
 			$result = array();
 			$data = $this->CI->Event->trigger('search_op_' . $operator['method'], $operator);
+
+			//Gotta deal with the way events return data.
 			if($data != NULL)
 			{
+				//Each item is the data returned from an individual listener
 				foreach($data AS $item)
 				{
+					//Lets make sure it is formatted correctly.
 					if(is_array($item))
 					{
+						//If it just returned an array of left and right sides of a query
+						//Set the result to itme
 						if(isset($item['left']))
 						{
 							$result[] = $item;
 						}
 						else
 						{
+							//Otherwise it returned several pairs
 							foreach($item AS $comparison)
 							{
 								$result[] = $comparison;

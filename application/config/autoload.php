@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('validation', 'structures/user', 'structures/payment', 'structures/credit', 'structures/debit', 'structures/client', 'structures/contact','structures/invoice','structures/job','structures/location','structures/search', 'structures/property', 'structures/accounting', 'structures/note', 'setting', 'date' );
+$autoload['helper'] = array('validation', 'structures/user', 'structures/payment', 'structures/credit', 'structures/debit', 'structures/client', 'structures/contact','structures/invoice','structures/job','structures/location','structures/search', 'structures/property', 'structures/accounting', 'structures/note', 'setting', 'date', 'url' );
 
 
 
@@ -110,7 +110,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('Event', 'Extension');
+$autoload['model'] = array('Event', 'Extension', 'User');
 
 
 /* End of file autoload.php */

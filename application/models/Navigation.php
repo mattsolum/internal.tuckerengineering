@@ -13,16 +13,42 @@ class Navigation extends CI_Model {
 
 	public function build_top_level()
 	{
-		$default = array();
-		$default['Home'] 		= site_url();
-		$defualt['clients'] 	= site_url('clients');
-		$defualt['jobs']		= site_url('jobs');
-		$defualt['invoices']	= site_url('invoices');
+		$links = array();
+		$links['Home'] 		= '';
+		$links['clients'] 	= 'clients';
+		$links['jobs']		= 'jobs';
+		$links['invoices']	= 'invoices';
+		$links['admin']		= 'admin';
 
 		$package_links = $this->CI->Event->trigger('nav.build.top');
 
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
 
-		$wrapper_start 	= '<nav id="top"><ul>';
-		$wrapper_end	= '</ul></nav>';
+		$this->censor($links);
+
+		return $links;
+	}
+
+	private function censor(&$links)
+	{
+		foreach($links AS $title => $link)
+		{
+			if(!$this->CI->User->read_enabled('/' . $link))
+			{
+				unset($links[$title]);
+			}
+		}
+	}
+
+	public function here($link)
+	{
+		//TODO
+		return FALSE;
 	}
 }

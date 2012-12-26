@@ -10,6 +10,7 @@ class Event extends CI_Model
 	{
 		parent::__construct();
 		$this->CI =& get_instance();
+		$this->CI->load->helper('structures/Event');
 		
 		$this->listeners = array();
 	}	
