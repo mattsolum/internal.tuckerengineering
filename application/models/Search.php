@@ -305,7 +305,7 @@ class Search extends CI_Model {
 				$keys = array_keys($value);
 
 				$query .= 'AND ';
-				$query .= preg_replace('/[^a-zA-Z_ ]/', '', $keys[0]);
+				$query .= preg_replace('/[^a-zA-Z_ !=<>]/', '', $keys[0]);
 
 				$test = trim(preg_replace('/[^a-zA-Z0-9 \.$@-]/', '', $value[$keys[0]]));
 
@@ -352,6 +352,23 @@ class Search extends CI_Model {
 		{
 			return $this->CI->Event->trigger('search_op_' . $operator['method'], $operator);
 		}
+	}
+
+	private function op_type($operator)
+	{
+		$query 	= array();
+		$left	= 'type ';
+
+		if($operator['negated'] == TRUE)
+		{
+			$left .= '!';
+		}
+
+		$left .= '=';
+
+		$query[$left] = $operator['data'];
+
+		return $query;
 	}
 
 	/**

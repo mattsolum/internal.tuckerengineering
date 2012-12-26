@@ -37,6 +37,18 @@ class StructJob {
 			$this->set_from_json($json);
 		}
 	}
+
+	public function add_note($user_id, $text)
+	{
+		$note = new StructNote();
+
+		$note->user->id = $user_id;
+		$note->type 	= 'job';
+		$note->text 	= $text;
+		$note->type_id 	= $this->id;
+
+		$this->notes[] = $note;
+	}
 	
 	public function set_id($id)
 	{

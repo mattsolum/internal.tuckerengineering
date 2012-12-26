@@ -36,6 +36,18 @@ class StructProperty
 		}
 	}
 	
+	public function add_note($user_id, $text)
+	{
+		$note = new StructNote();
+
+		$note->user->id = $user_id;
+		$note->type 	= 'property';
+		$note->text 	= $text;
+		$note->type_id 	= $this->id;
+
+		$this->notes[] = $note;
+	}
+
 	public function is_valid()
 	{
 		$location = $this->location_valid();

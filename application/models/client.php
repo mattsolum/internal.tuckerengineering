@@ -106,6 +106,8 @@ class Client extends CI_Model {
 			$this->commit_contacts($client->id, $client->contact);
 		}
 
+		$client->add_note(0, 'Created by ' . $this->CI->User->get_name() . '.');
+
 		$client->set_id($id);
 		$this->CI->Note->commit($client->notes);
 
@@ -153,6 +155,8 @@ class Client extends CI_Model {
 		{
 			$this->commit_contacts($client->id, $client->contact);
 		}
+
+		$client->add_note(0, 'Updated by ' . $this->CI->User->get_name() . '.');
 
 		$client->set_id($id);
 		$this->CI->Note->commit($client->notes);
