@@ -259,7 +259,8 @@ class Search extends CI_Model {
 			$negated  = (substr($value, 0, 1) == '-');
 			$operator = array('method' => $operator_matches[1][$key], 'data' => $operator_matches[2][$key], 'negated' => $negated);
 
-			$processed['generic'][] = $this->process_operator($operator);
+
+			$processed['generic'] = array_merge($processed['generic'], $this->process_operator($operator));
 
 			$query = str_replace($value, '', $query);
 		}
@@ -302,12 +303,10 @@ class Search extends CI_Model {
 		{
 			if($value != NULL && is_array($value))
 			{
-				$keys = array_keys($value);
-
 				$query .= 'AND ';
-				$query .= preg_replace('/[^a-zA-Z_ !=<>]/', '', $keys[0]);
+				$query .= preg_replace('/[^a-zA-Z_ !=<>]/', '', $value['left']);
 
-				$test = trim(preg_replace('/[^a-zA-Z0-9 \.$@-]/', '', $value[$keys[0]]));
+				$test = trim(preg_replace('/[^a-zA-Z0-9 \.$@-]/', '', $value['right']));
 
 				if(!is_numeric($test))
 				{
@@ -350,7 +349,33 @@ class Search extends CI_Model {
 		}
 		else
 		{
-			return $this->CI->Event->trigger('search_op_' . $operator['method'], $operator);
+			$result = array();
+			$data = $this->CI->Event->trigger('search_op_' . $operator['method'], $operator);
+			if($data != NULL)
+			{
+				foreach($data AS $item)
+				{
+					if(is_array($item))
+					{
+						if(isset($item['left']))
+						{
+							$result[] = $item;
+						}
+						else
+						{
+							foreach($item AS $comparison)
+							{
+								$result[] = $comparison;
+							}
+						}
+					}
+				}
+			}
+
+			if(count($result) > 0)
+			{
+				return $result;
+			}
 		}
 	}
 
@@ -366,7 +391,8 @@ class Search extends CI_Model {
 
 		$left .= '=';
 
-		$query[$left] = $operator['data'];
+		$query['left'] 		= $left;
+		$query['right'] 	= $operator['data'];
 
 		return $query;
 	}
