@@ -6,7 +6,7 @@ class PrototypeAPI
 	public $CI;
 	public $API;
 	
-	public function __construct($API)
+	public function __construct(&$API)
 	{
 		$this->CI =& get_instance();
 		$this->API =& $API;

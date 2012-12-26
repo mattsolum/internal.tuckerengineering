@@ -20,6 +20,7 @@ class Property extends CI_Model {
 	
 	//Return the ID on success
 	//and FALSE on failure
+	//TODO: Split into Create and Update methods, remove reliance on delete for update.
 	public function commit($property)
 	{
 		if(!$property->is_valid())
@@ -38,6 +39,7 @@ class Property extends CI_Model {
 		{
 			if(!is_array($id))
 			{
+				$this->CI->Event->trigger('property.commit.update', $property);
 				$data['property_id'] 		= $id;
 				$data['date_added']			= $property->date_added;
 				$this->delete($id);
@@ -50,6 +52,7 @@ class Property extends CI_Model {
 		}
 		else
 		{
+			$this->CI->Event->trigger('property.commit.create', $property);
 			$data['date_added'] = now();
 		}
 		

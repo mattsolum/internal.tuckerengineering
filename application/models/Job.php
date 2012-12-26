@@ -30,8 +30,6 @@ class Job extends CI_Model {
 			return FALSE;
 		}
 
-		$this->CI->Event->trigger('job_commit', $job)
-
 		//Everything should be encapsulated in a transaction
 		$this->CI->db->trans_start();
 		
@@ -39,12 +37,14 @@ class Job extends CI_Model {
 		$id = $this->exists($job);
 		if($id !== FALSE)
 		{
+			$this->CI->Event->trigger('job.commit.update', $job);
 			//It exists, keep the date added and assign the old ID
 			$data['job_id'] 	= $id;
 			$data['date_added']	= $job->date_added;
 		}
 		else
 		{
+			$this->CI->Event->trigger('job.commit.create', $job);
 			//It does not exist. Set date_added to now.
 			$data['job_id'] 	= $this->get_next_index();
 			$data['date_added']	= ($job->date_added != '')?$job->date_added:now();	

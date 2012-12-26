@@ -36,8 +36,6 @@ class Client extends CI_Model {
 			log_message('error', 'Error in model Client method commit: client is not valid.');
 			return FALSE;
 		}
-		
-		$this->CI->Event->trigger('client_commit', $client);
 
 		$this->CI->db->trans_start();
 		
@@ -79,6 +77,8 @@ class Client extends CI_Model {
 	 */
 	private function create($client)
 	{
+		$this->CI->Event->trigger('client.commit.create', $client);
+
 		$this->CI->db->trans_start();
 
 		$property_id = $this->CI->Property->commit($client->location);
@@ -132,6 +132,8 @@ class Client extends CI_Model {
 	 */
 	private function update($client)
 	{
+		$this->CI->Event->trigger('client.commit.update', $client);
+
 		$this->CI->db->trans_start();
 
 		$property_id = $this->CI->Property->commit($client->location);
@@ -183,7 +185,7 @@ class Client extends CI_Model {
 	 */
 	public function delete($id, $include_property = FALSE)
 	{
-		$this->CI->Event->trigger('client_delete', $id);
+		$this->CI->Event->trigger('client.commit.delete', $client);
 
 		$id = preg_replace('/[^0-9]/', '', $id);
 		

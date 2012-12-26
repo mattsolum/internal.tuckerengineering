@@ -26,11 +26,14 @@ class Event extends CI_Model
 		//Organize everything
 		$event = $this->sanitize_event_name($event);
 		
-		$event_object = $data;
+		$event_object = new StructEvent($event, $data);
 		
 		//Find any registered listeners
-		$where = array('event' => $event);
-		$query = $this->CI->db->get_where('listeners', $where);
+		//All events end in a full stop. 
+		//The user or developer should never actualy run in to this,
+		//but it is there so that we can match entire segments.
+		$this->CI->db->like('event', $event . '.', 'after');
+		$query = $this->CI->db->get('listeners');
 		
 		if($query->num_rows() > 0)
 		{
@@ -69,7 +72,10 @@ class Event extends CI_Model
 		
 		if(!$this->is_registered($event_name, $callback, $package_name))
 		{
-			$data = array('event' => $event_name, 'callback' => $callback, 'package' => $package_name);
+			//All events end in a full stop. 
+			//The user or developer should never actualy run in to this,
+			//but it is there so that we can match entire segments.
+			$data = array('event' => $event_name . '.', 'callback' => $callback, 'package' => $package_name);
 			$this->CI->db->insert('listeners', $data);
 		}
 		
@@ -93,8 +99,11 @@ class Event extends CI_Model
 		//and then unregister ALL listeners for the pacakge.
 		
 		$where['package'] = ($package == NULL)?$this->parse_package_name():$this->sanitize_package_name($package);
-				
-		if($event_name != NULL) $where['event'] 	= $this->sanitize_event_name($event_name);
+		
+		//All events end in a full stop. 
+		//The user or developer should never actualy run in to this,
+		//but it is there so that we can match entire segments.
+		if($event_name != NULL) $where['event'] 	= $this->sanitize_event_name($event_name) . '.';
 		if($callback != NULL) 	$where['callback'] 	= $this->sanitize_callback_name($callback);
 		
 		//DATABASE STUFF!

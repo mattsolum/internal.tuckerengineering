@@ -380,64 +380,73 @@ class Search extends CI_Model {
 	 * @param  mixed $object
 	 * @return NULL
 	 */
-	public function commit_handler($object)
+	public function commit_handler($e)
 	{
 		$this->CI->load->helper('url');
 
-		switch(get_class($object))
+		$last_segment = substr($e->event, strrpos($e->event, '.'));
+
+		if($last_segment != 'delete')
 		{
-			case 'StructClient':
-				$search = $this->client_prepare($object);
-				break;
-			case 'StructJob':
-				$search = $this->job_prepare($object);
-				break;
-			case 'StructProperty':
-				$search = $this->property_prepare($object);
-				break;
-			default:
-				return NULL;
+			switch(get_class($e->data))
+			{
+				case 'StructClient':
+					$search = $this->client_prepare($e);
+					break;
+				case 'StructJob':
+					$search = $this->job_prepare($e);
+					break;
+				case 'StructProperty':
+					$search = $this->property_prepare($e);
+					break;
+				default:
+					return NULL;
+			}
+		}
+		else
+		{
+			$this->delete_handler($e);
 		}
 
 		$this->commit($search);
 	}
 	
-	private function client_prepare($client)
+	private function client_prepare($e)
 	{
 		$search = new StructSearch();
 
-		$search->id 	= $client->id;
+		$search->id 	= $e->data->id;
 		$search->type 	= 'client';
-		$search->title	= $client->name;
-		$search->link	= site_url('clients/' . strtolower(str_replace(' ', '_', $client->name)));
-		$search->body	= (string)$client;
+		$search->title	= $e->data->name;
+		$search->link	= site_url('clients/' . strtolower(str_replace(' ', '_', $e->data->name)));
+		$search->body	= (string)$e->data;
 
 		return $search;
 
 	}
 
-	private function job_prepare($job)
+	private function job_prepare($e)
 	{
 		$search = new StructSearch();
 
-		$search->id 	= $job->id;
+		$search->id 	= $e->data->id;
 		$search->type 	= 'job';
-		$search->title	= 'Job #' . $job->id . ', ' . $job->service() . ', at ' . $job->location->number . ' ' . $job->location->route . ' for ' . $job->client->name;
-		$search->link	= site_url('jobs/' . $job->id);
-		$search->body	= (string)$job;
+		$search->title	= 'Job #' . $e->data->id . ', ' . $e->data->service() . ', at ' . $e->data->location->number . ' ' . $e->data->location->route . ' for ' . $e->data->client->name;
+		$search->link	= site_url('jobs/' . $e->data->id);
+		$search->body	= (string)$e->data;
 
 		return $search;
 	}
 
-	private function property_prepare($property)
+	private function property_prepare($e)
 	{
 		$search = new StructSearch();
 
-		$search->id 	= $property->id;
+		$search->id 	= $e->data->id;
 		$search->type 	= 'property';
-		$search->title	= $property->number . ' ' . $property->route . ($property->subpremise != '')?', #' . $property->subpremise:'';
-		$search->link	= site_url('properties/' . $property->id);
-		$search->body	= (string)$property;
+		$search->title	= $e->data->number . ' ' . $e->data->route . ($e->data->subpremise != '')?', #' . $e->data->subpremise:'';
+		$search->link	= site_url('properties/' . $e->data->id);
+		$search->body	= (string)$e->data;
 
 		return $search;
 	}
@@ -448,17 +457,17 @@ class Search extends CI_Model {
 	 * @param  int $object
 	 * @return NULL
 	 */
-	public function delete_handler($object)
+	private function delete_handler($e)
 	{
-		switch (get_class($object)) {
+		switch (get_class($e->data)) {
 			case 'StructClient':
-				$this->delete($object->id, 'client');
+				$this->delete($e->data->id, 'client');
 				break;
 			case 'StructProperty':
-				$this->delete($object->id, 'property');
+				$this->delete($e->data->id, 'property');
 				break;
 			case 'StructJob':
-				$this->delete($object->id, 'job');
+				$this->delete($e->data->id, 'job');
 				break;
 			default:
 				return NULL;
