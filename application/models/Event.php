@@ -48,15 +48,9 @@ class Event extends CI_Model
 				}
 			}
 
-
-			switch (count($return))
+			if(count($return) > 0)
 			{
-				case 0:
-					return NULL;
-				case 1:
-					return $return[0];
-				default:
-					return $return;
+				return $return;
 			}
 		}
 
@@ -71,8 +65,8 @@ class Event extends CI_Model
 	 * 
 	 * @param  str $event_name
 	 * @param  str $callback
-	 * @param  str $package
-	 * @return [type]
+	 * @param  str $package = NULL
+	 * @return VOID
 	 */
 	public function register($event_name, $callback, $package = NULL)
 	{

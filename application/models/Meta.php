@@ -4,12 +4,11 @@ class Meta extends CI_Model {
 	
 	private $CI = NULL;
 	
-	public function Meta()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->CI =& get_instance();	
 	}
-	
 	
 	//Return the ID on success
 	//and FALSE on failure
