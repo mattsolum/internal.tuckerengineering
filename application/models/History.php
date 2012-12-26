@@ -11,43 +11,32 @@ class History extends CI_Model {
 		$this->CI->load->model('Note');	
 	}
 
-	public function cl_create($data)
+	public function recent_activity()
 	{
-		$this->created('client', $data);
+		//TODO
 	}
 
-	public function cl_update($data)
+	public function commited($e)
 	{
-		$this->updated('client', $data);
+		switch ($e->segment(-1))
+		{
+			case 'create':
+				$this->created($e);
+				break;
+			case 'update':
+				$this->updated($e);
+		}
 	}
 
-	public function pr_create($data)
+	private function created($e)
 	{
-		$this->created('property', $data);
-	}
+		$type = strtolower(str_replace('Struct', '', get_class($e->data));
 
-	public function pr_update($data)
-	{
-		$this->updated('property', $data);
-	}
-
-	public function jb_create($data)
-	{
-		$this->created('job', $data);
-	}
-
-	public function jb_update($data)
-	{
-		$this->updated('job', $data);
-	}
-
-	private function created($type, $data)
-	{
 		$note = new StructNote();
 		$note->user->id = 0;
-		$note->type 	= strtolower($type);
+		$note->type 	= $type;
 		$note->text 	= 'Created by ' . $this->CI->User->get_name() . '.';
-		$note->type_id 	= $data->id;
+		$note->type_id 	= $e->data->id;
 
 		$this->CI->Note->commit($note);
 	}

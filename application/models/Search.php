@@ -384,9 +384,7 @@ class Search extends CI_Model {
 	{
 		$this->CI->load->helper('url');
 
-		$last_segment = substr($e->event, strrpos($e->event, '.'));
-
-		if($last_segment != 'delete')
+		if($e->segment(-1) != 'delete')
 		{
 			switch(get_class($e->data))
 			{

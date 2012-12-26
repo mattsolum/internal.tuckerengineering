@@ -19,7 +19,7 @@ class Event extends CI_Model
 	 * 
 	 * @param  str $event
 	 * @param  mixed $data
-	 * @return void
+	 * @return mixed
 	 */
 	public function trigger($event, &$data = NULL)
 	{
@@ -37,11 +37,30 @@ class Event extends CI_Model
 		
 		if($query->num_rows() > 0)
 		{
+			$return = array();
 			foreach($query->result() AS $listener)
 			{
-				$this->activate_listener($listener, $event_object);
+				$item = $this->activate_listener($listener, $event_object);
+				
+				if($item != NULL)
+				{
+					$return[] = $item;
+				}
+			}
+
+
+			switch (count($return))
+			{
+				case 0:
+					return NULL;
+				case 1:
+					return $return[0];
+				default:
+					return $return;
 			}
 		}
+
+		return NULL;
 	}
 	
 	
@@ -178,11 +197,11 @@ class Event extends CI_Model
 		//And then ship it off to the right place.
 		if(!model_exists($listener->package))
 		{
-			$this->activate_extension($listener, $e);
+			return $this->activate_extension($listener, $e);
 		}
 		else
 		{
-			$this->activate_local($listener, $e);
+			return $this->activate_local($listener, $e);
 		}
 	}
 	
@@ -197,8 +216,10 @@ class Event extends CI_Model
 		//This could change if I add another method of registering an event listener.
 		if(isset($this->CI->Extension->$package) && method_exists($this->CI->Extension->$package, $callback))
 		{	
-			$this->CI->Extension->$package->$callback($e);
+			return $this->CI->Extension->$package->$callback($e);
 		}
+
+		return NULL;
 	}
 	
 	private function activate_local($listener, $e)
@@ -217,7 +238,9 @@ class Event extends CI_Model
 		//In order to fail gracefully we check if the method actualy exists before calling it
 		if(method_exists($this->CI->$package, $callback))
 		{
-			$this->CI->$package->$callback($e);
+			return $this->CI->$package->$callback($e);
 		}
+
+		return NULL;
 	}
 }
