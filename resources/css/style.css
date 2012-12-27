@@ -1,35 +1,112 @@
 html {
-	min-width:960px;
-	min-height:100%;
+	min-width:			960px;
+	min-height:			100%;
+	font-family: 		"Museo", "Palatino", "Hoefler Text", "Baskerville", "Georgia", "Times New Roman", serif;
+	font-size:			16px;
+	line-height:		16px;
+}
+
+h1 {
+	font-size:			28px;
+	margin-top:			16px;
+	margin-bottom:		16px;
 }
 
 body#log_in {
-	min-height:100%;
-	background: #507282; /* Old browsers */
-	background: -moz-radial-gradient(center, ellipse cover,  #507282 0%, #345262 100%); /* FF3.6+ */
-	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#507282), color-stop(100%,#345262)); /* Chrome,Safari4+ */
-	background: -webkit-radial-gradient(center, ellipse cover,  #507282 0%,#345262 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-radial-gradient(center, ellipse cover,  #507282 0%,#345262 100%); /* Opera 12+ */
-	background: -ms-radial-gradient(center, ellipse cover,  #507282 0%,#345262 100%); /* IE10+ */
-	background: radial-gradient(ellipse at center,  #507282 0%,#345262 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#507282', endColorstr='#345262',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+	min-height:			100%;
+	background: 		#507282; /* Old browsers */
+	background: 		-moz-radial-gradient(center, ellipse cover,  #507282 0%, #345262 100%); /* FF3.6+ */
+	background: 		-webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#507282), color-stop(100%,#345262)); /* Chrome,Safari4+ */
+	background: 		-webkit-radial-gradient(center, ellipse cover,  #507282 0%,#345262 100%); /* Chrome10+,Safari5.1+ */
+	background: 		-o-radial-gradient(center, ellipse cover,  #507282 0%,#345262 100%); /* Opera 12+ */
+	background: 		-ms-radial-gradient(center, ellipse cover,  #507282 0%,#345262 100%); /* IE10+ */
+	background: 		radial-gradient(ellipse at center,  #507282 0%,#345262 100%); /* W3C */
+	filter: 			progid:DXImageTransform.Microsoft.gradient( startColorstr='#507282', endColorstr='#345262',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 #log_in form {
 	position: absolute;
-	background-color:#405e6b;
-	border-radius:2px;
-	width:336px;
-	height:192px;
-	left:50%;
-	top:50%;
-	margin-left:-168px;
-	margin-top:-96px;
+	background-color:	#405e6b;
+	border-radius:		2px;
+	width:				336px;
+	height:				192px;
+	left:				50%;
+	top:				50%;
+	margin-left:		-168px;
+	margin-top:			-96px;
 }
 
-#login form input {
-	display:block;
-	margin-top:16px;
+#log_in form ul {
+	margin:				0 16px;
+	padding:			0;
+	list-style-type:	none;
+}
+
+#log_in h1 {
+	text-align: 		center;
+	color:				#fff;
+}
+
+#log_in form ul li {
+	margin:				0;
+	padding:			-16px;
+	width:				100%;
+	line-height:48px;
+}
+
+#log_in input[type="text"],
+#log_in input[type="password"]{
+	font-size:			20px;
+	width:				272px;
+	height:				48px;
+	padding:			0 15px;
+	margin-bottom:		16px;
+}
+
+input[type="text"],
+input[type="password"] {
+	line-height:		32px;
+	display:			block;
+	padding:			0 16px;
+	margin:				0;
+	height:				32px;
+	border-radius:		2px;
+	border:				1px solid #989898;
+}
+
+.hide {
+	display:			none;
+}
+
+@font-face {
+  font-family: 'Museo';
+  src: url('../fonts/Museo300-Regular-webfont.ttf');
+  font-weight: 200;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Museo';
+  src: url('../fonts/Museo500-Regular-webfont.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Museo Slab';
+  src:url('../fonts/museo_slab_500-webfont.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Museo Slab';
+  src: url('../fonts/museo_slab_500italic-webfont.ttf');
+  font-weight: 500;
+  font-style: italic;
 }
 
 /*

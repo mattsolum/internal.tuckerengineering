@@ -33,8 +33,8 @@ class Event extends CI_Model
 		//All events end in a full stop. 
 		//The user or developer should never actualy run in to this,
 		//but it is there so that we can match entire segments.
-		$this->CI->db->like('event', $event . '.', 'after');
-		$query = $this->CI->db->get('listeners');
+
+		$query = $this->CI->db->query("SELECT * FROM listeners WHERE '$event' LIKE CONCAT('%', event, '%')");
 		
 		if($query->num_rows() > 0)
 		{
@@ -89,7 +89,7 @@ class Event extends CI_Model
 			//All events end in a full stop. 
 			//The user or developer should never actualy run in to this,
 			//but it is there so that we can match entire segments.
-			$data = array('event' => $event_name . '.', 'callback' => $callback, 'package' => $package_name);
+			$data = array('event' => $event_name, 'callback' => $callback, 'package' => $package_name);
 			$this->CI->db->insert('listeners', $data);
 		}
 		
@@ -117,7 +117,7 @@ class Event extends CI_Model
 		//All events end in a full stop. 
 		//The user or developer should never actualy run in to this,
 		//but it is there so that we can match entire segments.
-		if($event_name != NULL) $where['event'] 	= $this->sanitize_event_name($event_name) . '.';
+		if($event_name != NULL) $where['event'] 	= $this->sanitize_event_name($event_name);
 		if($callback != NULL) 	$where['callback'] 	= $this->sanitize_callback_name($callback);
 		
 		//DATABASE STUFF!

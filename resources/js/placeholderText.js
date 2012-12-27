@@ -1,10 +1,10 @@
 $(document).ready(function(){
 	
-	$('input[type="text"]').each(function(index){
+	$('input').each(function(index){
 		
-		if($(this).attr('rel') != undefined)
+		if($(this).attr('title') != undefined)
 		{
-			var defaultText = $(this).attr("rel");
+			var defaultText = $(this).attr("title");
 			
 			$(this).attr("value", defaultText).addClass("blur");
 			
@@ -21,10 +21,5 @@ $(document).ready(function(){
 			
 			$('label[for="' + $(this).attr("id") + '"]"').addClass("hide");
 		}
-	});
-	
-	$('ul.schedule li').draggable({
-		grid:[40,49], 
-		stack: "ul.schedule li"
 	});
 });

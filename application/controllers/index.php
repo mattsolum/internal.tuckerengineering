@@ -8,7 +8,7 @@ class Index extends CI_Controller {
 		
 		if(!$this->User->is_authed())
 		{
-			redirect('auth/log_in');
+			redirect('user/auth/' . urlencode(uri_string()));
 		}
 
 		$this->load->model('Navigation');

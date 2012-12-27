@@ -40,6 +40,8 @@
 
 $route['default_controller'] = "index";
 $route['404_override'] = '';
+$route['user'] = "user_admin";
+$route['user/auth'] = "user_admin/auth";
 
 
 /* End of file routes.php */
