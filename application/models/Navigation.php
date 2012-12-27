@@ -15,10 +15,10 @@ class Navigation extends CI_Model {
 	{
 		$links = array();
 		$links['Home'] 		= '';
-		$links['clients'] 	= 'clients';
-		$links['jobs']		= 'jobs';
-		$links['invoices']	= 'invoices';
-		$links['admin']		= 'admin';
+		$links['Clients'] 	= 'clients';
+		$links['Jobs']		= 'jobs';
+		$links['Invoices']	= 'invoices';
+		$links['Admin']		= 'admin';
 
 		$package_links = $this->CI->Event->trigger('nav.build.top');
 
@@ -35,6 +35,100 @@ class Navigation extends CI_Model {
 		return $links;
 	}
 
+	public function build_user_links()
+	{
+		$links = array();
+		$links['Account controls'] 	= 'user';
+		$links['Sign out']			= 'user/auth';
+
+		$package_links = $this->CI->Event->trigger('nav.build.user');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
+	public function build_admin_links()
+	{
+		$links = array();
+		$links['User admin'] 			= 'admin/users';
+		$links['Backup / restore']		= 'admin/backup';
+		$links['Logs']					= 'admin/logs';
+		$links['Config']				= 'admin/config';
+
+		$package_links = $this->CI->Event->trigger('nav.build.admin');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
+	public function build_job_links()
+	{
+		$links = array();
+		$links['Create job'] 			= 'jobs/create';
+		$links['Apply payment']			= 'jobs/payment';
+
+		$package_links = $this->CI->Event->trigger('nav.build.jobs');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
+	public function build_client_links()
+	{
+		$links = array();
+		$links['Create client'] 		= 'clients/create';
+		$links['Apply payment']			= 'clients/payment';
+		$links['Make invoice']			= 'invoice/client';
+		$links['Merge clients']			= 'clients/payment';
+
+		$package_links = $this->CI->Event->trigger('nav.build.clients');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
+	/**
+	 * Removes any link the user does not have permission to see.
+	 * 
+	 * @param  array $links
+	 * @return array
+	 */
 	private function censor(&$links)
 	{
 		foreach($links AS $title => $link)
@@ -48,7 +142,20 @@ class Navigation extends CI_Model {
 
 	public function here($link)
 	{
-		//TODO
-		return FALSE;
+		$uri = str_replace(base_url(), '', $link);
+
+		$elements = explode('/', strtolower(trim($uri, '/')));
+
+		$location = explode('/', strtolower(trim(uri_string(), '/')));
+
+		for($i = 0; $i < count($elements); $i++)
+		{
+			if(!isset($location[$i]) || $elements[$i] != $location[$i])
+			{
+				return FALSE;
+			}
+		}
+
+		return TRUE;
 	}
 }

@@ -11,9 +11,9 @@ class user_admin extends CI_Controller {
 		}
 	}
 
-	public function index()
-	{	
-		var_dump($this);
+	public function index($info)
+	{
+		var_dump($info);
 		$this->load->view('index');
 	}
 
@@ -24,7 +24,6 @@ class user_admin extends CI_Controller {
 		if($this->User->is_authed())
 		{
 			$this->User->de_auth();
-			redirect('user/auth');
 		}
 		else
 		{
@@ -40,8 +39,8 @@ class user_admin extends CI_Controller {
 			{
 				$redirect = '/' . $redirect;
 			}
-
-			$this->load->view('log_in', array('redirect' => $redirect));
 		}
+
+		$this->load->view('log_in', array('redirect' => $redirect));
 	}
 }

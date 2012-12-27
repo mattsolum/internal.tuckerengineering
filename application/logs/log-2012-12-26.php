@@ -42,3 +42,11 @@ ERROR - 2012-12-26 19:36:41 --> 404 Page Not Found --> user_admin/
 ERROR - 2012-12-26 19:36:44 --> 404 Page Not Found --> user_admin/
 ERROR - 2012-12-26 19:36:55 --> Severity: Notice  --> Undefined property: CI_Loader::$Navigation /Users/matthewsolum/Sites/internal.tuckerengineering/application/views/sections/top_level_nav.php 4
 ERROR - 2012-12-26 19:41:44 --> 404 Page Not Found --> user
+ERROR - 2012-12-26 22:54:35 --> Severity: Warning  --> Missing argument 1 for user_admin::index() /Users/matthewsolum/Sites/internal.tuckerengineering/application/controllers/user_admin.php 14
+ERROR - 2012-12-26 22:54:35 --> Severity: Notice  --> Undefined variable: info /Users/matthewsolum/Sites/internal.tuckerengineering/application/controllers/user_admin.php 16
+ERROR - 2012-12-26 22:54:35 --> Severity: Notice  --> Undefined property: CI_Loader::$Navigation /Users/matthewsolum/Sites/internal.tuckerengineering/application/views/sections/top_level_nav.php 4
+ERROR - 2012-12-26 22:54:45 --> 404 Page Not Found --> user
+ERROR - 2012-12-26 22:54:48 --> 404 Page Not Found --> user
+ERROR - 2012-12-26 22:55:12 --> Severity: Warning  --> Missing argument 1 for user_admin::index() /Users/matthewsolum/Sites/internal.tuckerengineering/application/controllers/user_admin.php 14
+ERROR - 2012-12-26 22:55:12 --> Severity: Notice  --> Undefined variable: info /Users/matthewsolum/Sites/internal.tuckerengineering/application/controllers/user_admin.php 16
+ERROR - 2012-12-26 22:55:12 --> Severity: Notice  --> Undefined property: CI_Loader::$Navigation /Users/matthewsolum/Sites/internal.tuckerengineering/application/views/sections/top_level_nav.php 4

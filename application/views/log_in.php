@@ -24,14 +24,15 @@
         <link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/style.css">
     </head>
     <body id="log_in">
-        <form name="login" method="POST" action="<?PHP echo(site_url('user/auth' . $redirect)) ?>">
+        <span id="company_name"><?PHP echo(setting('company.name')); ?></span>
+        <form name="login" method="POST" action="<?PHP echo(site_url('user/auth' . $redirect)) ?>" autocomplete="off">
             <h1>Log In</h1>
             <ul>
                 <li>
-                    <input type="text" name="email" id="email" title="Email Address" value=""/>
+                    <input type="text" name="email" id="email" title="Email Address" value="" autocomplete="off" />
                 </li>
                 <li>
-                    <input type="password" name="password" id="password" title="Password" value="" /> 
+                    <input type="password" name="password" id="password" title="Password" value="" autocomplete="off" /> 
                 </li>
                 <input type="submit" class="hide" />
             </ul>

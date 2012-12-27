@@ -40,8 +40,8 @@
 
 $route['default_controller'] = "index";
 $route['404_override'] = '';
-$route['user'] = "user_admin";
-$route['user/auth'] = "user_admin/auth";
+$route['user(\/.*)?'] = "user_admin$1";
+$route['search(\/.*)?'] = "search_controller$1";
 
 
 /* End of file routes.php */

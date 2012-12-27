@@ -158,6 +158,12 @@ class StructUser
 	
 	private function enabled($f, $index)
 	{
+
+		if($f == '')
+		{
+			return TRUE;
+		}
+
 		//Lets format the function we are checking permissions for
 		//the same way the functions in the database are stored.
 		$f = $this->format_function($f);

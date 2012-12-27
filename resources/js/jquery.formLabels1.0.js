@@ -105,9 +105,9 @@
 						}
 					}
 
-					var objheight = parseInt($this.css("padding-top")) + parseInt($this.css("border-top-width")) + parseInt($this.css("height")) + parseInt($this.css("border-bottom-width")) + parseInt($this.css("padding-bottom")) + 'px';
+					var objheight = parseInt($this.css("border-top-width")) + parseInt($this.css("height")) + parseInt($this.css("border-bottom-width")) + parseInt($this.css("padding-bottom")) + 'px';
 					var leftmargin 	= parseInt($this.css("padding-left")) + parseInt($this.css("border-left-width")) + 1 + 'px';
-					var topmargin 	= parseInt($this.css("padding-top")) + parseInt($this.css("border-top-width")) + 'px';
+					var topmargin 	= parseInt($this.css("padding-top")) + parseInt($this.css("border-top-width")) + parseInt($this.css("margin-top")) + 'px';
 
 					var formLabel = $(tagName, {
 						css: {
@@ -120,6 +120,7 @@
 							'position'				: 'absolute',
 							'height'				: objheight,
 							'color'					: $this.css("color"),
+							'margin-top'			: topmargin,
 							'margin-left'			: leftmargin,
 							'-moz-user-select'		: 'none',
 							'-webkit-user-select'	: 'none',
