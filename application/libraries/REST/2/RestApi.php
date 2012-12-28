@@ -264,11 +264,6 @@ class RestApi
 			$page = 0;
 		}
 		
-		if($per_page < 1)
-		{
-			$per_page = 1;
-		}
-		
 		$elements = count($data);
 		
 		if($elements == 0)
@@ -277,9 +272,13 @@ class RestApi
 		}
 		
 		$pages = ceil(count($data) / $per_page);
-		
-		
-		if($elements > ($per_page * ($page + 1)))
+
+		if(($per_page * ($page)) > $elements)
+		{
+			$this->error('Pagination is out of range for result. Number of elements returned: ' . $elements . '.');
+			return FALSE;	
+		}
+		else
 		{
 			$slice = array_slice($data, $per_page * $page, $per_page);
 			$pagination = array('page' => $page + 1, 'total_pages' => $pages, 'elements_returned' => $elements, 'elements_per_page' => $per_page);
@@ -292,11 +291,6 @@ class RestApi
 			unset($slice);
 			
 			return $final;
-		}
-		else
-		{
-			$this->error('Pagination is out of range for result. Number of elements returned: ' . $elements . '.');
-			return FALSE;	
 		}
 	}
 	

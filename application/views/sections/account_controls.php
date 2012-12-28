@@ -1,6 +1,6 @@
 <ul id="account_controls" class="nojs">
 	<li id="user">
-		<a href="<?PHP echo(site_url('user')); ?>"><?PHP echo($this->User->get_name()); ?></a>
+		<a href="<?PHP echo(site_url('user')); ?>" id="aculink"><?PHP echo($this->User->get_name()); ?></a>
 		<ul>
 			<?PHP
 				foreach($this->Navigation->build_user_links() AS $title => $link)

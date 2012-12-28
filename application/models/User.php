@@ -56,6 +56,38 @@ class User extends CI_Model {
 		return ($this->is_authed() && $this->user->delete_enabled($f));
 	}
 	
+	public function check_auth($permissions = '')
+	{
+		if($permissions == '')
+		{
+			$permissions = uri_string();
+		}
+
+		if(!$this->is_authed())
+		{
+			redirect('user/auth/' . urlencode(uri_string()));
+			return FALSE;
+		}
+
+		if($this->read_enabled($permissions))
+		{
+			$this->CI->session->set_userdata('last_page', uri_string());
+			return TRUE;
+		}
+		else
+		{
+			$last_page = $this->CI->session->userdata('last_page');
+			
+			if($last_page == FALSE)
+			{
+				$last_page = 'user/auth';
+			}
+
+			redirect($last_page);
+			return FALSE;
+		}
+	}
+
 	private function sess_auth()
 	{
 		if($this->CI->session->userdata('user_id') != NULL)

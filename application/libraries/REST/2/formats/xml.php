@@ -15,6 +15,11 @@ class ApiXml
 		$xml = '<APIResponse><result>';
 		$xml .= ($error)?'error</result>':'success</result>';
 		
+		if(!is_array($data))
+		{
+			$data = array('message' => $data);
+		}
+
 		foreach($data as $key => $value)
 		{
 			//If the root array is numerically indexed, 

@@ -1,0 +1,2 @@
+ERROR - Failed to insert client #1234
+ERROR - Failed to insert client #1235

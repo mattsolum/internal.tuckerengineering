@@ -5,16 +5,23 @@ class user_admin extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->load->model('Navigation');
+
 		if(!$this->User->is_authed() && uri_string() != 'user/auth')
 		{
 			redirect('user/auth');
 		}
 	}
 
-	public function index($info)
+	public function index()
 	{
-		var_dump($info);
-		$this->load->view('index');
+		$this->load->view('user/index');
+	}
+
+	public function messages($alert_id = '')
+	{
+		$this->load->view('user/index');
 	}
 
 	public function auth($redirect = '')

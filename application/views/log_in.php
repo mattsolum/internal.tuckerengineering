@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Log In</title>
+        <title>Sign In</title>
 
         <script src="<?PHP echo base_url(); ?>resources/js/jquery.js" type="text/javascript"></script>
         <script src="<?PHP echo base_url(); ?>resources/js/jquery.formLabels1.0.js" type="text/javascript"></script>
@@ -26,7 +26,7 @@
     <body id="log_in">
         <span id="company_name"><?PHP echo(setting('company.name')); ?></span>
         <form name="login" method="POST" action="<?PHP echo(site_url('user/auth' . $redirect)) ?>" autocomplete="off">
-            <h1>Log In</h1>
+            <h1>Sign In</h1>
             <ul>
                 <li>
                     <input type="text" name="email" id="email" title="Email Address" value="" autocomplete="off" />

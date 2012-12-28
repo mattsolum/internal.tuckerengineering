@@ -6,11 +6,8 @@ class search_controller extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('Navigation');
-		
-		if(!$this->User->read_enabled(uri_string()))
-		{
-			redirect('user/auth');
-		}
+
+		$this->User->check_auth();
 	}
 
 	public function _remap($method)
@@ -32,11 +29,16 @@ class search_controller extends CI_Controller {
 		call_user_func_array(array($this, $method), $params);
 	} 
 
-	private function prepare($q)
+	private function prepare($q, $type = '')
 	{
+		if($type != '' && substr($type, -1) != '/')
+		{
+			$type = $type . '/';
+		}
+
 		if($q == '' && $this->input->post('q') !== FALSE)
 		{
-			redirect('search/' . urlencode($this->input->post('q')));
+			redirect('search/' . $type . urlencode($this->input->post('q')));
 		}
 		elseif($q != '')
 		{
@@ -48,51 +50,51 @@ class search_controller extends CI_Controller {
 	{
 		$q = $this->prepare($q);
 
-		echo($q);
+		$this->load->view('search/index', array('q' => $q));
 	}
 
 	public function clients($q = '')
 	{
-		$q = $this->prepare($q);
+		$q = $this->prepare($q, 'clients');
 
 		if($q != '')
 		{
-			if(str_pos('[type:client]') === FALSE) 
+			if(strpos($q, '[type:client]') === FALSE) 
 			{
 				$q .= ' [type:client]';
 			}
 		}
 
-		echo($q);
+		$this->load->view('search/index', array('q' => $q, 'post_uri' => 'search/clients'));
 	}
 
 	public function jobs($q = '')
 	{
-		$q = $this->prepare($q);
+		$q = $this->prepare($q, 'jobs');
 
 		if($q != '')
 		{
-			if(str_pos('[type:job]') === FALSE) 
+			if(strpos($q, '[type:job]') === FALSE) 
 			{
 				$q .= ' [type:job]';
 			}
 		}
 
-		echo($q);
+		$this->load->view('search/index', array('q' => $q, 'post_uri' => 'search/jobs'));
 	}
 
 	public function properties($q = '')
 	{
-		$q = $this->prepare($q);
+		$q = $this->prepare($q, 'properties');
 
 		if($q != '')
 		{
-			if(str_pos('[type:property]') === FALSE) 
+			if(strpos($q, '[type:property]') === FALSE) 
 			{
 				$q .= ' [type:property]';
 			}
 		}	
 
-		echo($q);
+		$this->load->view('search/index', array('q' => $q, 'post_uri' => 'search/properties'));
 	}
 }

@@ -1,10 +1,18 @@
 <?php
 
-class Invoice extends CI_Controller {
+class Invoices extends CI_Controller {
 
-	function index()
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('Navigation');
+
+		$this->User->check_auth();
+	}
+
+	public function index()
 	{	
-		$this->load->view('index');
+		$this->load->view('invoices/index');
 	}
 	
 	/**
