@@ -82,6 +82,10 @@ class Note extends CI_Model {
 			{
 				$this->commit_single($note);
 			}
+			else
+			{
+				log_message('Error', 'Note is not valid!');
+			}
 		}
 		
 		$this->CI->db->trans_complete();

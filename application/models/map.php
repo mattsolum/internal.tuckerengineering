@@ -95,6 +95,7 @@ class Map extends CI_Model {
 		if(is_object($prop) && get_class($prop) == 'StructProperty')
 		{
 			$data = $this->gmaps_request(array('address' => $prop->location_string()));
+			$location = $prop;
 		}
 		elseif (is_string($prop))
 		{
@@ -117,7 +118,7 @@ class Map extends CI_Model {
 		}
 		else
 		{
-			log_message('error', 'Variable passed to geocode_address is ' . gettype($propess) . '. StructProperty object or string expected');
+			log_message('error', 'Variable passed to geocode_address is ' . gettype($prop) . '. StructProperty object or string expected');
 			return FALSE;	
 		}
 		
@@ -140,7 +141,6 @@ class Map extends CI_Model {
 				$result[$key]->neighborhood		= (isset($propess['neighborhood']))	?$propess['neighborhood']	:$location->neighborhood;
 				$result[$key]->latitude			= (isset($propess['latitude']))		?$propess['latitude']		:$location->latitude;
 				$result[$key]->longitude		= (isset($propess['longitude']))	?$propess['longitude']		:$location->longitude;
-				
 			}
 			
 			if(count($result) == 1)
@@ -195,7 +195,8 @@ class Map extends CI_Model {
 		{
 			foreach($value->address_components as $component)
 			{
-				$results[$key][$component->types[0]] = $component->long_name;
+				$index = array_shift($component->types);
+				$results[$key][$index] = $component->long_name;
 			}
 			
 			$results[$key]['latitude'] = $value->geometry->location->lat;

@@ -29,21 +29,22 @@ class StructNote
 			$json = json_decode($json);
 		}
 		
-		$this->id			= $json->id;
+		@$this->id			= $json->id;
 		$this->type_id		= $json->type_id;
 		$this->type			= $json->type;
 		
 		$this->text			= $json->text;
 		
-		$this->date_added 	= $json->date_added;
+		@$this->date_added 	= $json->date_added;
 		
 		$this->user			= new StructUser($json->user);
 	}
 	
 	public function is_valid()
 	{
-		if($this->type_id == NULL || $this->type == NULL || $this->user->id == NULL || $this->text == NULL)
+		if($this->type_id == NULL || $this->type == NULL || $this->user->id === NULL || $this->text == NULL)
 		{
+			log_message('error', 'StructNote invalid [type_id:' . $this->type_id . '] [type:' . $this->type . '] [user_id:' . $this->user->id . '] [text:' . $this->text . ']');
 			return FALSE;	
 		}
 		

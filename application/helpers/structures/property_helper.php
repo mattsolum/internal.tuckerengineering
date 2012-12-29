@@ -26,7 +26,7 @@ class StructProperty
 	
 	public function __construct($json = NULL)
 	{
-		$this->info = new stdClass;
+		$this->info = array();
 		$this->assets = new stdClass;
 		$this->notes = array();
 		
@@ -128,7 +128,7 @@ class StructProperty
 		{
 			$str .= str_replace('_', ' ', $key) . ' - ' . $value . ', ';
 		}
-		
+
 		if(count($this->info) > 0)
 		{
 			$str = substr($str, 0, strlen($str) - 2);
@@ -166,8 +166,9 @@ class StructProperty
 		
 		$formatted .= ($this->locality != '')?', ' . $this->locality:'';
 		$formatted .= ($this->admin_level_1 != '')?', ' . $this->admin_level_1:'';
+
 		$formatted .= ($this->postal_code != '')?' ' . $this->postal_code:'';
-		
+
 		return $formatted;
 	}
 	
@@ -198,7 +199,7 @@ class StructProperty
 		{
 			foreach($json->info AS $key => $value)
 			{
-				$this->info->$key = $value; 
+				$this->info[$key] = $value; 
 			}
 		}
 		

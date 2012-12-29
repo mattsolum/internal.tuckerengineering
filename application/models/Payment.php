@@ -300,7 +300,7 @@ class Payment extends CI_Model {
 		$this->CI->db->select('payments.amount', 'payment_total');
 		$this->CI->db->from('ledger');
 		$this->CI->db->join('payments', 'ledger.payment_id = payments.payment_id');
-		$this->CI->db->where('ledger.payment_id' => $payment->id);
+		$this->CI->db->where('ledger.payment_id', $payment->id);
 
 		$query = $this->CI->db->get('ledger');
 

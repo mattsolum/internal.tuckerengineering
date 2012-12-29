@@ -59,6 +59,14 @@ class StructClient
 		{
 			return FALSE;
 		}
+
+		foreach($this->contact AS $contact)
+		{
+			if(!$contact->is_valid())
+			{
+				return FALSE;
+			}
+		}
 		
 		return TRUE;
 	}
@@ -138,6 +146,8 @@ class StructClient
 					$type = $contact_item->type;
 					$info = $contact_item->info;
 					
+					$this->contact[$key] = new StructContact();
+					$this->contact[$key]->id   = $this->id;
 					$this->contact[$key]->type = $type;
 					$this->contact[$key]->info = $info;
 				}

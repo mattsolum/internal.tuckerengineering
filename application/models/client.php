@@ -40,7 +40,7 @@ class Client extends CI_Model {
 		$this->CI->db->trans_start();
 		
 		//Find the client's ID if it is not provided
-		$id = ($client->id != NULL)?$client->id:$this->exists($client);
+		$id = $this->exists($client);
 		
 		//If the client's ID is not set and it does not exist
 		//$id will be false.
@@ -65,6 +65,7 @@ class Client extends CI_Model {
 		}
 		else
 		{
+			$this->CI->Event->trigger('client.commit.after', $this->get($id));
 			return $id;
 		}
 	}
@@ -77,7 +78,7 @@ class Client extends CI_Model {
 	 */
 	private function create($client)
 	{
-		$this->CI->Event->trigger('client.commit.create', $client);
+		$this->CI->Event->trigger('client.commit.before.create', $client);
 
 		$this->CI->db->trans_start();
 
@@ -89,11 +90,17 @@ class Client extends CI_Model {
 		}
 		
 		$data['name']			= $client->name;
+		$data['search_name']	= preg_replace('/[^a-zA-Z ]/', '', strtolower($client->name)); //Used for determining if a client exists or not
 		$data['title']			= $client->title;
 		$data['property_id']	= $property_id;
-		$data['date_added'] 	= ($client->date_added != '')?$client->date_added:'';
+		$data['date_added'] 	= ($client->date_added != '')?$client->date_added:now();
 		$data['date_updated']	= now();
 		
+		if($client->id != NULL)
+		{
+			$data['client_id']	= $client->id;
+		}
+
 		//Insert the client into the database
 		$this->CI->db->insert('clients', $data);
 
@@ -105,8 +112,6 @@ class Client extends CI_Model {
 		{
 			$this->commit_contacts($client->id, $client->contact);
 		}
-
-		$client->add_note(0, 'Created by ' . $this->CI->User->get_name() . '.');
 
 		$client->set_id($id);
 		$this->CI->Note->commit($client->notes);
@@ -132,8 +137,6 @@ class Client extends CI_Model {
 	 */
 	private function update($client)
 	{
-		$this->CI->Event->trigger('client.commit.update', $client);
-
 		$this->CI->db->trans_start();
 
 		$property_id = $this->CI->Property->commit($client->location);
@@ -142,8 +145,15 @@ class Client extends CI_Model {
 			log_message('error', 'Error in model Client method commit: property failed to commit.');
 			return FALSE;
 		}
-		
+		else
+		{
+			$client->location->id = $property_id;
+		}
+
+		$this->CI->Event->trigger('client.commit.before.update', $client);
+
 		$data['name']			= $client->name;
+		$data['search_name']	= preg_replace('/[^a-zA-Z ]/', '', strtolower($client->name)); //Used for determining if a client exists or not
 		$data['title']			= $client->title;
 		$data['property_id']	= $property_id;
 		$data['date_updated']	= now();
@@ -160,7 +170,7 @@ class Client extends CI_Model {
 
 		$client->add_note(0, 'Updated by ' . $this->CI->User->get_name() . '.');
 
-		$client->set_id($id);
+		$client->set_id($client->id);
 		$this->CI->Note->commit($client->notes);
 
 		$this->CI->db->trans_complete();
@@ -172,7 +182,7 @@ class Client extends CI_Model {
 		}
 		else
 		{
-			return $id;
+			return $client->id;
 		}
 	}
 
@@ -371,7 +381,7 @@ class Client extends CI_Model {
 
 		foreach($contact AS $item)
 		{
-			if(!$this->insert_contacts($client_id, $contact))
+			if(!$this->insert_contacts($client_id, $item))
 			{
 				return FALSE;
 			}

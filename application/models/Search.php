@@ -473,11 +473,12 @@ class Search extends CI_Model {
 	{
 		$search = new StructSearch();
 
+		$subpremise = ($e->data->subpremise != '')?', #' . $e->data->subpremise:'';
 		$search->id 	= $e->data->id;
 		$search->type 	= 'property';
-		$search->title	= $e->data->number . ' ' . $e->data->route . ($e->data->subpremise != '')?', #' . $e->data->subpremise:'';
+		$search->title	= $e->data->number . ' ' . $e->data->route . $subpremise;
 		$search->link	= site_url('properties/' . $e->data->id);
-		$search->body	= (string)$e->data;
+		$search->body 	= (string)$e->data;
 
 		return $search;
 	}

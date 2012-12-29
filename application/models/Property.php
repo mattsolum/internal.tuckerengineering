@@ -39,9 +39,9 @@ class Property extends CI_Model {
 		{
 			if(!is_array($id))
 			{
-				$this->CI->Event->trigger('property.commit.update', $property);
-				$data['property_id'] 		= $id;
-				$data['date_added']			= $property->date_added;
+				$property->id = $id;
+
+				$this->CI->Event->trigger('property.commit.before.update', $property);
 				$this->delete($id);
 			}
 			else
@@ -52,10 +52,13 @@ class Property extends CI_Model {
 		}
 		else
 		{
-			$this->CI->Event->trigger('property.commit.create', $property);
-			$data['date_added'] = now();
+			$property->id = $this->get_next_property_id();
+			$property->date_added = now();
+			$this->CI->Event->trigger('property.commit.before.create', $property);
 		}
-		
+
+		$data['property_id'] 					= $property->id;
+
 		$data['street_number']					= $property->number;
 		$data['route']							= $property->route;
 		$data['subpremise']						= $property->subpremise;
@@ -67,6 +70,7 @@ class Property extends CI_Model {
 		$data['latitude']						= $property->latitude;
 		$data['longitude']						= $property->longitude;
 		
+		$data['date_added']						= $property->date_added;
 		$data['date_updated']					= now();
 		
 		$sub_search = ($property->subpremise != '')?' ' . $property->subpremise:'';
@@ -97,6 +101,7 @@ class Property extends CI_Model {
 		}
 		else
 		{
+			$this->CI->Event->trigger('property.commit.after', $this->get($id));
 			return $id;
 		}
 	}
@@ -159,7 +164,7 @@ class Property extends CI_Model {
 				foreach($meta AS $meta_value)
 				{
 					$key = $meta_value['name'];
-					$property->info->$key = $meta_value['value'];
+					$property->info[$key] = $meta_value['value'];
 				}
 			}
 			
@@ -230,5 +235,23 @@ class Property extends CI_Model {
 			
 		}
 		else return FALSE;
+	}
+
+	private function get_next_property_id()
+	{
+		$this->CI->db->select('property_id');
+		$this->CI->db->from('properties');
+		$this->CI->db->order_by('property_id', 'DESC');
+		$this->CI->db->limit(1);
+
+		$query = $this->CI->db->get();
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row(0);
+
+			return $row->property_id + 1;
+		}
+
+		return 0;
 	}
 }

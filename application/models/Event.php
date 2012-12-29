@@ -11,6 +11,7 @@ class Event extends CI_Model
 		parent::__construct();
 		$this->CI =& get_instance();
 		$this->CI->load->helper('structures/Event');
+		$this->CI->load->helper('loader');
 		
 		$this->listeners = array();
 	}	
@@ -187,7 +188,7 @@ class Event extends CI_Model
 	}
 	
 	private function activate_listener($listener, $e)
-	{		
+	{
 		//Check if it is an extension or an internal class
 		//And then ship it off to the right place.
 		if(!model_exists($listener->package))

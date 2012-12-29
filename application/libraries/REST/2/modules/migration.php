@@ -12,51 +12,49 @@ class MigrationAPI extends PrototypeAPI
 
 	public function get()
 	{
-		return $this->CI->migrator->get_id();
-	}
+		$id = preg_replace('/[^0-9]/', '', $this->API->id);
 
-	public function status_get()
-	{
-		if($this->API->id != NULL)
+		if($id != NULL)
 		{
-			$filename = './application/libraries/migration/resources/status/' . preg_replace('/[^0-9]/', '', $this->API->id) . '_status.txt';
-			
+			$filename = './resources/migration/data/' . $id . '.txt';
 			if(file_exists($filename))
 			{
-				$data = file_get_contents($filename);
-				return array('status' => explode("\n", $data));
+				return file_get_contents($filename);
 			}
 			else
 			{
-				$this->error = 'Data for given ID does not exist.';
-				return FALSE;
+				return '0';
 			}
 		}
-
-		$this->error = 'ID required.';
-		return FALSE;
+		else
+		{
+			return $this->id_get();
+		}
 	}
 
-	public function percent_get()
+	public function id_get()
+	{
+		return microtime(true) * 10000;
+	}
+
+	public function put()
+	{
+		return $this->post();
+	}
+
+	public function post()
+	{
+		$id = preg_replace('/[^0-9]/', '', $this->API->id);
+
+		if($id != NULL && $this->input->POST('status') != FALSE)
+		{
+			$filename = './resources/migration/data/' . $id . '.txt';
+			return file_put_contents($filename, $this->input->POST('status'));
+		}
+	}
+
+	public function client_post()
 	{
 		
-		if($this->API->id != NULL)
-		{
-			$filename = './application/libraries/migration/resources/status/' . preg_replace('/[^0-9]/', '', $this->API->id) . '_done.txt';
-
-			if(file_exists($filename))
-			{
-				$data = file_get_contents($filename);
-				return $data;
-			}
-			else
-			{
-				$this->error = 'Data for the given ID does not exist.';
-				return FALSE;
-			}
-		}
-
-		$this->error = 'ID required.';
-		return FALSE;
 	}
 }

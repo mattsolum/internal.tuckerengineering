@@ -474,52 +474,49 @@ form#search_bar input[type="submit"]:hover {
 	width:				464px;
 }
 
-#migration .ui-combobox-input {
-	margin-left: 		248px;
-	width:				422px;
-}
-
-.ui-helper-hidden-accessible {
-	display:			none;
-}
-
-.ui-autocomplete {
+#progress_bar {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin-left: 		80px;
+	margin-right: 		80px;
+	width:				784px;
 	background-color:	#fff;
-	width:				auto;
-}
-
-.ui-combobox-input {
-	display:			inline-block;
-	vertical-align:		bottom;
+	border-radius: 		2px;
 	height:				30px;
-	border:				1px solid #989898;
-	font-family: 		"Museo", "Palatino", "Hoefler Text", "Baskerville", "Georgia", "Times New Roman", serif;
-	font-weight:		200;
-	font-size:			18px;
-	padding:			0 8px;
-	border-top-left-radius:	2px;
-	border-bottom-left-radius:	2px;
-	border-right:		0;
+	border: 			1px solid #989898;
+	overflow:			hidden;
 }
 
-.ui-button {
-	display:			inline-block;
-	vertical-align:		bottom;
-	height:				30px;
-	width:				30px;
-	border:				1px solid #989898;
-	background-color:	#fff;
-	border-top-right-radius: 2px;
-	border-bottom-right-radius: 2px;
-	border-left:		none;
-}
-
-.ui-button-icon-primary {
+#progress_bar #progress {
 	display:			block;
-	width:				26px;
-	height:				26px;
-	background-color:	#989898;
-	margin:				2px;
+	position:			absolute;
+	width:				784px;
+	background-color:	#507282;
+	padding:			0 1px;
+	box-shadow:			0 1px 2px #000;
+	border-radius: 		2px;
+	height:				30px;
+	margin-left:		-784px;
+}
+
+#status {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin-left: 		8px;
+	margin-right: 		8px;
+	width:				944px;
+	height: 			192px;
+	margin-top:			48px;
+	overflow-y:			scroll;
+	overflow-x:			hidden;
+	background-color:	#ccc3a9;
+	border-radius:		2px;
+}
+
+#status li {
+	margin:				16px;
 }
 
 /*custom upload elements*/

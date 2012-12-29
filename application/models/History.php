@@ -16,7 +16,7 @@ class History extends CI_Model {
 		//TODO
 	}
 
-	public function commited($e)
+	public function committed($e)
 	{
 		switch ($e->segment(-1))
 		{
@@ -30,24 +30,43 @@ class History extends CI_Model {
 
 	private function created($e)
 	{
-		$type = strtolower(str_replace('Struct', '', get_class($e->data));
+		$type = strtolower(str_replace('Struct', '', get_class($e->data)));
+
+		$name = $this->CI->User->get_name();
+		$message = 'Created by ' . $name . '.';
+
+		if($this->CI->User->get_name() == '')
+		{
+			//Belongs to the system.
+			$message = "I imported this.";
+		}
 
 		$note = new StructNote();
 		$note->user->id = 0;
 		$note->type 	= $type;
-		$note->text 	= 'Created by ' . $this->CI->User->get_name() . '.';
+		$note->text 	= $message;
 		$note->type_id 	= $e->data->id;
 
 		$this->CI->Note->commit($note);
 	}
 
-	private function updated($type, $data)
+	private function updated($e)
 	{
+		$type = strtolower(str_replace('Struct', '', get_class($e->data)));
+
+		$name = $this->CI->User->get_name();
+
+		if($this->CI->User->get_name() == '')
+		{
+			$system = $this->CI->User->get_user(0);
+			$name = $system->name;
+		}
+
 		$note = new StructNote();
 		$note->user->id = 0;
 		$note->type 	= strtolower($type);
-		$note->text 	= 'Updated by ' . $this->CI->User->get_name() . '.';
-		$note->type_id 	= $data->id;
+		$note->text 	= 'Updated by ' . $name . '.';
+		$note->type_id 	= $e->data->id;
 
 		$this->CI->Note->commit($note);
 	}

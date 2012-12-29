@@ -54,7 +54,7 @@ class ClientAPI extends PrototypeAPI
 		
 		if($client->is_valid())
 		{
-			$id = $this->CI->Client->insert($client);
+			$id = $this->CI->Client->commit($client);
 			if($id !== FALSE)
 			{
 				return array('id' => $id);

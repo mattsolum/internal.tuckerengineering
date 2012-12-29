@@ -32,9 +32,9 @@ class StructSearch
 		$this->words 			= ($words != FALSE)?$words:$this->words;
 
 		//The opening section of the tag(s) that keywords will be wrapped in
-		$wrapper_open 			= settings('application.search.wrapper_open');
+		$wrapper_open 			= setting('application.search.wrapper_open');
 		//The closing section of said tag(s)
-		$wrapper_close 			= settings('application.search.wrapper_close');
+		$wrapper_close 			= setting('application.search.wrapper_close');
 
 		$this->wrapper_open 	= ($wrapper_open != FALSE)?$wrapper_open:$this->wrapper_open;
 		$this->wrapper_close 	= ($wrapper_close != FALSE)?$wrapper_close:$this->wrapper_close;
@@ -57,8 +57,9 @@ class StructSearch
 
 	public function is_valid()
 	{
-		if(!isset($this->id) || !isset($this->type) || !isset($this->body))
+		if($this->id == NULL || $this->type == NULL|| $this->body == NULL)
 		{
+			log_message('ERROR', 'StructSearch invalid [id:' . $this->id . '] [type:' . $this->type . '] [body:' . str_replace("\n", '', $this->body) . ']');
 			return FALSE;
 		}
 
