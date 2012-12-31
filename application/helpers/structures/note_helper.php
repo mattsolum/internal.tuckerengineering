@@ -29,13 +29,13 @@ class StructNote
 			$json = json_decode($json);
 		}
 		
-		@$this->id			= $json->id;
+		$this->id			= (isset($json->id))?$json->id:null;
 		$this->type_id		= $json->type_id;
 		$this->type			= $json->type;
 		
 		$this->text			= $json->text;
 		
-		@$this->date_added 	= $json->date_added;
+		$this->date_added 	= (isset($json->date_added))?$json->date_added:null;
 		
 		$this->user			= new StructUser($json->user);
 	}

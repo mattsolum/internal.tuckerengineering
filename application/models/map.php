@@ -68,7 +68,7 @@ class Map extends CI_Model {
 			log_message('error', 'Variable passed to validate_address is ' . gettype($propess) . '. StructProperty object or string expected');
 			return FALSE;	
 		}
-		
+
 		if($data !== FALSE)
 		{
 			$result = array();
@@ -141,6 +141,12 @@ class Map extends CI_Model {
 				$result[$key]->neighborhood		= (isset($propess['neighborhood']))	?$propess['neighborhood']	:$location->neighborhood;
 				$result[$key]->latitude			= (isset($propess['latitude']))		?$propess['latitude']		:$location->latitude;
 				$result[$key]->longitude		= (isset($propess['longitude']))	?$propess['longitude']		:$location->longitude;
+
+				if($location->is_pobox())
+				{
+					$result[$key]->number 	= NULL;
+					$result[$key]->route 	= $prop->route;
+				}
 			}
 			
 			if(count($result) == 1)
@@ -154,7 +160,7 @@ class Map extends CI_Model {
 		}
 		else
 		{
-			log_message('error', 'Error map_model, validate_address.');
+			log_message('error', 'Error map_model, parse_address.');
 			return FALSE;	
 		}
 	}

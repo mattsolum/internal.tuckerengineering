@@ -462,6 +462,27 @@ form#search_bar input[type="submit"]:hover {
 	margin-top: 		48px;
 }
 
+#begin_migration {
+	height:				30px;
+	padding:			0 15px;
+	background-color:	#507282;
+	border:				none;
+	font-size:			18px;
+	font-family: 		"Museo", "Palatino", "Hoefler Text", "Baskerville", "Georgia", "Times New Roman", serif;
+	font-weight:		200;
+	line-height:		16px;
+	color:				#a8b9c1;
+	margin-bottom:		32px;
+	border-radius:		2px;
+	border:				1px solid #507282;
+}
+
+#begin_migration:hover {
+	cursor:				pointer;
+	border-bottom:		1px solid #3c5965;
+	color:				#fff;
+}
+
 #migration p {
 	font-size:			22px;
 	line-height:		32px;

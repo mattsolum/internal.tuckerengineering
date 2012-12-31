@@ -7,9 +7,14 @@ class StructContact
 	public $info = '';
 	public $note = '';
 
-	public function is_valid()
+	public function is_valid($strict = TRUE)
 	{
-		if($this->id == NULL || $this->type == '' || $this->info == '')
+		if($strict == TRUE && $this->id == NULL)
+		{
+			return FALSE;
+		}
+		
+		if($this->type == '' || $this->info == '')
 		{
 			return FALSE;
 		}

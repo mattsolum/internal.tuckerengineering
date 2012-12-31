@@ -62,7 +62,7 @@ class StructClient
 
 		foreach($this->contact AS $contact)
 		{
-			if(!$contact->is_valid())
+			if(!$contact->is_valid(FALSE))
 			{
 				return FALSE;
 			}
@@ -81,6 +81,11 @@ class StructClient
 				$this->notes[$i]->type 		= 'client';
 			}
 			
+			for($i = 0; $i < count($this->contact); $i++)
+			{
+				$this->contact[$i]->id = $id;
+			}
+
 			$this->id = $id;
 			
 			return TRUE;

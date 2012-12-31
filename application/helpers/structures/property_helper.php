@@ -2,7 +2,7 @@
 
 class StructProperty
 {
-	public $id;
+	public $id 				= NULL;
 	
 	public $number 			= ''; 	//Street number
 	public $route 			= '';	//Street name
@@ -78,9 +78,12 @@ class StructProperty
 	private function location_valid()
 	{
 		//Check that all required fields are at least set
+		if(!$this->is_pobox() && ($this->number == '' || $this->route == ''))
+		{
+			return FALSE;
+		}
+
 		if(
-			$this->number 			== '' 	||
-			$this->route 			== ''	||
 			$this->locality			== ''	||
 			$this->admin_level_1	== ''	||
 			$this->postal_code		== ''
@@ -89,12 +92,7 @@ class StructProperty
 			return FALSE;
 		}
 		
-		$CI =& get_instance();
-		
-		$CI->load->model('Map');
-		
-		//Since everything is set check it with Google.
-		return $CI->Map->validate_address($this);
+		return TRUE;
 	}
 	
 	private function meta_valid()
@@ -169,7 +167,7 @@ class StructProperty
 
 		$formatted .= ($this->postal_code != '')?' ' . $this->postal_code:'';
 
-		return $formatted;
+		return trim($formatted);
 	}
 	
 	public function set_from_json($json)
@@ -226,5 +224,15 @@ class StructProperty
 		$this->neighborhood		= $property->neighborhood;
 		$this->latitude 		= $property->latitude;
 		$this->longitude 		= $property->longitude;
+	}
+
+	public function is_pobox()
+	{
+		if(preg_match('/(Postal|(P(ost|\.)?( |-)?O(ffice|\.)?))/i', $this->route))
+		{
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 }

@@ -356,7 +356,7 @@ class Client extends CI_Model {
 	//Return ID on success and FALSE on failure
 	public function exists($client)
 	{
-		$this->CI->db->like('search_name', $client->name, 'none');
+		$this->CI->db->like('search_name', preg_replace('/[^a-zA-Z ]/', '', strtolower($client->name)), 'none');
 		
 		$query = $this->CI->db->get('clients');
 		

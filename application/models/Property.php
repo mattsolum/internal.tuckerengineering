@@ -33,7 +33,7 @@ class Property extends CI_Model {
 		
 		$data = array();
 		
-		$id = ($property->id != 0)?$property->id:$this->exists($property);
+		$id = ($property->id != NULL)?$property->id:$this->exists($property);
 		
 		if($id !== FALSE)
 		{
@@ -180,10 +180,10 @@ class Property extends CI_Model {
 	
 	public function get_by_string($str)
 	{
-		$str = preg_replace('/(^| )east($| )/', ' e ', $str);
-		$str = preg_replace('/(^| )west($| )/', ' w ', $str);
-		$str = preg_replace('/(^| )north($| )/', ' n ', $str);
-		$str = preg_replace('/(^| )south($| )/', ' s ', $str);
+		$str = preg_replace('/(^| )e($| )/i', ' east ', $str);
+		$str = preg_replace('/(^| )w($| )/i', ' west ', $str);
+		$str = preg_replace('/(^| )n($| )/i', ' north ', $str);
+		$str = preg_replace('/(^| )s($| )/i', ' south ', $str);
 		
 		$where = array('search_text' => trim(strtolower($str)));
 		

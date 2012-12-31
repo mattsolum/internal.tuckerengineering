@@ -1,6 +1,7 @@
 <?PHP $this->load->view('sections/header'); ?>
 <?PHP $this->load->view('sections/second_level_nav', array('links' => $this->Navigation->build_admin_links())); ?>
 <section id="migration">
+	<button id="begin_migration" value="0">Begin Migration</button>
 	<div id="progress_bar">
 		<span id="progress" />
 	</div>
@@ -17,13 +18,15 @@
 			$('#status').height(status_height());
 		});
 
-		$('html').click(function(){
+		$('#begin_migration').click(function(){
 			if(pause()) {
-				$('#status').data('pause', false);
+				$(this).attr('value', 1);
+				$(this).html('Pause migration');
 			}
 			else
 			{
-				$('#status').data('pause', true);
+				$(this).attr('value', 0);
+				$(this).html('Resume migration');
 			}
 		});
 
@@ -113,13 +116,16 @@
 
 							client.notes.push(note);
 
+							add_status('Info', 'Begin ID ' + client.id + ': ' + client.name);
+
 							var json_string = JSON.stringify(client);
 							$.ajax({
 								type: 		'POST',
-								url: 		'<?PHP echo(base_url()); ?>api/v2/client/' + client.id + '.json',
+								url: 		'<?PHP echo(base_url()); ?>api/v2/migration/client/' + client.id + '.json',
 								data: 		{data: json_string},
-								async: 		false,
 								success: 	function(returned) {
+									add_status('info', 'Response for client ID ' + client.id + ' recieved');
+
 									if(returned.result == undefined)
 									{
 										add_status('error', returned);
@@ -134,6 +140,12 @@
 									{
 										add_status('error', returned.data.message);
 									}
+
+									if(i < total_rows)
+									{
+										i++;
+									}
+									setTimeout(doNext, 10);
 								},
 								error: 		function(jqxhr) {
 									var response = JSON.parse(jqxhr.responseText);
@@ -146,6 +158,12 @@
 									{
 										add_status('error', response.data.message);
 									}
+
+									if(i < total_rows)
+									{
+										i++;
+									}
+									setTimeout(doNext, 10);
 								}
 							});
 
@@ -155,7 +173,10 @@
 							}
 						}
 
-						setTimeout(doNext, 1);
+						if(pause())
+						{
+							setTimeout(doNext, 10);
+						}
 					}
 
 					doNext();
@@ -169,7 +190,7 @@
 
 	function pause()
 	{
-		if($('#status').data('pause') == true)
+		if($('#begin_migration').attr('value') == 0)
 		{
 			return true;
 		}

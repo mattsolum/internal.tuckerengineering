@@ -6,6 +6,7 @@ class search_controller extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('Navigation');
+		$this->load->model('Search');
 
 		$this->User->check_auth();
 	}
@@ -50,7 +51,11 @@ class search_controller extends CI_Controller {
 	{
 		$q = $this->prepare($q);
 
-		$this->load->view('search/index', array('q' => $q));
+		$results = $this->Search->find($q);
+
+		$results = array_slice($results, 0, 10);
+
+		$this->load->view('search/index', array('q' => $q, 'results' => $results));
 	}
 
 	public function clients($q = '')

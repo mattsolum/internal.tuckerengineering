@@ -32,8 +32,8 @@ class StructUser
 		}
 		
 		$this->id			= $json->id;
-		@$this->name		= $json->name;
-		@$this->office_id	= $json->office_id;
+		$this->name			= (isset($json->name))?$json->name:NULL;
+		$this->office_id	= (isset($json->office_id))?$json->office_id:NULL;
 		
 		if(isset($json->email))
 		{

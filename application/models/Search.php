@@ -180,7 +180,7 @@ class Search extends CI_Model {
 	 */
 	public function find($search)
 	{
-		$q .= $this->parse_query($search);
+		$q = $this->parse_query($search);
 
 		if($query == FALSE)
 		{
