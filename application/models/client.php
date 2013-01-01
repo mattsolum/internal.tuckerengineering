@@ -31,6 +31,8 @@ class Client extends CI_Model {
 	 */
 	public function commit($client)
 	{
+		log_message('error', '--- Client->commit() called for ' . $client->id . ' ' . $client->name);
+
 		if(get_class($client) != 'StructClient' || !$client->is_valid())
 		{
 			log_message('error', 'Error in model Client method commit: client is not valid.');
@@ -65,7 +67,7 @@ class Client extends CI_Model {
 		}
 		else
 		{
-			$this->CI->Event->trigger('client.commit.after', $this->get($id));
+			log_message('error', '---!! Client->commit() SUCCESS ' . $client->id . ' ' . $client->name);
 			return $id;
 		}
 	}
@@ -78,6 +80,7 @@ class Client extends CI_Model {
 	 */
 	private function create($client)
 	{
+		log_message('error', '--- Client->create() called for ' . $client->id . ' ' . $client->name);
 		$this->CI->Event->trigger('client.commit.before.create', $client);
 
 		$this->CI->db->trans_start();
@@ -125,6 +128,8 @@ class Client extends CI_Model {
 		}
 		else
 		{
+			log_message('error', '---!! Client->create() SUCCESS ' . $client->id . ' ' . $client->name);
+			$this->CI->Event->trigger('client.commit.after.create', $this->get($id));
 			return $id;
 		}
 	}
@@ -137,6 +142,7 @@ class Client extends CI_Model {
 	 */
 	private function update($client)
 	{
+		log_message('error', '--- Client->update() called ' . $client->id . ' ' . $client->name);
 		$this->CI->db->trans_start();
 
 		$property_id = $this->CI->Property->commit($client->location);
@@ -182,6 +188,8 @@ class Client extends CI_Model {
 		}
 		else
 		{
+			log_message('error', '---!! Client->update() SUCCESS ' . $client->id . ' ' . $client->name);
+			$this->CI->Event->trigger('client.commit.after.update', $this->get($client->id));
 			return $client->id;
 		}
 	}
@@ -195,7 +203,9 @@ class Client extends CI_Model {
 	 */
 	public function delete($id, $include_property = FALSE)
 	{
-		$this->CI->Event->trigger('client.commit.delete', $client);
+		$this->CI->Event->trigger('client.commit.delete', $id);
+		log_message('Error', 'Why are we deleting client ' . $id . '?');
+
 
 		$id = preg_replace('/[^0-9]/', '', $id);
 		
@@ -363,11 +373,12 @@ class Client extends CI_Model {
 		if($query->num_rows() > 0)
 		{
 			$result = $query->row();
-			
+			log_message('error', '---!! Client->exists() SUCCESS ' . $client->id . ' ' . $client->name);
 			return $result->client_id;
 		}
 		else
 		{
+			log_message('error', '--- Client->exist() client does not exist ' . $client->id . ' ' . $client->name);
 			return FALSE;
 		}
 	}
@@ -436,7 +447,7 @@ class Client extends CI_Model {
 			return $result;
 		}
 		
-		return NULL;
+		return array();
 	}
 	
 	public function delete_contacts($client_id)

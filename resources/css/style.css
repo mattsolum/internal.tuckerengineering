@@ -1,7 +1,5 @@
 html {
 	min-width:			960px;
-	overflow-x:			hidden; 
-	min-height:			100%;
 	font-family: 		"Museo", "Palatino", "Hoefler Text", "Baskerville", "Georgia", "Times New Roman", serif;
 	font-weight:		200;
 	font-size:			16px;
@@ -9,7 +7,7 @@ html {
 }
 
 body {
-	min-height:			100%;
+	max-width:			100%;
 	background-color: 	#e5dac0;
 }
 
@@ -17,6 +15,14 @@ h1 {
 	font-size:			28px;
 	margin-top:			16px;
 	margin-bottom:		16px;
+}
+
+#body_wrapper {
+	display:			block;
+	margin-left: 		auto;
+	margin-right: 		auto;
+	width: 				960px;
+	margin-top:			32px;
 }
 
 /**
@@ -146,6 +152,7 @@ header {
 	background-color:		#507282;
 	font-size:				18px;
 	font-weight:			200;
+	overflow:				hidden;
 }
 
 header:after {
@@ -452,6 +459,54 @@ form#search_bar input[type="submit"]:hover {
 	padding-left:		8px;
 	padding-right:		8px;
 }
+
+#search_section:after {
+	content:			"";
+	display:			block;
+	clear:				both;
+}
+
+#search_results {
+	list-style-type:	none;
+	margin-left: 		auto;
+	margin-right: 		auto;
+	margin-top:			48px;
+	width: 				960px;
+	padding-top:		47px;
+	border-top:			1px solid #ccc3a9;
+}
+
+#search_results li {
+	display:			inline;
+	float:				left;
+	position:			relative;
+	padding:			16px 8px 16px 8px;
+	width:				624px;
+	margin-right:		320px;
+	margin-bottom:		16px;
+	border-radius:		2px;
+}
+
+span.search_term {
+	font-weight:		500;
+}
+
+#search_results li a:first-child {
+	font-size:			18px;
+	color:				#0b72bf;
+	margin-bottom:		16px;
+}
+
+#search_results li a:last-child {
+	font-size:			12px;
+	color:				#829548;
+}
+
+#search_results p {
+	font-size:			16px;
+	margin-top:			16px;
+}
+
 /**
  * MIGRATION
  */
@@ -614,6 +669,130 @@ form#search_bar input[type="submit"]:hover {
 	outline: 1px dotted #ccc;
 }
 
+/**
+ * 404
+ */
+
+#fof {
+	margin-left: 		auto;
+	margin-right: 		auto;
+	width: 				954px;
+	padding-left:		8px;
+	padding-right:		8px;
+	margin-top:			48px;
+	text-align:			center;
+}
+
+/**
+ * View Client
+ */
+
+h1.client {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin:				11px 8px 0 8px;
+	width:				784px;
+	font-size:			40px;
+	line-height:		16px;
+	height:				16px;
+	padding:			16px 0;
+}
+
+#balance {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	width:				144px;
+	text-align:			right;
+	background-color:	#8eb640;
+	border-radius:		2px;
+	height:				16px;
+	padding:			16px 8px;
+	font-size:			24px;
+	line-height:		16px;
+	color:				#fff;
+	margin-top:			16px;
+}
+
+address.client {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin-left: 		8px;
+	margin-right: 		8px;
+	width:				944px;
+	line-height:		16px;
+	height:				16px;
+	padding-top:		3px;
+	font-family:		Helvetica, Arial, sans-serif;
+	margin-bottom:		48px;
+}
+
+#client_contact {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	width:				960px;
+	margin-bottom:		48px;
+}
+
+#client_contact li {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin-left: 		8px;
+	margin-right: 		8px;
+	width:				304px;
+	font-size:			24px;
+}
+
+.clear {
+	clear:				both;
+}
+
+#client_contact li span {
+	font-size:			16px;
+	margin-bottom:		16px;
+	display:			block;
+	font-family:		Helvetica, Arial, sans-serif;
+}
+
+#notes {
+	padding-bottom:		48px;
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	width:				480px;
+}
+
+#notes span.name {
+	font-size:			18px;
+	font-weight:		500;
+}
+
+#notes span.name:after {
+	content:			" - ";
+}
+
+#notes span.text {
+	font-family:		Helvetica, Arial, sans-serif;
+	font-size:			16px;
+}
+
+#notes li {
+	display:			block;
+	padding:			8px 8px 7px 8px;
+	margin-bottom:		1px;
+	background-color:	#ccc3a9;
+}
+
+#notes input {
+	width:				446px;
+	font-size:			18px;
+	padding-left:		7px;
+	padding-right:		7px;
+}
 /*
 	Variable Grid System.
 	Learn more ~ http://www.spry-soft.com/grids/
@@ -658,11 +837,11 @@ body {
 .grid_10,
 .grid_11,
 .grid_12 {
-	display:inline;
-	float: left;
-	position: relative;
-	margin-left: 8px;
-	margin-right: 8px;
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin-left: 		8px;
+	margin-right: 		8px;
 }
 
 
@@ -954,15 +1133,6 @@ body {
 ----------------------------------------------------------------------------------------------------*/
 
 /* http://sonspring.com/journal/clearing-floats */
-
-.clear {
-  clear: both;
-  display: block;
-  overflow: hidden;
-  visibility: hidden;
-  width: 0;
-  height: 0;
-}
 
 /* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
 

@@ -2,9 +2,9 @@
 	<?PHP 
 	foreach ($results as $key => $result) {
 	?>
-	<li<?PHP if($key % 2 == 0) echo(' class="odd"'); ?>>
+	<li<?PHP if($key % 2 == 1) echo(' class="odd"'); ?>>
 	<?PHP
-		$this->load->view('search/result', array('q' => $q, 'result' => $result));
+		$this->load->view('search/result', array('keywords' => $keywords, 'result' => $result));
 	?>
 	</li>
 	<?PHP

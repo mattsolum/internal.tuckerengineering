@@ -4,17 +4,13 @@
 		$q = '';
 	}
 
-	if(!isset($post_uri))
-	{
-		$post_uri = 'search';
-	}
-
 	$search_type = '';
+	$post_uri = 'search';
 
-	$segments = explode('/', trim(uri_string(), '/'));
-	if(isset($segments[1]))
+	if(isset($type))
 	{
-		$search_type = ' ' . $segments[1];
+		$search_type = ' ' . $type;
+		$post_uri .= '/' . $type;
 	}
 ?>
 
@@ -26,3 +22,5 @@
 		<input type="submit" class="hide" />
 	</form>
 </section>
+<?PHP $this->load->view('search/result_list', array('keywords' => $keywords, 'results' => $results)); ?>
+<?PHP $this->load->view('sections/footer') ?>

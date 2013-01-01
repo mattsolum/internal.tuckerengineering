@@ -1767,3 +1767,379 @@ ERROR - 2012-12-31 13:18:26 --> Google Maps API response: status 'OVER_QUERY_LIM
 ERROR - 2012-12-31 13:18:26 --> Error map_model, parse_address.
 ERROR - 2012-12-31 13:18:27 --> Google Maps API response: status 'OVER_QUERY_LIMIT'.
 ERROR - 2012-12-31 13:18:27 --> Error map_model, parse_address.
+ERROR - 2012-12-31 13:31:25 --> Severity: Notice  --> Undefined variable: query /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 185
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 200
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 201
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 202
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 204
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 205
+ERROR - 2012-12-31 13:32:59 --> Severity: Notice  --> Trying to get property of non-object /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 206
+ERROR - 2012-12-31 13:33:49 --> Severity: Notice  --> Undefined property: stdClass::$text /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 13:33:49 --> Severity: Notice  --> Undefined property: stdClass::$text /Users/matthewsolum/Sites/internal.tuckerengineering/application/models/search.php 203
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 14:14:53 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:04:33 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:07:51 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 226
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: 0 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 233
+ERROR - 2012-12-31 15:08:12 --> Severity: Notice  --> Undefined offset: -1 /Users/matthewsolum/Sites/internal.tuckerengineering/application/helpers/structures/search_helper.php 236
+ERROR - 2012-12-31 15:22:26 --> 404 Page Not Found --> searchclients
+ERROR - 2012-12-31 15:57:36 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 15:57:36 --> Severity: Notice  --> Undefined variable: post_uri /Users/matthewsolum/Sites/internal.tuckerengineering/application/views/sections/404.php 6
+ERROR - 2012-12-31 15:57:36 --> Severity: Notice  --> Undefined variable: search_type /Users/matthewsolum/Sites/internal.tuckerengineering/application/views/sections/404.php 7
+ERROR - 2012-12-31 15:57:36 --> Severity: Notice  --> Undefined variable: q /Users/matthewsolum/Sites/internal.tuckerengineering/application/views/sections/404.php 7
+ERROR - 2012-12-31 15:58:07 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 15:59:39 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 15:59:41 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 16:00:32 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 16:00:44 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 16:00:46 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 16:01:01 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 17:04:30 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 17:04:36 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 17:05:19 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 17:07:53 --> Error in Client method get: no data found with given string ID.
+ERROR - 2012-12-31 17:17:26 --> Severity: Warning  --> Invalid argument supplied for foreach() /Users/matthewsolum/Sites/internal.tuckerengineering/application/views/clients/view.php 11
+ERROR - 2012-12-31 17:17:49 --> Severity: Warning  --> Invalid argument supplied for foreach() /Users/matthewsolum/Sites/internal.tuckerengineering/application/views/clients/view.php 11
+ERROR - 2012-12-31 17:18:23 --> Severity: Warning  --> Invalid argument supplied for foreach() /Users/matthewsolum/Sites/internal.tuckerengineering/application/views/clients/view.php 13
+ERROR - 2012-12-31 17:20:17 --> Error in Client method get: no data found with given numeric ID.
+ERROR - 2012-12-31 17:20:24 --> Error in Client method get: no data found with given numeric ID.

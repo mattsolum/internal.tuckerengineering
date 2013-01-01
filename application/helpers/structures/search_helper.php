@@ -105,7 +105,7 @@ class StructSearch
 							$excerpt = $words[$index - $i] . ' ' . $excerpt;
 						}
 					
-						$excerpt = (isset($words[$index + $i]))?$excerpt . ' ' . $words[$index + $i]:'';
+						$excerpt = (isset($words[$index + $i]))?$excerpt . ' ' . $words[$index + $i]:$excerpt;
 					}
 					
 					$numkeywords = $this->count_keywords($excerpt, $keywords);
@@ -137,13 +137,16 @@ class StructSearch
 				}
 			}
 		}
-		
+
 		//Sort it by keywords
 		$excerpts = $this->sort_by_keywords($excerpts);
 		
 		//It was sorted in ascending order so get the last $lines number of elements
 		//So that we have the $lines highest keyword density segments
-		$excerpts = array_slice($excerpts, $this->lines * -1);
+		if(count($excerpts) > $this->lines)
+		{
+			$excerpts = array_slice($excerpts, $this->lines * -1);
+		}
 		
 		//Sort it again by offset, so that it appears in the right order.
 		$excerpts = $this->sort_by_offset($excerpts);
@@ -211,6 +214,11 @@ class StructSearch
 	
 	private function quicksort_by_property($arr, $property, $left = 0, $right = NULL)
 	{
+		if(count($arr) <= 1)
+		{
+			return $arr;
+		}
+
 		// when the call is recursive we need to change
 		//the array passed to the function yearlier
 		static $array = array();

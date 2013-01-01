@@ -52,10 +52,12 @@ class search_controller extends CI_Controller {
 		$q = $this->prepare($q);
 
 		$results = $this->Search->find($q);
+		$keywords = preg_replace('/\[.*?\]/', '', $q);
+		$keywords = preg_replace('/[^a-zA-Z0-9\'\. ]/', '', $keywords);
 
 		$results = array_slice($results, 0, 10);
 
-		$this->load->view('search/index', array('q' => $q, 'results' => $results));
+		$this->load->view('search/index', array('q' => $q, 'keywords' => $keywords, 'results' => $results));
 	}
 
 	public function clients($q = '')
@@ -70,7 +72,13 @@ class search_controller extends CI_Controller {
 			}
 		}
 
-		$this->load->view('search/index', array('q' => $q, 'post_uri' => 'search/clients'));
+		$results = $this->Search->find($q);
+		$keywords = preg_replace('/\[.*?\]/', '', $q);
+		$keywords = preg_replace('/[^a-zA-Z0-9\'\.]/', '', $keywords);
+
+		$results = array_slice($results, 0, 10);
+
+		$this->load->view('search/index', array('q' => $q, 'type' => 'clients', 'keywords' => $keywords, 'results' => $results));
 	}
 
 	public function jobs($q = '')
@@ -85,7 +93,13 @@ class search_controller extends CI_Controller {
 			}
 		}
 
-		$this->load->view('search/index', array('q' => $q, 'post_uri' => 'search/jobs'));
+		$results = $this->Search->find($q);
+		$keywords = preg_replace('/\[.*?\]/', '', $q);
+		$keywords = preg_replace('/[^a-zA-Z0-9\'\.]/', '', $keywords);
+
+		$results = array_slice($results, 0, 10);
+
+		$this->load->view('search/index', array('q' => $q, 'type' => 'jobs', 'keywords' => $keywords, 'results' => $results));
 	}
 
 	public function properties($q = '')
@@ -100,6 +114,12 @@ class search_controller extends CI_Controller {
 			}
 		}	
 
-		$this->load->view('search/index', array('q' => $q, 'post_uri' => 'search/properties'));
+		$results = $this->Search->find($q);
+		$keywords = preg_replace('/\[.*?\]/', '', $q);
+		$keywords = preg_replace('/[^a-zA-Z0-9\'\.]/', '', $keywords);
+
+		$results = array_slice($results, 0, 10);
+
+		$this->load->view('search/index', array('q' => $q, 'type' => 'properties', 'keywords' => $keywords, 'results' => $results));
 	}
 }

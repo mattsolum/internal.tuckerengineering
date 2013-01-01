@@ -73,14 +73,16 @@ class MigrationAPI extends PrototypeAPI
 		$json = json_decode($this->CI->input->post('data'));
 
 		$passed_id = preg_replace('/[^0-9]/', '', $this->API->id);
+		
+		$client = new StructClient();
+		$client->set_from_json($json);
 
 		if($passed_id != '')
 		{
 			$client->id = $this->API->id;
 		}
-		
-		$client = new StructClient();
-		$client->set_from_json($json);
+
+		log_message('error', '--- migration/client:POST called for ' . $client->id . ' ' . $client->name);
 
 		$client->name = ucwords(strtolower($client->name));
 		
@@ -106,6 +108,7 @@ class MigrationAPI extends PrototypeAPI
 
 		if(!$client->location->is_valid())
 		{
+			log_message('error', '--- migration/client:POST address received is invalid');
 			$client->location = $this->office_location;
 			$client->add_note(0, 'The address given was formatted poorly. The client has been given the office address. Old address was: ' . $old_location->location_string());
 		}
@@ -115,16 +118,19 @@ class MigrationAPI extends PrototypeAPI
 			$id = $this->CI->Client->commit($client);
 			if($id !== FALSE)
 			{
+				log_message('error', '--- migration/client:POST Client successefully committed ' . $client->id . ' ' . $client->name);
 				return array('id' => $id);
 			}
 			else
 			{
+				log_message('error', '--- migration/client:POST FAILED ' . $client->id . ' ' . $client->name);
 				$this->error = 'Error inserting client into database. Client given: ' . $client;
 				return FALSE;
 			}
 		}
 		else
 		{
+			log_message('error', '--- migration/client:POST client is invalid ' . $client->id . ' ' . $client->name);
 			$this->error = 'Data given is not a valid client object. Client given: ' . $client;
 			return FALSE;	
 		}

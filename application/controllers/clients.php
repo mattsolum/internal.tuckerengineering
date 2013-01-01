@@ -7,13 +7,40 @@ class Clients extends CI_Controller {
 		parent::__construct();
 
 		$this->load->model('Navigation');
+		$this->load->model('client');
 
 		$this->User->check_auth();
 	}
 
-	public function index()
+	public function _remap($method)
+	{
+		$param_offset = 2;
+
+		// Default to index
+		if ( ! method_exists($this, $method))
+		{
+			// We need one more param
+			$param_offset = 1;
+			$method = 'index';
+		}
+
+		// Since all we get is $method, load up everything else in the URI
+		$params = array_slice($this->uri->rsegment_array(), $param_offset);
+
+		// Call the determined method with all params
+		call_user_func_array(array($this, $method), $params);
+	} 
+
+	public function index($client_id = NULL)
 	{	
-		$this->load->view('clients/index');
+		if($client_id != NULL)
+		{
+			$this->view($client_id);
+		}
+		else
+		{
+			$this->load->view('clients/index');
+		}
 	}
 	
 	/**
@@ -25,7 +52,17 @@ class Clients extends CI_Controller {
 	 */
 	public function view($client_id)
 	{
-		//code
+		$client_id = str_replace('_', ' ', $client_id);
+		$client = $this->client->get($client_id);
+
+		if($client != FALSE)
+		{
+			$this->load->view('clients/view', array('client' => $client));
+		}
+		else
+		{
+			$this->load->view('sections/404');
+		}
 	}
 	
 	/**

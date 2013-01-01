@@ -182,7 +182,7 @@ class Search extends CI_Model {
 	{
 		$q = $this->parse_query($search);
 
-		if($query == FALSE)
+		if($q == FALSE)
 		{
 			return array();
 		}
@@ -193,14 +193,14 @@ class Search extends CI_Model {
 		{
 			$result = array();
 
-			foreach($query AS $row)
+			foreach($query->result() AS $row)
 			{
 				$search = new StructSearch();
 
 				$search->id 			= $row->id;
 				$search->type 			= $row->type;
 				$search->title			= $row->title;
-				$search->body			= $row->text;
+				$search->body			= $row->keywords;
 				$search->link			= $row->link;
 				$search->date_added		= $row->date_added;
 				$search->date_updated	= $row->date_updated;
@@ -260,7 +260,7 @@ class Search extends CI_Model {
 			$operator = array('method' => $operator_matches[1][$key], 'data' => $operator_matches[2][$key], 'negated' => $negated);
 
 
-			$processed['generic'] = array_merge($processed['generic'], $this->process_operator($operator));
+			$processed['generic'][] = $this->process_operator($operator);
 
 			$query = str_replace($value, '', $query);
 		}
@@ -344,7 +344,7 @@ class Search extends CI_Model {
 		//It might be an internal method. Just make sure it is designated for this use.
 		if(method_exists($this, 'op_' . $operator['method']))
 		{
-			$method = $operator['method'];
+			$method = 'op_' . $operator['method'];
 			return $this->$method($operator);
 		}
 		else
@@ -415,6 +415,7 @@ class Search extends CI_Model {
 	 */
 	public function commit_handler($e)
 	{
+		log_message('error', '--- Search->commit_handler() called');
 		$this->CI->load->helper('url');
 
 		if($e->segment(-1) != 'delete')
@@ -444,13 +445,16 @@ class Search extends CI_Model {
 	
 	private function client_prepare($e)
 	{
+		log_message('error', '--- Search->client_prepare() called');
 		$search = new StructSearch();
 
-		$search->id 	= $e->data->id;
+		$client = $this->CI->Client->get($e->data->id);
+
+		$search->id 	= $client->id;
 		$search->type 	= 'client';
-		$search->title	= $e->data->name;
-		$search->link	= site_url('clients/' . strtolower(str_replace(' ', '_', $e->data->name)));
-		$search->body	= (string)$e->data;
+		$search->title	= $client->name;
+		$search->link	= site_url('clients/' . strtolower(str_replace(' ', '_', $client->name)));
+		$search->body	= (string)$client;
 
 		return $search;
 
@@ -471,14 +475,16 @@ class Search extends CI_Model {
 
 	private function property_prepare($e)
 	{
+		log_message('error', '--- Search->property_prepare() called');
 		$search = new StructSearch();
+		$property = $this->CI->Property->get($e->data->id);
 
-		$subpremise = ($e->data->subpremise != '')?', #' . $e->data->subpremise:'';
-		$search->id 	= $e->data->id;
+		$subpremise = ($property->subpremise != '')?', #' . $property->subpremise:'';
+		$search->id 	= $property->id;
 		$search->type 	= 'property';
-		$search->title	= $e->data->number . ' ' . $e->data->route . $subpremise;
-		$search->link	= site_url('properties/' . $e->data->id);
-		$search->body 	= (string)$e->data;
+		$search->title	= $property->number . ' ' . $property->route . $subpremise;
+		$search->link	= site_url('properties/' . $property->id);
+		$search->body 	= (string)$property;
 
 		return $search;
 	}

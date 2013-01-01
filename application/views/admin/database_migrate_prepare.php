@@ -124,7 +124,6 @@
 								url: 		'<?PHP echo(base_url()); ?>api/v2/migration/client/' + client.id + '.json',
 								data: 		{data: json_string},
 								success: 	function(returned) {
-									add_status('info', 'Response for client ID ' + client.id + ' recieved');
 
 									if(returned.result == undefined)
 									{
@@ -166,11 +165,6 @@
 									setTimeout(doNext, 10);
 								}
 							});
-
-							if(i < total_rows)
-							{
-								i++;
-							}
 						}
 
 						if(pause())
@@ -236,3 +230,4 @@
 		return percent * 100;
 	}
 </script>
+<?PHP $this->load->view('sections/footer') ?>
