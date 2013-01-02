@@ -84,7 +84,13 @@ class MigrationAPI extends PrototypeAPI
 
 		log_message('error', '--- migration/client:POST called for ' . $client->id . ' ' . $client->name);
 
-		$client->name = ucwords(strtolower($client->name));
+		$client->name = trim(ucwords(strtolower($client->name)));
+
+		if(is_numeric($client->name))
+		{
+			$this->error = 'Client name invalid';
+			return FALSE;
+		}
 		
 		//If there is no latitude there probably is not a longitude either
 		//no point checking.

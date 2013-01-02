@@ -415,20 +415,20 @@ class Search extends CI_Model {
 	 */
 	public function commit_handler($e)
 	{
-		log_message('error', '--- Search->commit_handler() called');
+		log_message('error', '--- Search->commit_handler() called ' . $e->event);
 		$this->CI->load->helper('url');
 
 		if($e->segment(-1) != 'delete')
 		{
-			switch(get_class($e->data))
+			switch($e->segment(0))
 			{
-				case 'StructClient':
+				case 'client':
 					$search = $this->client_prepare($e);
 					break;
-				case 'StructJob':
+				case 'job':
 					$search = $this->job_prepare($e);
 					break;
-				case 'StructProperty':
+				case 'property':
 					$search = $this->property_prepare($e);
 					break;
 				default:
@@ -445,15 +445,23 @@ class Search extends CI_Model {
 	
 	private function client_prepare($e)
 	{
+		$this->load->model('Client');
 		log_message('error', '--- Search->client_prepare() called');
 		$search = new StructSearch();
 
-		$client = $this->CI->Client->get($e->data->id);
+		if(is_object($e->data) && get_class($e->data) == 'StructClient')
+		{
+			$client = $this->CI->Client->get($e->data->id);
+		}
+		elseif(is_numeric($e->data) || is_string($e->data))
+		{
+			$client = $this->CI->Client->get($e->data);
+		}
 
 		$search->id 	= $client->id;
 		$search->type 	= 'client';
 		$search->title	= $client->name;
-		$search->link	= site_url('clients/' . strtolower(str_replace(' ', '_', $client->name)));
+		$search->link	= site_url('clients/' . url_title($client->name, '_', TRUE));
 		$search->body	= (string)$client;
 
 		return $search;
@@ -462,7 +470,17 @@ class Search extends CI_Model {
 
 	private function job_prepare($e)
 	{
+		$this->load->model('Job');
 		$search = new StructSearch();
+
+		if(is_object($e->data) && get_class($e->data) == 'StructJob')
+		{
+			$job = $this->CI->Job->get($e->data->id);
+		}
+		elseif(is_numeric($e->data))
+		{
+			$job = $this->CI->Job->get($e->data);
+		}
 
 		$search->id 	= $e->data->id;
 		$search->type 	= 'job';
@@ -475,9 +493,18 @@ class Search extends CI_Model {
 
 	private function property_prepare($e)
 	{
+		$this->load->model('Property');
 		log_message('error', '--- Search->property_prepare() called');
 		$search = new StructSearch();
-		$property = $this->CI->Property->get($e->data->id);
+
+		if(is_object($e->data) && get_class($e->data) == 'StructProperty')
+		{
+			$property = $this->CI->Property->get($e->data->id);
+		}
+		elseif(is_numeric($e->data))
+		{
+			$property = $this->CI->Property->get($e->data);
+		}
 
 		$subpremise = ($property->subpremise != '')?', #' . $property->subpremise:'';
 		$search->id 	= $property->id;

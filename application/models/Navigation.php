@@ -35,6 +35,35 @@ class Navigation extends CI_Model {
 		return $links;
 	}
 
+	public function build_client_tools($client_id = NULL)
+	{
+		$id = '';
+		if($client_id != NULL)
+		{
+			$id = $client_id;
+		}
+
+		$links = array();
+		$links['View'] 				= 'clients/' . $id;
+		$links['Edit'] 				= 'clients/edit/' . $id;
+		$links['Apply Payment']		= 'payments/apply/client/'. $id;
+		$links['Make Invoice']		= 'invoices/create/client/' . $id;
+
+		$package_links = $this->CI->Event->trigger('nav.build.client_tools');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
 	public function build_user_links()
 	{
 		$links = array();
@@ -84,6 +113,7 @@ class Navigation extends CI_Model {
 		$links = array();
 		$links['Create job'] 			= 'jobs/create';
 		$links['Apply payment']			= 'jobs/payment';
+		$links['Search jobs']			= 'search/jobs';
 
 		$package_links = $this->CI->Event->trigger('nav.build.jobs');
 
@@ -104,9 +134,8 @@ class Navigation extends CI_Model {
 	{
 		$links = array();
 		$links['Create client'] 		= 'clients/create';
-		$links['Apply payment']			= 'clients/payment';
-		$links['Make invoice']			= 'invoice/client';
 		$links['Merge clients']			= 'clients/payment';
+		$links['Search clients']		= 'search/clients';
 
 		$package_links = $this->CI->Event->trigger('nav.build.clients');
 
@@ -149,7 +178,7 @@ class Navigation extends CI_Model {
 	{
 		$links = array();
 		$links['Create invoice'] 		= 'invoice/create';
-		$links['Apply Payment']			= 'payments/invoice';
+		$links['Apply payment']			= 'payments/invoice';
 
 		$package_links = $this->CI->Event->trigger('nav.build.invoice');
 

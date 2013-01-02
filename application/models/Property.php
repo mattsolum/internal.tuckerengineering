@@ -41,6 +41,7 @@ class Property extends CI_Model {
 			{
 				$property->id = $id;
 
+				$updated = TRUE;
 				$this->CI->Event->trigger('property.commit.before.update', $property);
 				$this->delete($id);
 			}
@@ -52,6 +53,7 @@ class Property extends CI_Model {
 		}
 		else
 		{
+			$updated = FALSE;
 			$property->id = $this->get_next_property_id();
 			$property->date_added = now();
 			$this->CI->Event->trigger('property.commit.before.create', $property);
@@ -101,7 +103,14 @@ class Property extends CI_Model {
 		}
 		else
 		{
-			$this->CI->Event->trigger('property.commit.after', $this->get($id));
+			if($updated == TRUE)
+			{
+				$this->CI->Event->trigger('property.commit.after.update', $this->get($id));
+			}
+			else
+			{
+				$this->CI->Event->trigger('property.commit.after.create', $this->get($id));
+			}
 			return $id;
 		}
 	}

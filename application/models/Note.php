@@ -10,6 +10,38 @@ class Note extends CI_Model {
 		$this->CI =& get_instance();	
 	}
 	
+	public function get_by_note($id)
+	{
+		$this->CI->db->select('notes.*, users.name, users.email');
+		$this->CI->db->from('notes');
+		$this->CI->db->join('users', 'notes.user_id = users.user_id');
+		$this->CI->db->where('notes.note_id', $id);
+		$this->CI->db->limit(1);
+
+		$query = $this->CI->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row(0);
+
+			$note = new StructNote();
+			
+			$note->id			= $row->note_id;
+			$note->type_id		= $row->id;
+			$note->type			= $row->type;
+			$note->text			= $row->note;
+			$note->date_added	= $row->date_added;
+			
+			$note->user->id		= $row->user_id;
+			$note->user->name	= $row->name;
+			
+			$note->user->set_email($row->email);
+
+			return $note;
+		}
+
+		return FALSE;
+	}
 	
 	public function get_by_job($id)
 	{
@@ -75,6 +107,9 @@ class Note extends CI_Model {
 		{
 			$notes = array($notes);
 		}
+
+		$type 	= strtolower($notes[0]->type);
+		$id 	= $notes[0]->type_id;
 		
 		foreach($notes AS $note)
 		{
@@ -97,6 +132,7 @@ class Note extends CI_Model {
 		}
 		else
 		{
+			$this->Event->trigger($type . '.dirty', $id);
 			return TRUE;
 		}
 	}
@@ -182,6 +218,8 @@ class Note extends CI_Model {
 	{
 		$this->CI->db->trans_start();
 		
+		$note = $this->get_by_note($note_id);
+
 		$where = array('note_id' => $note_id);
 		
 		$this->CI->db->delete('notes', $where);
@@ -193,6 +231,7 @@ class Note extends CI_Model {
 		}
 		else
 		{
+			$this->CI->Event->trigger($note->type . '.dirty', $note->type_id);
 			return TRUE;
 		}
 	}

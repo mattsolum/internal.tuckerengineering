@@ -1,5 +1,9 @@
+<?PHP
+	$client_slug = strtolower(str_replace(' ', '_', $client->name));
+?>
+
 <?PHP $this->load->view('sections/header'); ?>
-<?PHP $this->load->view('sections/second_level_nav', array('links' => $this->Navigation->build_client_links())); ?>
+<?PHP $this->load->view('sections/second_level_nav', array('links' => $this->Navigation->build_client_tools($client_slug))); ?>
 <div id="body_wrapper">
 	<h1 class="client"><?PHP echo($client->name); ?></h1>
 	<div id="balance"<?PHP if ($client->balance < 0) echo(' class="negative_balance"'); ?>>
@@ -16,7 +20,7 @@
 		foreach($client->contact AS $key => $contact)
 		{
 		?>
-		<li<?PHP if($key == count($client->contact) - 1) echo(' class="clear"'); ?>>
+		<li<?PHP if($key == count($client->contact) - 1) echo(' class="clear-after"'); ?>>
 			<span class="contact_label"><?PHP echo($contact->type); ?></span>
 			<?PHP echo($contact->info); ?>
 		</li>
@@ -27,7 +31,7 @@
 	<?PHP
 	}
 	?>
-	<?PHP $this->load->view('sections/notes', array('notes' => $client->notes, 'uri' => 'notes/client/' . $client->id)); ?>
+	<?PHP $this->load->view('sections/notes', array('notes' => $client->notes, 'uri' => 'notes/client/' . $client_slug)); ?>
 	<div class="clear"></div>
 </div>
 <?PHP $this->load->view('sections/footer') ?>

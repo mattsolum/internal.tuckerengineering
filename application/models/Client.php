@@ -93,7 +93,7 @@ class Client extends CI_Model {
 		}
 		
 		$data['name']			= $client->name;
-		$data['search_name']	= preg_replace('/[^a-zA-Z ]/', '', strtolower($client->name)); //Used for determining if a client exists or not
+		$data['search_name']	= str_replace('_', ' ', $this->slug($client->name)); //Used for determining if a client exists or not
 		$data['title']			= $client->title;
 		$data['property_id']	= $property_id;
 		$data['date_added'] 	= ($client->date_added != '')?$client->date_added:now();
@@ -159,7 +159,7 @@ class Client extends CI_Model {
 		$this->CI->Event->trigger('client.commit.before.update', $client);
 
 		$data['name']			= $client->name;
-		$data['search_name']	= preg_replace('/[^a-zA-Z ]/', '', strtolower($client->name)); //Used for determining if a client exists or not
+		$data['search_name']	= str_replace('_', ' ', $this->slug($client->name)); //Used for determining if a client exists or not
 		$data['title']			= $client->title;
 		$data['property_id']	= $property_id;
 		$data['date_updated']	= now();
@@ -255,7 +255,10 @@ class Client extends CI_Model {
 		else
 		{
 			//For the time being any id that is not a number will be treated as a name
-			$this->CI->db->like('name', $id);
+			$id = $this->slug($id);
+			$id = str_replace('_', ' ', $id);
+
+			$this->CI->db->like('search_name', $id);
 			$query = $this->CI->db->get('clients');
 			
 			if($query->num_rows() > 0)
@@ -268,11 +271,17 @@ class Client extends CI_Model {
 		
 		return FALSE;
 	}
+
+	public function slug($name)
+	{
+		return url_title($name, '_', TRUE);
+	}
 	
 	private function get_by_string($id)
 	{
 		//For the time being any id that is not a number will be treated as a name
-		$this->CI->db->like('name', $id);
+		$id =  str_replace('_', ' ', $this->slug($id));
+		$this->CI->db->like('search_name', $id);
 		$query = $this->CI->db->get('clients');
 		
 		//echo('Query: ' . $this->CI->db->last_query());

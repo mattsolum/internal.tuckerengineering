@@ -119,7 +119,7 @@
 							'line-height'			: objheight,
 							'position'				: 'absolute',
 							'height'				: objheight,
-							'color'					: $this.css("color"),
+							'color'					: $this.css("border-top-color"),
 							'margin-top'			: topmargin,
 							'margin-left'			: leftmargin,
 							'-moz-user-select'		: 'none',

@@ -36,7 +36,7 @@ class History extends CI_Model {
 		$type = strtolower(str_replace('Struct', '', get_class($e->data)));
 
 		$name = $this->CI->User->get_name();
-		$message = 'Created by ' . $name . '.';
+		$message = 'This ' . $type . ' was created by ' . $name . '.';
 
 		if($this->CI->User->get_name() == '')
 		{
@@ -69,7 +69,7 @@ class History extends CI_Model {
 		$note = new StructNote();
 		$note->user->id = 0;
 		$note->type 	= strtolower($type);
-		$note->text 	= 'Updated by ' . $name . '.';
+		$note->text 	= 'This ' . $note->type . ' was updated by ' . $name . '.';
 		$note->type_id 	= $e->data->id;
 
 		$this->CI->Note->commit($note);

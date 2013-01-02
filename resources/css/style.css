@@ -4,6 +4,7 @@ html {
 	font-weight:		200;
 	font-size:			16px;
 	line-height:		16px;
+	min-height:			100%;
 }
 
 body {
@@ -12,9 +13,17 @@ body {
 }
 
 h1 {
-	font-size:			28px;
+	font-size:			32px;
 	margin-top:			16px;
 	margin-bottom:		16px;
+	margin-left:		8px;
+	margin-right:		8px;
+	font-weight:		500;
+}
+
+h2 {
+	font-size:			24px;
+	margin:				16px 8px;
 }
 
 #body_wrapper {
@@ -22,7 +31,7 @@ h1 {
 	margin-left: 		auto;
 	margin-right: 		auto;
 	width: 				960px;
-	margin-top:			32px;
+	margin-top:			48px;
 }
 
 /**
@@ -152,7 +161,6 @@ header {
 	background-color:		#507282;
 	font-size:				18px;
 	font-weight:			200;
-	overflow:				hidden;
 }
 
 header:after {
@@ -392,6 +400,7 @@ form#search_bar {
 	height:					46px;
 	margin-top:				1px;
 	border-left:			1px solid #3c5965;
+	overflow:				hidden;
 } 
 
 form#search_bar input[type="text"] {
@@ -455,7 +464,8 @@ form#search_bar input[type="submit"]:hover {
 #search_section input[type="text"]
 {
 	width: 				608px;
-	font-size:			18px;
+	height:				46px;
+	font-size:			24px;
 	padding-left:		8px;
 	padding-right:		8px;
 }
@@ -751,6 +761,14 @@ address.client {
 	clear:				both;
 }
 
+.clear-after:after {
+	content:			"";
+	display:			block;
+	width:				0;
+	height:				0;
+	clear:				both;
+}
+
 #client_contact li span {
 	font-size:			16px;
 	margin-bottom:		16px;
@@ -758,17 +776,50 @@ address.client {
 	font-family:		Helvetica, Arial, sans-serif;
 }
 
+/**
+ * NOTES
+ */
+
 #notes {
 	padding-bottom:		48px;
 	display:			inline;
 	float: 				left;
 	position: 			relative;
 	width:				480px;
+	border-radius:		2px;
+	overflow:  			hidden;
 }
 
 #notes span.name {
 	font-size:			18px;
 	font-weight:		500;
+}
+
+#notes a.note_delete {
+	text-decoration: 	none;
+	position:			absolute;
+	width:				16px;
+	height:				16px;
+	line-height:		16px;
+	background-color:	#e5dac0;
+	color:				#ccc3a9;
+	padding:			0;
+	border-radius:		2px;
+	text-align:			center;
+	right:				8px;
+	text-transform:		uppercase;
+	display:			none;
+	background-image:	url('../img/tanx.png');
+	background-repeat:	no-repeat;
+	background-position:50% 50%;
+}
+
+#notes a.note_delete:hover {
+	background-color:	#bf492f;
+}
+
+#notes li:hover a.note_delete {
+	display:			block;
 }
 
 #notes span.name:after {
@@ -778,6 +829,14 @@ address.client {
 #notes span.text {
 	font-family:		Helvetica, Arial, sans-serif;
 	font-size:			16px;
+}
+
+#notes span.date {
+	font-family:		Helvetica, Arial, sans-serif;
+	height:				16px;
+	display:			block;
+	text-align:			right;
+	color:				#e5dac0;
 }
 
 #notes li {
@@ -793,6 +852,151 @@ address.client {
 	padding-left:		7px;
 	padding-right:		7px;
 }
+
+/**
+ * ACTION LINKS
+ */
+
+#action_links li {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin-left: 		8px;
+	margin-right: 		8px;
+	width:				304px;
+}
+
+#action_links a {
+	display:			block;
+	height:				16px;
+	width:				304px;
+	padding:			240px 0 48px 0;
+	text-align:			center;
+	background-color:	#ccc3a9;
+	border-top:			1px solid #5c4d40;
+	font-size:			40px;
+	color:				#5c4d40;
+	text-decoration:	none;
+}
+
+#action_links li.create_client a {
+	background-image:	url('../img/client_sprite_large.png');
+	background-repeat:	no-repeat;
+	background-position:0 -1px;
+}
+
+#action_links li.merge_clients a {
+	background-image:	url('../img/merge_sprite_large.png');
+	background-repeat:	no-repeat;
+	background-position:0 -1px;
+}
+
+#action_links li.search_clients a {
+	background-image:	url('../img/search_sprite_large.png');
+	background-repeat:	no-repeat;
+	background-position:0 -1px;
+}
+
+#action_links li.search_jobs a {
+	background-image:	url('../img/search_sprite_large.png');
+	background-repeat:	no-repeat;
+	background-position:0 -1px;
+}
+
+#action_links li.apply_payment a {
+	background-image:	url('../img/payment_sprite_large.png');
+	background-repeat:	no-repeat;
+	background-position:0 -1px;
+}
+
+#action_links li.create_job a {
+	background-image:	url('../img/job_sprite_large.png');
+	background-repeat:	no-repeat;
+	background-position:0 -1px;
+}
+
+#action_links li.create_invoice a {
+	background-image:	url('../img/invoice_sprite_large.png');
+	background-repeat:	no-repeat;
+	background-position:0 -1px;
+}
+
+#action_links li a:hover {
+	background-position:0 -305px;
+	color:				#000;
+}
+
+/**
+ * CREATE/EDIT CLIENT
+ */
+
+#client_edit_form {
+	margin-top:			32px;
+}
+
+#client_edit_form ul {
+	margin-bottom:		32px;
+}
+
+#client_edit_form li {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin-left: 		8px;
+	margin-right: 		8px;
+	width:				944px;
+}
+
+#client_edit_form li {
+	margin-bottom:		16px;
+}
+
+#client_edit_form input[type="text"]
+{
+	display:			inline-block;
+	width:				608px;
+	height:				46px;
+	margin-right:		8px;
+	font-family: 		"Museo", "Palatino", "Hoefler Text", "Baskerville", "Georgia", "Times New Roman", serif;
+	font-weight:		200;
+	font-size:			24px;
+	padding:			0 7px;
+}
+
+span.hint {
+	vertical-align:		bottom;
+	display:			inline-block;
+	position: 			relative;
+	width:				288px;
+	height:				32px;
+	background-color:	#bf492f;
+	border-radius:		2px;
+	font-size:			16px;
+	color:				#fff;
+	padding:			8px;
+	opacity:			0;
+}
+
+span.hint:before {
+	content:			"";
+	position:			absolute;
+	width:				0px;
+	height:				0px;
+	border-top:			8px solid transparent;
+	border-bottom:		8px solid transparent;
+	border-right:		8px solid #bf492f;
+	left:				-8px;
+	top:				16px;
+}
+
+span.hint.green {
+	background-color:	#85b53d;
+}
+
+span.hint.green:before {
+	border-right:		8px solid #85b53d;
+}
+
 /*
 	Variable Grid System.
 	Learn more ~ http://www.spry-soft.com/grids/

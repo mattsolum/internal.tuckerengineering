@@ -57,6 +57,11 @@ class Clients extends CI_Controller {
 
 		if($client != FALSE)
 		{
+			if(is_numeric($client_id))
+			{
+				redirect(site_url('clients/' . url_title($client->name, '_', TRUE)));
+			}
+
 			$this->load->view('clients/view', array('client' => $client));
 		}
 		else
@@ -74,7 +79,28 @@ class Clients extends CI_Controller {
 	 */
 	public function edit($client_id)
 	{
-		//code
+		$client_id = str_replace('_', ' ', $client_id);
+		$client = $this->client->get($client_id);
+
+		if($client != FALSE)
+		{
+			if(is_numeric($client_id))
+			{
+				redirect(site_url('clients/edit/' . url_title($client->name, '_', TRUE)));
+			}
+
+			$this->load->view('clients/edit', array('client' => $client));
+		}
+		else
+		{
+			$this->load->view('sections/404');
+		}
+	}
+
+	public function create()
+	{
+		$client = new StructClient;
+		$this->load->view('clients/create', array('client' => $client));
 	}
 }
 
