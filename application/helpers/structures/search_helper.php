@@ -79,8 +79,8 @@ class StructSearch
 			return '';
 		}
 
-		$words 		= explode(' ', str_replace("\n", ' ', $this->body));
-		$keywords 	= explode(' ', preg_replace('/\W\s*/', ' ', $keywords));
+		$words 		= explode(' ', trim(str_replace("\n", ' ', $this->body)));
+		$keywords 	= explode(' ', trim(preg_replace('/\W\s*/', ' ', $keywords)));
 		
 		$matched	= array();
 		

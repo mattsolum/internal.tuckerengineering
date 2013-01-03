@@ -53,7 +53,7 @@ class search_controller extends CI_Controller {
 
 		$results = $this->Search->find($q);
 		$keywords = preg_replace('/\[.*?\]/', '', $q);
-		$keywords = preg_replace('/[^a-zA-Z0-9\'\. ]/', '', $keywords);
+		$keywords = trim(preg_replace('/[^a-zA-Z0-9\'\. ]/', '', $keywords));
 
 		$results = array_slice($results, 0, 10);
 
@@ -73,8 +73,9 @@ class search_controller extends CI_Controller {
 		}
 
 		$results = $this->Search->find($q);
+		$q = trim(str_replace('[type:client]', '', $q));
 		$keywords = preg_replace('/\[.*?\]/', '', $q);
-		$keywords = preg_replace('/[^a-zA-Z0-9\'\.]/', '', $keywords);
+		$keywords = trim(preg_replace('/[^a-zA-Z0-9\'\. ]/', '', $keywords));
 
 		$results = array_slice($results, 0, 10);
 
@@ -93,9 +94,10 @@ class search_controller extends CI_Controller {
 			}
 		}
 
+		$q = trim(str_replace('[type:job]', '', $q));
 		$results = $this->Search->find($q);
 		$keywords = preg_replace('/\[.*?\]/', '', $q);
-		$keywords = preg_replace('/[^a-zA-Z0-9\'\.]/', '', $keywords);
+		$keywords = trim(preg_replace('/[^a-zA-Z0-9\'\. ]/', '', $keywords));
 
 		$results = array_slice($results, 0, 10);
 
@@ -114,9 +116,10 @@ class search_controller extends CI_Controller {
 			}
 		}	
 
+		$q = trim(str_replace('[type:property]', '', $q));
 		$results = $this->Search->find($q);
 		$keywords = preg_replace('/\[.*?\]/', '', $q);
-		$keywords = preg_replace('/[^a-zA-Z0-9\'\.]/', '', $keywords);
+		$keywords = trim(preg_replace('/[^a-zA-Z0-9\'\. ]/', '', $keywords));
 
 		$results = array_slice($results, 0, 10);
 

@@ -1,3 +1,25 @@
 {
-	
+	"cl_name": {
+		"required": true
+	},
+	"cl_addr_1": {
+		"required": true
+	},
+	"cl_locality": {
+		"required": true
+	},
+	"cl_admin_level_1":  {
+		"required": true
+	},
+	"cl_postal_code":  {
+		"required": true,
+		"number": true,
+		"minlength": 5
+	},
+	"cl_contact[phone]": {
+		"phoneUS": true
+	}, 
+	"cl_contact[email]": {
+		"email": true
+	}
 }

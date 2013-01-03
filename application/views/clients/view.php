@@ -1,5 +1,5 @@
 <?PHP
-	$client_slug = strtolower(str_replace(' ', '_', $client->name));
+	$client_slug = url_title($client->name, '_', TRUE);
 ?>
 
 <?PHP $this->load->view('sections/header'); ?>

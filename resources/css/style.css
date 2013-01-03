@@ -112,6 +112,10 @@ input[type="password"] {
 	border-radius:		2px;
 }
 
+input[type="submit"].hide {
+	visibilit:			hidden;
+}
+
 .hide {
 	display:			none;
 }
@@ -963,7 +967,7 @@ address.client {
 	padding:			0 7px;
 }
 
-span.hint {
+label.hint {
 	vertical-align:		bottom;
 	display:			inline-block;
 	position: 			relative;
@@ -977,7 +981,7 @@ span.hint {
 	opacity:			0;
 }
 
-span.hint:before {
+label.hint:before {
 	content:			"";
 	position:			absolute;
 	width:				0px;
@@ -989,11 +993,19 @@ span.hint:before {
 	top:				16px;
 }
 
-span.hint.green {
+#error_labels {
+	display:			none;
+}
+
+#error_labels label {
+	display:			none;
+}
+
+label.hint.valid {
 	background-color:	#85b53d;
 }
 
-span.hint.green:before {
+label.hint.valid:before {
 	border-right:		8px solid #85b53d;
 }
 

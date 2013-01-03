@@ -134,7 +134,7 @@ class Navigation extends CI_Model {
 	{
 		$links = array();
 		$links['Create client'] 		= 'clients/create';
-		$links['Merge clients']			= 'clients/payment';
+		$links['Merge clients']			= 'clients/merge';
 		$links['Search clients']		= 'search/clients';
 
 		$package_links = $this->CI->Event->trigger('nav.build.clients');
