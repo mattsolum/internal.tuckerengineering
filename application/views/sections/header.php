@@ -7,6 +7,7 @@
 		<script src="<?PHP echo base_url(); ?>resources/js/jquery.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/jquery.formLabels1.0.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/jquery.validate.min.js" type="text/javascript"></script>
+		<script src="<?PHP echo base_url(); ?>resources/js/jquery.shadowComplete.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/additional-methods.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
 		$(function(){

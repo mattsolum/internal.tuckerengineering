@@ -113,7 +113,8 @@ input[type="password"] {
 }
 
 input[type="submit"].hide {
-	visibilit:			hidden;
+	display:			block;
+	visibility:			hidden;
 }
 
 .hide {
@@ -877,10 +878,10 @@ address.client {
 	padding:			240px 0 48px 0;
 	text-align:			center;
 	background-color:	#ccc3a9;
-	border-top:			1px solid #5c4d40;
 	font-size:			40px;
 	color:				#5c4d40;
 	text-decoration:	none;
+	border-radius:		2px;
 }
 
 #action_links li.create_client a {
