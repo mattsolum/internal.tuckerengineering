@@ -1,3 +1,10 @@
+<?PHP
+	if(isset($search) && is_array($search))
+	{
+		$results = $search;
+		$keywords = $id;
+	}	
+?>
 <ul id="search_results">
 	<?PHP 
 	foreach ($results as $key => $result) {

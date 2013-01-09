@@ -1,55 +1,54 @@
 (function($){
 	var opts;
-	var results;
 
 	var methods = {
-		init: function() {
-			
+		find: function($this) {
+			search = $this.val().toLowerCase();
+
+			if(search.length >= opts.minLength)
+			{
+				if(Object.prototype.toString.call(opts.source) === '[object Array]')
+				{
+					this.find_in_array($this);
+				}
+				else if(typeof opts.source == 'string' || opts.source instanceof String)
+				{
+					this.find_ajax($this);
+				}
+				else if(Object.prototype.toString.call(opts.source) === '[object Function]')
+				{
+					opts.source($this);
+				}
+			}
+			else {
+				this.update($this);
+			}
 		},
 
-		find: function($this, search) {
-			search = search.replace(new RegExp("['\x00-\x1F\x80-\xFF]", "gm"), '');
-			search = search.toLowerCase();
-
-			if(Object.prototype.toString.call(opts.source) === '[object Array]')
-			{
-				this.find_in_array($this, search);
-			}
-			else if(typeof opts.source == 'string' || opts.source instanceof String)
-			{
-				this.find_ajax($this, search);
-			}
-			else if(Object.prototype.toString.call(opts.source) === '[object Function]')
-			{
-				opts.source($this, search);
-			}
-
-			this.update($this, search);
-		},
-
-		find_in_array: function($this, search) {
+		find_in_array: function($this) {
 			var result = new Array();
-			var searchLen = search.length;
+			var searchLen = $this.val().length;
 
 			for(var i = 0; i < opts.source.length; i++)
 			{
-				if(opts.source[i].substr(0, searchLen).toLowerCase() == search)
+				if(opts.source[i].substr(0, searchLen).toLowerCase() == $this.val().toLowerCase)
 				{
-					result.unshift(opts.source[i]);
+					result.push(opts.source[i]);
 				}
 			}
 
-			$this.data('SCresults', result);
-			$this.data('SCindex', 0);
+			$this.data('SCResults', result);
+			$this.data('SCIndex', 0);
+			this.update($this);
+			$this.data('SCList').show();
 		},
 
-		find_ajax: function($this, search) {
-			var uri = encodeURIComponent(search);
+		find_ajax: function($this) {
+			var uri = encodeURIComponent($this.val());
 			var url = opts.source + uri + opts.sourceSuffix;
-			var SC = $this.data('SCbg');
 			var val = '';
 
-			SComp = this;
+			var SC = this;
 
 			$.getJSON(url, function(json){
 				var result;
@@ -64,184 +63,311 @@
 					result = json;
 				}
 
-				$this.data('SCresults', result);
-				$this.data('SCindex', 0);
-				SComp.update($this);
+				$this.data('SCResults', result);
+				$this.data('SCIndex', 0);
+				SC.update($this);
+				$this.data('SCList').show();
 			});
 		},
 
-		update: function($this, q) {
-			var val = '';
-			var SC = $this.data('SCbg');
-
-			if($this.data('SCresults').length > 0)
-			{
-				val = $this.val() + $this.data('SCresults')[$this.data('SCindex')].substr($this.val().length);
+		update: function($this) {
+			if($this.val().length < opts.minLength){
+				$this.data('SCHint').val('');
 			}
-			SC.val(val);
+			else {
+				if($this.data('SCResults').length > 0){
+					var hintVal = $this.val() + $this.data('SCResults')[$this.data('SCIndex')].substr($this.val().length);
+					$this.data('SCHint').val(hintVal);
+				}
+				else {
+					$this.data('SCHint').val($this.val());
+
+					if(Object.prototype.toString.call(opts.source) === '[object Array]')
+					{
+						$this.data('SCResults', opts.source);
+					}
+				}
+			}
+
+			this.dropdownUpdate($this);
+		},
+
+		dropdownUpdate: function($this) {
+
+			$this.data('SCList').empty();
+
+			if($this.data('SCResults').length > 0)
+			{
+				for(var i = 0; i < $this.data('SCResults').length; i++){
+					var li = $('<li />');
+					li.append($('<a href="#" />').html($this.data('SCResults')[i]));
+
+					if(i == $this.data('SCIndex'))
+					{
+						li.addClass('SCSelected');
+					}
+
+					$this.data('SCList').append(li);
+				}
+			}
+			else {
+				$this.data('SCList').hide();
+			}
+		},
+
+		/**
+		 * Creates the required DOM elements for the given element
+		 * @param  {jQuery} $this
+		 * @return {null}
+		 */
+		build: function($this) {
+			if($this.prop('tagName') == 'INPUT') {
+				//Make sure it is not of a type we cannot work with
+				if($this.prop('tagName').search(/button|checkbox|file|hidden|image|radio|reset|submit/i) == -1)
+				{
+					this.buildInput($this);
+				}
+			} else if ($this.prop('tagName') == 'SELECT') {
+				this.buildSelect($this);
+			}
+
+			$this.data('SCIndex', 0);
+			$this.data('SCResults', new Array());
+		},
+
+		buildSelect: function($this) {
+			var SCInput = $('<input />');
+
+			// iterate over every attribute of the #some_id span element
+			$.each($this.get(0).attributes, function(i, attrib) {
+					// set each attribute to the specific value
+					SCInput.attr(attrib.name, attrib.value);
+			});
+
+			SCInput.addClass('SCInput');
+
+			var source = new Array();
+
+			$this.children().each(function(){
+				source.push($(this).attr('value'));
+			});
+
+			opts.source = source;
+
+			// finally, swap the elements   
+			$this.replaceWith(SCInput); 
+
+			var SCButton = $('<button class="SCButton" />').click(function(e){
+				SCInput.data('SCList').toggle();
+			});
+
+			var SCHint = $('<input />', {
+								css: {	
+									'font-family'			: SCInput.css("font-family"),
+									'font-size'				: SCInput.css("font-size"),
+									'font-style'			: SCInput.css("font-style"),
+									'font-weight'			: SCInput.css("font-weight"),
+									'text-shadow'			: ($.support.opacity) ? SCInput.css("text-shadow") : '',
+									'line-height'			: SCInput.css("line-height"),
+									'position'				: 'absolute',
+									'height'				: SCInput.css("height"),
+									'width'					: parseInt(SCInput.css("width")) - parseInt(SCButton.outerWidth()) + "px",
+									'color'					: SCInput.css("border-top-color"),
+									'margin-top'			: SCInput.css("margin-top"),
+									'margin-left'			: SCInput.css("margin-left"),
+									'border-top'			: SCInput.css("border-top"),
+									'border-bottom'			: SCInput.css("border-bottom"),
+									'border-left'			: SCInput.css("border-left"),
+									'-moz-user-select'		: 'none',
+									'-webkit-user-select'	: 'none',
+									'cursor'				: 'text',
+									'z-index'				: '-100'
+								},
+								class: 'SCHint SCSelect',
+								'type': 'text',
+								'disabled': 'true'
+							});
+
+			var SCList = $('<ul />', {
+					css: {
+						width: SCInput.outerWidth()
+					},
+					class: 'SCList'
+				});
+
+			SCInput.before(SCHint);
+			SCInput.after(SCList);
+			SCInput.after(SCButton);
+
+			SCInput.data('SCHint', SCHint);
+			SCInput.data('SCButton', SCButton);
+			SCInput.data('SCList', SCList);
+
+			this.attachEvents(SCList);
+		},
+
+		buildInput: function($this) {
+			$this.css('background-color', 'transparent');
+			$this.addClass('SCInput');
+
+			var SCHint = $('<input />', {
+								css: {	
+									'font-family'			: $this.css("font-family"),
+									'font-size'				: $this.css("font-size"),
+									'font-style'			: $this.css("font-style"),
+									'font-weight'			: $this.css("font-weight"),
+									'text-shadow'			: ($.support.opacity) ? $this.css("text-shadow") : '',
+									'line-height'			: $this.css("line-height"),
+									'position'				: 'absolute',
+									'height'				: $this.css("height"),
+									'width'					: $this.css("width"),
+									'color'					: $this.css("border-top-color"),
+									'margin-top'			: $this.css("margin-top"),
+									'margin-left'			: $this.css("margin-left"),
+									'border-top'			: $this.css("border-top"),
+									'border-bottom'			: $this.css("border-bottom"),
+									'border-left'			: $this.css("border-left"),
+									'-moz-user-select'		: 'none',
+									'-webkit-user-select'	: 'none',
+									'cursor'				: 'text',
+									'z-index'				: '-100'
+								},
+								class: 'SCHint SCSelect',
+								'type': 'text',
+								'disabled': 'true'
+							});
+				
+			var SCList = $('<ul />', {
+					css: {
+						'width': 		$this.outerWidth(),
+						'position': 	'absolute'
+					},
+					class: 'SCList'
+				});
+
+			$this.before(SCHint);
+			$this.after(SCList);
+
+			$this.data('SCHint', SCHint);
+			$this.data('SCList', SCList);
+
+			this.attachEvents($this);
+		},
+
+		buildDropdown: function($this) {
+
+		},
+
+		attachEvents: function($this) {
+			//Handler for function keys
+			//Tab and arrow keys
+			$this.keydown(function(e){
+				switch(e.which) {
+					case 9: //Tab
+						methods.acceptSuggestion($this, e);
+						break;
+					case 37: //Left arrow
+
+						break;
+					case 38: //Up arrow
+						methods.decrementIndex($this, e);
+						break;
+					case 39: //Right arrow
+						methods.acceptSuggestion($this, e);
+						break;
+					case 40: //Down arrow
+						methods.incrementIndex($this, e);
+						break;
+				}
+			});
+
+			//Handler for searching the autocomplete
+			$this.keyup(function(e){
+				if(e.which != 38 && e.which != 40){
+					methods.find($this);
+				}
+			})
+
+			//Hide everything on focusout
+			$this.focusout(function(e){
+				$this.data('SCResults', new Array());
+				methods.dropdownUpdate($this);
+				$this.data('SCList').empty().hide();
+				$this.data('SCHint').val('');
+			});
+
+			$this.blur(function(e){
+				$this.data('SCList').hide();
+				$this.data('SCHint').val('');
+			});
+
+			$this.data('SCList').mousedown(function(e){
+				if($(e.target).prop('tagName') == 'A'){
+					$this.val($(e.target).html());
+					$this.trigger('SCAccept');
+				}
+			});
+		},
+
+		acceptSuggestion: function($this, e) {
+			var position = $this.getSelection();
+
+			//If text is not selected, the cursor is at the end fo the text, and the hint box has text to donate
+			if(position.length == 0 && position.end == $this.val().length && $this.val() != $this.data('SCHint').val())
+			{
+				e.preventDefault();
+				$this.val($this.data('SCHint').val());
+				$this.trigger('SCAccept');
+			}
+		},
+
+		incrementIndex: function($this, e) {
+			var curIndex 	= $this.data('SCIndex');
+			var results 	= $this.data('SCResults');
+
+			if(curIndex + 1 <= results.length - 1)
+			{
+				e.preventDefault();
+				this.setIndex($this, curIndex + 1);
+			}
+		},
+
+		decrementIndex: function($this, e) {
+			var curIndex 	= $this.data('SCIndex');
+			var results 	= $this.data('SCResults');
+
+			if(curIndex - 1 >= 0)
+			{
+				e.preventDefault();
+				this.setIndex($this, curIndex - 1);
+			}
+		},
+
+		setIndex: function($this, index) {
+			$this.data('SCIndex', index);
+			this.update($this);
 		}
 	};
 
-	$.fn.shadowComplete = function(options){
+	$.fn.shadowComplete = function(options) {
 		opts = $.extend({
-			inputClass: 'SCUserInput',
-			hintClass: 'SCHint',
-			minLength: 2,
-			source: new Array(),
-			dataContainer: null,
-			sourceSuffix: ''
-		}, options);
-
-		methods.init();
+					inputClass: 	'SCUserInput',
+					hintClass: 		'SCHint',
+					dropdownClass: 	'SCDropdown',
+					maxSuggestions: 100,
+					minLength: 		2,
+					source: 		new Array(),
+					dataContainer: 	null,
+					sourceSuffix: 	''
+				}, options);
 
 		this.each(function(){
 			$this = $(this);
 
-			var tagName = $this.prop('tagName');
-
-			if(tagName == 'INPUT') {
-				
-				var SC = $this.clone();
-
-				$this.addClass(opts.inputClass);
-				$this.css('background-color', 'transparent');
-				$this.css('z-index', '100');
-
-				SC.css({
-					position: 	"absolute",
-					color: 		"#ccc",
-					zIndex: 	"-100"
-				});
-
-				SC.addClass(opts.hintClass)
-				SC.prop({
-					"disabled": 	"true",
-					"id": 			"",
-					"title": 		"",
-					"name": 		""
-				});
-
-				$this.before(SC);
-
-				$this.data('SCbg', SC);
-
-				$this.keydown(function(e){
-					var q = $this.val();
-					var shouldSearch = false;
-
-					if(
-						(e.which > 48 && e.which < 90) ||
-						(e.which > 96 && e.which < 111) ||
-						(e.which > 186 && e.which < 222)
-					)
-					{
-						q = q + String.fromCharCode(e.which);
-						shouldSearch = true;
-					}
-
-					if(e.which == 13) {
-						e.preventDefault();
-					}
-					else if (e.which == 8 || e.which == 46)
-					{
-						var selection = $(this).getSelection();
-
-						if(selection.length > 0)
-						{
-							q = q.substr(0, selection.start) + q.substr(selection.end);
-						}
-						else
-						{
-							if(e.which == 8)
-							{
-								q = q.substr(0, selection.start - 1) + q.substr(selection.end);
-							}
-							else
-							{
-								q = q.substr(0, selection.start) + q.substr(selection.end + 1);
-							}
-						}
-
-						shouldSearch = true;
-					}
-					else if(e.which == 38)
-					{
-						//up arrow
-						if($(this).data('SCindex') > 0)
-						{
-							e.preventDefault();
-							$this.data('SCindex', $this.data('SCindex') - 1);
-						}
-
-						SC.val($this.data('SCresults')[$this.data('SCindex')]);
-					}
-					else if(e.which == 40)
-					{
-						//down arrow
-						if($(this).data('SCindex') < $(this).data('SCresults').length - 1)
-						{
-							e.preventDefault();
-							$this.data('SCindex', $this.data('SCindex') + 1);
-						}
-
-						SC.val($this.data('SCresults')[$this.data('SCindex')]);
-					}
-					else if(e.which == 9)
-					{
-						//Tab
-						if($this.val().length != SC.val().length)
-						{
-							$this.val(SC.val());
-							e.preventDefault();
-						}
-						
-					}
-
-					q = q.replace(new RegExp("['\x00-\x1F\x80-\xFF]", "gm"), '');
-					q = q.toLowerCase();
-
-					if(shouldSearch == true && q.length >= opts.minLength)
-					{
-						methods.find($this, q);
-					}
-				});
-
-				$this.keyup(function(e){
-					if($this.val().length < opts.minLength)
-					{
-						SC.val('');
-					}
-
-					switch(e.which) {
-						case 13:
-							//enter
-							$this.val(SC.val());
-							$(this).parents("form").submit();
-							break;
-						case 39:
-							//right arrow
-							var selection = $this.getSelection();
-							if(SC.val().length != 0 && selection.end == $this.val().length)
-							{
-								$this.val(SC.val());
-							}
-							break;
-					}
-				});
-
-			}
-			else if($this.prop('tagName') == 'SELECT') {
-
-			}
+			methods.build($this);
 		});
 	}
 
-	$.fn.shadowComplete.setSource = function(source)
-	{
-		opts.source = source;
-		methods.find(this.val());
-		alert('yay');
-	}
 })(jQuery);
 
 /*

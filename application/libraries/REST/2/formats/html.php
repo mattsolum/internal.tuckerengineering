@@ -1,6 +1,6 @@
 <?PHP
 	
-class ApiXml
+class ApiHtml
 {
 	public $mime 	= 'text/html';
 	private $CI 	= NULL;
@@ -9,18 +9,17 @@ class ApiXml
 	function __construct(&$API)
 	{	
 		$this->API =& $API;
+		$this->CI =& get_instance();
 	}
 
 	public function format($data, $error)
 	{
-		$this->CI =& get_instance();
 			
 		if(is_array($data) && isset($data['pagination'])) unset($data['pagination']);
 		
-		if($error == FALSE && isset($this->arguments->view) && view_exists($this->arguments->view))
+		if($error == FALSE && isset($this->API->arguments->view) && view_exists($this->API->arguments->view))
 		{
-			
-			return $this->CI->load->view($this->arguments->view, array($this->type => $data), TRUE);
+			return $this->CI->load->view($this->API->arguments->view, array($this->API->type => $data, 'id' => trim($this->API->id)), TRUE);
 		}
 		else
 		{

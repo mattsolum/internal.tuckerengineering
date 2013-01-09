@@ -23,14 +23,8 @@
 	</form>
 </section>
 <script type="text/javascript">
+	var prev_val = '';
 	$("#search").shadowComplete({source: "<?PHP echo(site_url()); ?>api/v2/autocomplete/", sourceSuffix: ".json", dataContainer: 'data'});
-	//$("#search").shadowComplete();
-	
-	/*$("#search").keyup(function(e) {
-		$.getJSON("<?PHP echo(site_url()); ?>api/v2/autocomplete/" + $(e.target).val() + ".json", function(json) {
-			$(e.target).shadowComplete.setSource(json.data);
-		});
-	});*/
 </script>
 <?PHP $this->load->view('search/result_list', array('keywords' => $keywords, 'results' => $results)); ?>
 <?PHP $this->load->view('sections/footer') ?>

@@ -8,23 +8,36 @@ class AutocompleteAPI extends PrototypeAPI
 	}
 
 	public function get() {
-		$search = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', urldecode($this->API->id));
+		$this->CI->load->model('Search');
+		$search = trim(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', urldecode($this->API->id)));
 		$results = array();
 
 		if($search != '')
 		{
-			$this->CI->db->like('title', $search, 'after');
+			$this->CI->db->like('keywords', ' ' . $search);
 			$query = $this->CI->db->get('search');
 
 			if($query->num_rows() > 0)
 			{
 				foreach($query->result() AS $row)
 				{
-					$results[] = $row->title;
+					$matches = array();
+					preg_match('/(?<=\W|^)' . $search . '\w*(\W\w+)?/i', $row->keywords, $matches);
+
+					if(isset($matches[0]) && !in_array(preg_replace('/[^a-zA-Z0-9 ]/', '', $matches[0]), $results))
+					{
+						$results[] = preg_replace('/[^a-zA-Z0-9 ]/', '', $matches[0]);
+					}
 				}
+
 			}
 		}
 
+		usort($results, 'length_sort');
 		return $results;
 	}
+}
+
+function length_sort($a,$b){
+    return strlen($b)-strlen($a);
 }
