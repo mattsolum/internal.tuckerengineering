@@ -20,7 +20,12 @@
 					opts.source($this);
 				}
 			}
-			else {
+			else if(search.length > 0) {
+				this.update($this);
+			} else {
+				if($this.val().length == 0 && Object.prototype.toString.call(opts.source) === '[object Array]') {
+					$this.data('SCResults', opts.source);
+				}
 				this.update($this);
 			}
 		},
@@ -31,7 +36,7 @@
 
 			for(var i = 0; i < opts.source.length; i++)
 			{
-				if(opts.source[i].substr(0, searchLen).toLowerCase() == $this.val().toLowerCase)
+				if(opts.source[i].substr(0, searchLen).toLowerCase() == $this.val().toLowerCase())
 				{
 					result.push(opts.source[i]);
 				}
@@ -71,15 +76,14 @@
 		},
 
 		update: function($this) {
-			if($this.val().length < opts.minLength){
+			if($this.val().length < opts.minLength && $this.data('SCList').css('display') == 'none'){
 				$this.data('SCHint').val('');
 			}
 			else {
 				if($this.data('SCResults').length > 0){
 					var hintVal = $this.val() + $this.data('SCResults')[$this.data('SCIndex')].substr($this.val().length);
 					$this.data('SCHint').val(hintVal);
-				}
-				else {
+				} else {
 					$this.data('SCHint').val($this.val());
 
 					if(Object.prototype.toString.call(opts.source) === '[object Array]')
@@ -96,8 +100,12 @@
 
 			$this.data('SCList').empty();
 
-			if($this.data('SCResults').length > 0)
+			if($this.data('SCResults').length > 0 || (Object.prototype.toString.call(opts.source) === '[object Array]' && opts.source.length > 0))
 			{
+				if($this.data('SCResults').length == 0) {
+					$this.data('SCResults', opts.source)
+				}
+
 				for(var i = 0; i < $this.data('SCResults').length; i++){
 					var li = $('<li />');
 					li.append($('<a href="#" />').html($this.data('SCResults')[i]));
@@ -153,7 +161,9 @@
 		},
 
 		buildSelect: function($this) {
+			var SC = this;
 			var SCInput = $('<input />');
+			var text = '';
 
 			// iterate over every attribute of the #some_id span element
 			$.each($this.get(0).attributes, function(i, attrib) {
@@ -162,21 +172,47 @@
 			});
 
 			SCInput.addClass('SCInput');
+			SCInput.addClass('SCSelect');
+			SCInput.attr('type', 'text');
 
 			var source = new Array();
 
-			$this.children().each(function(){
-				source.push($(this).attr('value'));
+			$this.children().each(function(key){
+				if($(this).attr('value').length > 0){
+					source.push($(this).attr('value'));
+				}
+
+				if($(this).attr('selected') != undefined) {
+					text = $(this).attr('value');
+				}
 			});
+
+			SCInput.attr('value', text);
 
 			opts.source = source;
 
 			// finally, swap the elements   
 			$this.replaceWith(SCInput); 
 
-			var SCButton = $('<button class="SCButton" />').click(function(e){
-				SCInput.data('SCList').toggle();
-			});
+			var SCButton = $('<button class="SCButton" tabIndex="-1"/>').click(function(e){
+				e.preventDefault();
+
+				if(SCInput.data('SCList').css('display') != 'none') {
+					SCInput.data('SCList').hide();
+				} else {
+					SCInput.data('SCIndex', 0);
+
+					if(SCInput.val().length > 0){
+						SC.find(SCInput);
+					} else {
+						SCInput.data('SCResults', opts.source);
+						SC.dropdownUpdate(SCInput);
+						SCInput.data('SCList').show();
+					}
+
+					SCInput.focus();
+				}
+			}).mousedown(function(e){e.preventDefault()});
 
 			var SCHint = $('<input />', {
 								css: {	
@@ -188,7 +224,7 @@
 									'line-height'			: SCInput.css("line-height"),
 									'position'				: 'absolute',
 									'height'				: SCInput.css("height"),
-									'width'					: parseInt(SCInput.css("width")) - parseInt(SCButton.outerWidth()) + "px",
+									'width'					: SCInput.css("width"),
 									'color'					: SCInput.css("border-top-color"),
 									'margin-top'			: SCInput.css("margin-top"),
 									'margin-left'			: SCInput.css("margin-left"),
@@ -200,7 +236,7 @@
 									'cursor'				: 'text',
 									'z-index'				: '-100'
 								},
-								class: 'SCHint SCSelect',
+								class: 'SCHint',
 								'type': 'text',
 								'disabled': 'true'
 							});
@@ -219,8 +255,10 @@
 			SCInput.data('SCHint', SCHint);
 			SCInput.data('SCButton', SCButton);
 			SCInput.data('SCList', SCList);
+			SCInput.data('SCResults', new Array());
+			SCInput.data('SCIndex', 0);
 
-			this.attachEvents(SCList);
+			this.attachEvents(SCInput);
 		},
 
 		buildInput: function($this) {
@@ -249,7 +287,7 @@
 									'cursor'				: 'text',
 									'z-index'				: '-100'
 								},
-								class: 'SCHint SCSelect',
+								class: 'SCHint',
 								'type': 'text',
 								'disabled': 'true'
 							});
@@ -267,6 +305,7 @@
 
 			$this.data('SCHint', SCHint);
 			$this.data('SCList', SCList);
+			SCInput.data('SCResults', new Array());
 
 			this.attachEvents($this);
 		},
@@ -276,6 +315,8 @@
 		},
 
 		attachEvents: function($this) {
+			var SC = this;
+
 			//Handler for function keys
 			//Tab and arrow keys
 			$this.keydown(function(e){
@@ -293,7 +334,13 @@
 						methods.acceptSuggestion($this, e);
 						break;
 					case 40: //Down arrow
-						methods.incrementIndex($this, e);
+						if($this.data('SCList').css('display') == 'none') {
+							SC.dropdownUpdate($this);
+							$this.data('SCList').show();
+							SC.update($this);
+						} else {
+							methods.incrementIndex($this, e);
+						}
 						break;
 				}
 			});
@@ -372,7 +419,7 @@
 					hintClass: 		'SCHint',
 					dropdownClass: 	'SCDropdown',
 					maxSuggestions: 100,
-					minLength: 		2,
+					minLength: 		1,
 					source: 		new Array(),
 					dataContainer: 	null,
 					sourceSuffix: 	''

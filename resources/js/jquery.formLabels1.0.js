@@ -63,7 +63,7 @@
 					$thisBI,		//background-image of input box
 					labelParent,	//parent element
 					tagName;		//type of the element to be inserted
-				if(this.value == '' && this.title != '') {
+				if(this.title != '') {
 					if (opts.labelParent == 'form') {
 						labelParent = $this.closest('form');
 						tagName = '<label/>';
@@ -154,7 +154,11 @@
 						"my"		: myPosition,
 						"at"		: parentPosition,
 						"offset"	: offsetValue
-					})
+					});
+
+					if(this.value != '') {
+						formLabel.css('opacity', 0.0);
+					}
 				}
 				spanID++; //Increasing spanID by one
 			});

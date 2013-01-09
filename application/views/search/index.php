@@ -23,7 +23,6 @@
 	</form>
 </section>
 <script type="text/javascript">
-	var prev_val = '';
 	$("#search").shadowComplete({source: "<?PHP echo(site_url()); ?>api/v2/autocomplete/", sourceSuffix: ".json", dataContainer: 'data'});
 </script>
 <?PHP $this->load->view('search/result_list', array('keywords' => $keywords, 'results' => $results)); ?>

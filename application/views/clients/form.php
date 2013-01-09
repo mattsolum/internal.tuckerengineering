@@ -3,6 +3,8 @@
 	$contacts 	= array();
 	$email		= array();
 
+	$states = array('Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming');
+
 	foreach($client->contact AS $contact)
 	{
 		switch($contact->type)
@@ -41,7 +43,17 @@
 			<label class="hint" for="cl_locality">Required.</label>
 		</li>
 		<li>
-			<input type="text" name="cl_admin_level_1" id="cl_admin_level_1" title="State" value="<?PHP echo(trim($client->location->admin_level_1)); ?>">
+			<select name="cl_admin_level_1" id="cl_admin_level_1" title="State">
+				<option value=""></option>
+				<?PHP
+				foreach($states AS $state)
+				{
+				?>
+				<option value="<?PHP echo($state); ?>"<?PHP if(strtolower($client->location->admin_level_1) == strtolower($state)) echo(' selected="selected"'); ?>
+				<?PHP
+				}
+				?>
+			</select>
 			<label class="hint" for="cl_admin_level_1">Required.</label>
 		</li>
 		<li>
@@ -118,6 +130,8 @@
 				}
 			});
 		});
+
+		$('#cl_admin_level_1').shadowComplete();
 
 		$('input').focusin(function(){
 			$(this).siblings('label.hint').each(function(){

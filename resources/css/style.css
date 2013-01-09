@@ -940,25 +940,33 @@ address.client {
 	margin-top:			32px;
 }
 
-#client_edit_form ul {
+#client_edit_form > ul {
 	margin-bottom:		32px;
 }
 
-#client_edit_form li {
+#client_edit_form > ul > li {
 	display:			inline;
 	float: 				left;
 	position: 			relative;
 	margin-left: 		8px;
 	margin-right: 		8px;
-	width:				944px;
-}
-
-#client_edit_form li {
 	margin-bottom:		16px;
+	width:				944px;
 }
 
 #client_edit_form input[type="text"]
 {
+	display:			inline-block;
+	width:				608px;
+	height:				46px;
+	margin-right:		8px;
+	font-family: 		"Museo", "Palatino", "Hoefler Text", "Baskerville", "Georgia", "Times New Roman", serif;
+	font-weight:		200;
+	font-size:			24px;
+	padding:			0 7px;
+}
+
+select {
 	display:			inline-block;
 	width:				608px;
 	height:				46px;
@@ -1019,11 +1027,47 @@ input[disabled] {
 	background-color:	#fff; !important
 }
 
+.SCButton {
+	position:			absolute;
+	width: 				44px;
+	height:				44px;
+	vertical-align:  	bottom;
+	background-color:	#989898;
+	border-radius:		2px;
+	margin:				2px 2px 2px -54px;
+	border:				none;
+	cursor:				pointer;
+	margin-left:		-54px;
+	background-image:	url('../img/white_dropdown_arrow.png');
+	background-position:50% 50%;
+	background-repeat: 	no-repeat;
+}
+
+.SCSelect {
+	margin-right:		0;
+}
+
+.SCInput {
+	background-color:	transparent;
+}
+
 .SCList {
 	background-color:	#fff;
 	max-height:			128px;
+	position:			absolute;
+	z-index:			9999;
 	overflow-y:			scroll;
+	overflow-x:			hidden;
 	border-radius:		2px;
+	padding:			0;
+	text-indent:		0;
+	box-shadow:			0 1px 2px #5c4d40;
+}
+
+.SCList li {
+	margin:				0;
+	padding:			0;
+	text-indent:		0;
 }
 
 .SCList a {
@@ -1032,6 +1076,7 @@ input[disabled] {
 	color:				#000;
 	text-decoration:	none;
 	padding:			8px;
+	margin:				0;
 }
 
 .SCList:hover .SCSelected a {
