@@ -101,13 +101,30 @@
 				for(var i = 0; i < $this.data('SCResults').length; i++){
 					var li = $('<li />');
 					li.append($('<a href="#" />').html($this.data('SCResults')[i]));
+					$this.data('SCList').append(li);
 
 					if(i == $this.data('SCIndex'))
 					{
 						li.addClass('SCSelected');
 					}
+				}
 
-					$this.data('SCList').append(li);
+				//Handle scroll position
+				var selected = $this.data('SCList').children('.SCSelected');
+				var scrollBottom = $this.data('SCList').scrollTop() + $this.data('SCList').innerHeight();
+				var scrollTop = $this.data('SCList').scrollTop();
+				var position = selected.position();
+
+				if(0 > position.top)
+				{
+					//Scroll up
+					$this.data('SCList').scrollTop($this.data('SCList').scrollTop() + position.top);
+				}
+				else if (position.top >= $this.data('SCList').innerHeight())
+				{
+					//Scroll down
+					var scrollTo = (position.top + selected.outerHeight()) - $this.data('SCList').innerHeight() + $this.data('SCList').scrollTop();
+					$this.data('SCList').scrollTop(scrollTo);
 				}
 			}
 			else {
@@ -193,7 +210,7 @@
 						width: SCInput.outerWidth()
 					},
 					class: 'SCList'
-				});
+				}).hide();
 
 			SCInput.before(SCHint);
 			SCInput.after(SCList);
@@ -243,7 +260,7 @@
 						'position': 	'absolute'
 					},
 					class: 'SCList'
-				});
+				}).hide();
 
 			$this.before(SCHint);
 			$this.after(SCList);

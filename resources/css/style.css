@@ -1022,7 +1022,7 @@ input[disabled] {
 .SCList {
 	background-color:	#fff;
 	max-height:			128px;
-	overflow-y:			hidden;
+	overflow-y:			scroll;
 	border-radius:		2px;
 }
 
