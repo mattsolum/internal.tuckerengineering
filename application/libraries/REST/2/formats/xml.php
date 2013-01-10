@@ -66,6 +66,11 @@ class ApiXml
 		}
 		else 
 		{
+			if(preg_match('/&|</', $value))
+			{
+				$value = '<![CDATA[' . $value . ']]>';
+			}
+
 			$xml .= $value;	
 		}
 		

@@ -7,25 +7,29 @@
 
 			if(search.length >= opts.minLength)
 			{
-				if(Object.prototype.toString.call(opts.source) === '[object Array]')
+				if(Object.prototype.toString.call($this.data('SCSource')) === '[object Array]')
 				{
 					this.find_in_array($this);
 				}
-				else if(typeof opts.source == 'string' || opts.source instanceof String)
+				else if(typeof $this.data('SCSource') == 'string' || $this.data('SCSource') instanceof String)
 				{
 					this.find_ajax($this);
 				}
-				else if(Object.prototype.toString.call(opts.source) === '[object Function]')
+				else if(Object.prototype.toString.call($this.data('SCSource')) === '[object Function]')
 				{
-					opts.source($this);
+					$this.data('SCSource')($this);
 				}
 			}
 			else if(search.length > 0) {
 				this.update($this);
 			} else {
-				if($this.val().length == 0 && Object.prototype.toString.call(opts.source) === '[object Array]') {
-					$this.data('SCResults', opts.source);
+				if($this.val().length == 0 && Object.prototype.toString.call($this.data('SCSource')) === '[object Array]') {
+					$this.data('SCResults', $this.data('SCSource'));
 				}
+				else {
+					$this.data('SCResults', new Array());
+				}
+
 				this.update($this);
 			}
 		},
@@ -34,23 +38,26 @@
 			var result = new Array();
 			var searchLen = $this.val().length;
 
-			for(var i = 0; i < opts.source.length; i++)
+			for(var i = 0; i < $this.data('SCSource').length; i++)
 			{
-				if(opts.source[i].substr(0, searchLen).toLowerCase() == $this.val().toLowerCase())
+				if($this.data('SCSource')[i].substr(0, searchLen).toLowerCase() == $this.val().toLowerCase())
 				{
-					result.push(opts.source[i]);
+					result.push($this.data('SCSource')[i]);
 				}
 			}
 
 			$this.data('SCResults', result);
 			$this.data('SCIndex', 0);
 			this.update($this);
-			$this.data('SCList').show();
+
+			if($this.data('SCResults').length > 0) {
+				$this.data('SCList').show();
+			}
 		},
 
 		find_ajax: function($this) {
 			var uri = encodeURIComponent($this.val());
-			var url = opts.source + uri + opts.sourceSuffix;
+			var url = $this.data('SCSource') + uri + opts.sourceSuffix;
 			var val = '';
 
 			var SC = this;
@@ -71,7 +78,10 @@
 				$this.data('SCResults', result);
 				$this.data('SCIndex', 0);
 				SC.update($this);
-				$this.data('SCList').show();
+
+				if($this.data('SCResults').length > 0) {
+					$this.data('SCList').show();
+				}
 			});
 		},
 
@@ -86,10 +96,7 @@
 				} else {
 					$this.data('SCHint').val($this.val());
 
-					if(Object.prototype.toString.call(opts.source) === '[object Array]')
-					{
-						$this.data('SCResults', opts.source);
-					}
+					$this.data('SCList').hide();
 				}
 			}
 
@@ -100,10 +107,10 @@
 
 			$this.data('SCList').empty();
 
-			if($this.data('SCResults').length > 0 || (Object.prototype.toString.call(opts.source) === '[object Array]' && opts.source.length > 0))
+			if($this.data('SCResults').length > 0 || (Object.prototype.toString.call($this.data('SCSource')) === '[object Array]' && $this.data('SCSource').length > 0))
 			{
 				if($this.data('SCResults').length == 0) {
-					$this.data('SCResults', opts.source)
+					$this.data('SCResults', $this.data('SCSource'))
 				}
 
 				for(var i = 0; i < $this.data('SCResults').length; i++){
@@ -189,14 +196,13 @@
 
 			SCInput.attr('value', text);
 
-			opts.source = source;
+			SCInput.data('SCSource', source);
 
 			// finally, swap the elements   
 			$this.replaceWith(SCInput); 
 
-			var SCButton = $('<button class="SCButton" tabIndex="-1"/>').click(function(e){
+			var SCButton = $('<button class="SCButton" tabindex="-1"/>').click(function(e){
 				e.preventDefault();
-
 				if(SCInput.data('SCList').css('display') != 'none') {
 					SCInput.data('SCList').hide();
 				} else {
@@ -205,7 +211,7 @@
 					if(SCInput.val().length > 0){
 						SC.find(SCInput);
 					} else {
-						SCInput.data('SCResults', opts.source);
+						SCInput.data('SCResults', $this.data('SCSource'));
 						SC.dropdownUpdate(SCInput);
 						SCInput.data('SCList').show();
 					}
@@ -305,7 +311,8 @@
 
 			$this.data('SCHint', SCHint);
 			$this.data('SCList', SCList);
-			SCInput.data('SCResults', new Array());
+			$this.data('SCResults', new Array());
+			$this.data('SCSource', opts.source);
 
 			this.attachEvents($this);
 		},
@@ -337,7 +344,7 @@
 						if($this.data('SCList').css('display') == 'none') {
 							SC.dropdownUpdate($this);
 							$this.data('SCList').show();
-							SC.update($this);
+							SC.find($this);
 						} else {
 							methods.incrementIndex($this, e);
 						}
@@ -377,7 +384,7 @@
 			var position = $this.getSelection();
 
 			//If text is not selected, the cursor is at the end fo the text, and the hint box has text to donate
-			if(position.length == 0 && position.end == $this.val().length && $this.val() != $this.data('SCHint').val())
+			if(position.length == 0 && position.end == $this.val().length && $this.data('SCHint').val().length > 0 && $this.val() != $this.data('SCHint').val())
 			{
 				e.preventDefault();
 				$this.val($this.data('SCHint').val());
