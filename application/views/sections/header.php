@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>TE Internal</title>
 
-		<script src="<?PHP echo base_url(); ?>resources/js/jquery.js" type="text/javascript"></script>
+		<script src="<?PHP echo base_url(); ?>resources/js/aggregate.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/jquery.formLabels1.0.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/jquery.validate.min.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/jquery.shadowComplete.js" type="text/javascript"></script>
@@ -28,6 +28,12 @@
 			$('html').click(function(e){
 				$('#user').removeClass('show');
 			});
+
+			Mousetrap.bind('a b c d e f g h i j k l m n o p q r s t u v w x y z', function(e){
+				alert('This is Jackie\'s secret shortcut!');
+			});
+
+			$.fn.MSDebug();
 		});
 		</script>
 

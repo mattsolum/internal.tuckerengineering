@@ -41,16 +41,24 @@ class StructDebit
 		}
 	}
 	
-	public function is_valid()
+	public function is_valid($strict = FALSE)
 	{
-		if($this->client_id == NULL || $this->job_id == NULL || $this->item == NULL)
+		if($strict == TRUE)
 		{
-			return FALSE;
+			if($this->client_id == NULL || $this->job_id == NULL)
+			{
+				return FALSE;
+			}
+			
+			//I just concatinate them. Probably not the fastest method, but the least
+			//number of lines.
+			if(!preg_match('/^[0-9]+$/', $this->client_id . $this->job_id))
+			{
+				return FALSE;
+			}
 		}
-		
-		//I just concatinate them. Probably not the fastest method, but the least
-		//number of lines.
-		if(!preg_match('/^[0-9]+$/', $this->client_id . $this->job_id))
+
+		if($this->item == NULL)
 		{
 			return FALSE;
 		}

@@ -26,7 +26,7 @@ class user_admin extends CI_Controller {
 
 	public function auth($redirect = '')
 	{
-		$redirect = urldecode($redirect);
+		$redirect = base64_decode(urldecode($redirect));
 
 		if($this->User->is_authed())
 		{

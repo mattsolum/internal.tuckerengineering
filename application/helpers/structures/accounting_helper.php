@@ -60,7 +60,10 @@ class StructAccounting
 	
 	public function sort_debits()
 	{
-		$this->debits = $this->quicksort_by_property($this->debits, 'amount');
+		if(count($this->debits) > 1)
+		{
+			$this->debits = $this->quicksort_by_property($this->debits, 'amount');
+		}
 	}
 	
 	private function quicksort_by_property($arr, $property, $left = 0, $right = NULL)
@@ -155,7 +158,7 @@ class StructAccounting
 		return $this->credit_total() + $this->debit_total();
 	}
 	
-	public function is_valid()
+	public function is_valid($strict = TRUE)
 	{
 		foreach($this->credits AS $credit)
 		{
@@ -164,7 +167,7 @@ class StructAccounting
 		
 		foreach($this->debits AS $debit)
 		{
-			if(!$debit->is_valid()) return FALSE;
+			if(!$debit->is_valid($strict)) return FALSE;
 		}
 		
 		return TRUE;

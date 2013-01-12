@@ -146,9 +146,26 @@ class StructJob {
 		return $this->debits->total() - $this->credits->total();
 	}
 	
-	public function is_valid()
+	public function is_valid($strict = TRUE)
 	{
-		//TODO
+		if(!$this->client->is_valid() || !$this->location->is_valid() || !$this->accounting->is_valid($strict))
+		{
+			return FALSE;
+		}
+
+		if($this->requester->name != '' && !$this->requester->is_valid())
+		{
+			return FALSE;
+		}
+
+		foreach($this->notes AS $note)
+		{
+			if(!$note->is_valid())
+			{
+				return FALSE;
+			}
+		}
+
 		return TRUE;
 	}
 	
@@ -158,6 +175,11 @@ class StructJob {
 		$str .= "Location:\n\t" . str_replace("\n", "\n\t", (string)$this->location) . "\n";
 		
 		$str .= "Client:\n\t" . str_replace("\n", "\n\t", (string)$this->client) . "\n";
+
+		if($this->requester->name != '' && $this->requester->name != $this->client->name)
+		{
+			$str .= "Requester:\n\t" . str_replace("\n", "\n\t", (string)$this->requester) . "\n";
+		}
 		
 		$str .=  (string)$this->accounting . "\n";
 		

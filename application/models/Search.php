@@ -415,7 +415,7 @@ class Search extends CI_Model {
 	 */
 	public function commit_handler($e)
 	{
-		log_message('error', '--- Search->commit_handler() called ' . $e->event);
+		//log_message('error', '--- Search->commit_handler() called ' . $e->event);
 		$this->CI->load->helper('url');
 
 		if($e->segment(-1) != 'delete')
@@ -446,7 +446,7 @@ class Search extends CI_Model {
 	private function client_prepare($e)
 	{
 		$this->load->model('Client');
-		log_message('error', '--- Search->client_prepare() called');
+		//log_message('error', '--- Search->client_prepare() called');
 		$search = new StructSearch();
 
 		if(is_object($e->data) && get_class($e->data) == 'StructClient')
@@ -494,7 +494,7 @@ class Search extends CI_Model {
 	private function property_prepare($e)
 	{
 		$this->load->model('Property');
-		log_message('error', '--- Search->property_prepare() called');
+		//log_message('error', '--- Search->property_prepare() called');
 		$search = new StructSearch();
 
 		if(is_object($e->data) && get_class($e->data) == 'StructProperty')

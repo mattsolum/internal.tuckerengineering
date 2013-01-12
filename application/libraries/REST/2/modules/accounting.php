@@ -18,6 +18,36 @@ class AccountingAPI extends PrototypeAPI
 	{
 	
 	}
+
+	public function price_get()
+	{
+		$item = preg_replace('[^a-zA-Z0-9 -]', '', $this->API->id);
+
+		if($item != '')
+		{
+			if(strstr($item, '-') !== FALSE)
+			{
+				$sections = explode('-', $item);
+				$item = $sections[0];
+				$condition = $sections[1];
+
+				$this->CI->db->like('condition', $condition, 'none');
+			}
+
+			$this->CI->db->like('name', $item, 'none');
+			$query = $this->CI->db->get('items');
+
+			if($query->num_rows() > 0)
+			{
+				$result = $query->row(0);
+
+				return array('price' => $result->cost);
+			}
+		}
+
+		$this->error = 'Item of ID \'' . $item .'\' not found.';
+		return FALSE;
+	}
 	
 	public function job_get()
 	{

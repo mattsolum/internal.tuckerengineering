@@ -63,6 +63,14 @@
 					$thisBI,		//background-image of input box
 					labelParent,	//parent element
 					tagName;		//type of the element to be inserted
+
+				$this.siblings('label').each(function(){
+					if($(this).hasClass('fLabel') && $(this).attr('for') == $this.attr('id'))
+					{
+						$(this).remove();
+					}
+				});
+
 				if(this.title != '') {
 					if (opts.labelParent == 'form') {
 						labelParent = $this.closest('form');
@@ -106,7 +114,7 @@
 					}
 
 					var objheight = parseInt($this.css("border-top-width")) + parseInt($this.css("height")) + parseInt($this.css("border-bottom-width")) + parseInt($this.css("padding-bottom")) + 'px';
-					var leftmargin 	= parseInt($this.css("padding-left")) + parseInt($this.css("border-left-width")) + 1 + 'px';
+					var leftmargin 	= parseInt($this.css("padding-left")) + parseInt($this.css("border-left-width")) + 1 + parseInt($this.css('margin-left')) + 'px';
 					var topmargin 	= parseInt($this.css("padding-top")) + parseInt($this.css("border-top-width")) + parseInt($this.css("margin-top")) + 'px';
 
 					var formLabel = $(tagName, {
@@ -178,13 +186,13 @@
 							})
 						}
 						else {
-							LabelSpanID.stop().fadeOut(300)
+							LabelSpanID.stop().fadeTo(300, 0);
 						}
 					}
 				}
 				if (e.type == 'change' || e.type == 'cut' || e.type == 'paste' || e.type == 'input' || e.type == 'keyup') {
 					if(this.title != '') {
-						LabelSpanID.stop().fadeOut(300)
+						LabelSpanID.stop().fadeTo(300, 0)
 					}
 					if(this.value == '') {
 						LabelSpanID.stop().fadeTo(100,0.2)

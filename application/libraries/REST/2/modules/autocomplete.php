@@ -34,14 +34,16 @@ class AutocompleteAPI extends PrototypeAPI
 		}
 
 		usort($results, 'length_sort');
-		return $results;
+		return array_reverse($results);
 	}
 
-	public function clients_get() {
+	public function clients_get()
+	{
 		return $this->client_get();
 	}
 
-	public function client_get() {
+	public function client_get()
+	{
 		$search = trim(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', urldecode($this->API->id)));
 		$results = array();
 
@@ -49,6 +51,30 @@ class AutocompleteAPI extends PrototypeAPI
 		{
 			$this->CI->db->like('name', $search, 'after');
 			$query = $this->CI->db->get('clients');
+
+			if($query->num_rows() > 0)
+			{
+				foreach($query->result() AS $row)
+				{
+					$results[] = $row->name;
+				}
+			}
+		}
+
+		usort($results, 'length_sort');
+		return array_reverse($results);
+	}
+
+	public function services_get()
+	{
+		$results = array();
+
+		$search = trim(preg_replace('/[^a-zA-Z0-9 -]/', '', urldecode($this->API->id)));
+
+		if($search != '')
+		{
+			//Raw MySQL
+			$query = $this->CI->db->query("SELECT * FROM (SELECT * FROM items ORDER BY cost ASC) AS t1 WHERE t1.`name` LIKE '$search%' GROUP BY t1.`name` order by cost DESC");
 
 			if($query->num_rows() > 0)
 			{

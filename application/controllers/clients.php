@@ -7,7 +7,7 @@ class Clients extends CI_Controller {
 		parent::__construct();
 
 		$this->load->model('Navigation');
-		$this->load->model('client');
+		$this->load->model('Client');
 
 		$this->User->check_auth();
 	}
@@ -53,7 +53,7 @@ class Clients extends CI_Controller {
 	public function view($client_id)
 	{
 		$client_id = str_replace('_', ' ', $client_id);
-		$client = $this->client->get($client_id);
+		$client = $this->Client->get($client_id);
 
 		if($client != FALSE)
 		{
@@ -80,16 +80,35 @@ class Clients extends CI_Controller {
 	public function edit($client_id)
 	{
 		$client_id = str_replace('_', ' ', $client_id);
-		$client = $this->client->get($client_id);
+		$client = $this->Client->get($client_id);
 
 		if($client != FALSE)
 		{
-			if(is_numeric($client_id))
+			if($this->input->post('cl_name') != FALSE)
 			{
-				redirect(site_url('clients/edit/' . url_title($client->name, '_', TRUE)));
-			}
+				$client = $this->load_client_from_input($client);
 
-			$this->load->view('clients/edit', array('client' => $client));
+				if($client->is_valid())
+				{
+					if($this->Client->commit($client))
+					{
+						redirect(site_url('clients/' . url_title($client->name, '_', true)));
+					}
+				}
+				else
+				{
+					$this->load->view('clients/edit', array('client' => $client));
+				}
+			}
+			else
+			{
+				if(is_numeric($client_id))
+				{
+					redirect(site_url('clients/edit/' . url_title($client->name, '_', TRUE)));
+				}
+
+				$this->load->view('clients/edit', array('client' => $client));
+			}
 		}
 		else
 		{
@@ -99,10 +118,70 @@ class Clients extends CI_Controller {
 
 	public function create()
 	{
-		$client = new StructClient;
-		$this->load->view('clients/create', array('client' => $client));
+		$client = new StructClient();
+
+		if($this->input->post() == false)
+		{
+			$this->load->view('clients/create', array('client' => $client));
+		}
+		else
+		{
+			$this->load->model('Client');
+
+			$post = $this->input->post();
+			$cl2 = $this->Client->get($post['cl_name']);
+
+			if($cl2 != FALSE)
+			{
+				$client = $cl2;
+			}
+
+			$client = $this->load_client_from_input($client);
+
+			if($client->is_valid())
+			{
+				if($this->Client->commit($client))
+				{
+					redirect(site_url('clients/' . url_title($client->name, '_', true)));
+				}
+			}
+			else
+			{
+				$this->load->view('clients/create', array('client' => $client));
+			}
+		}
+	}
+
+	private function load_client_from_input($client = NULL)
+	{
+		if($client == NULL)
+		{
+			$client = new StructClient();
+		}
+
+		$post = $this->input->post();
+
+		$client->name 						= $post['cl_name'];
+		$client->location->set_addr_1($post['cl_addr_1']);
+		$client->location->subpremise 		= $post['cl_subpremise'];
+		$client->location->locality			= $post['cl_locality'];
+		$client->location->admin_level_1 	= $post['cl_admin_level_1'];
+		$client->location->postal_code		= $post['cl_postal_code'];
+
+		foreach($post['cl_contact'] AS $type => $list)
+		{
+			foreach($list AS $info)
+			{
+				if($info != '')
+				{
+					$client->add_contact_item($type, $info);
+				}
+			}
+		}
+
+		return $client;
 	}
 }
 
-/* End of file client.php */
-/* Location: ./system/application/controllers/client.php */
+/* End of file clients.php */
+/* Location: ./system/application/controllers/clients.php */

@@ -1,7 +1,7 @@
+	<script type="text/javascript">
+		$(function(){
+			$.fn.formLabels();
+		});
+	</script>
 	</body>
 </html>
-<script type="text/javascript">
-	$(function(){
-		$.fn.formLabels();
-	});
-</script>

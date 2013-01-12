@@ -18,7 +18,7 @@ class History extends CI_Model {
 
 	public function committed($e)
 	{
-		log_message('error', '--- History->committed() called');
+		//log_message('error', '--- History->committed() called');
 		switch ($e->segment(-1))
 		{
 			case 'create':
@@ -32,7 +32,7 @@ class History extends CI_Model {
 
 	private function created($e)
 	{
-		log_message('error', '--- History->created() called');
+		//log_message('error', '--- History->created() called');
 		$type = strtolower(str_replace('Struct', '', get_class($e->data)));
 
 		$name = $this->CI->User->get_name();
@@ -55,7 +55,7 @@ class History extends CI_Model {
 
 	private function updated($e)
 	{
-		log_message('error', '--- History->updated() called');
+		//log_message('error', '--- History->updated() called');
 		$type = strtolower(str_replace('Struct', '', get_class($e->data)));
 
 		$name = $this->CI->User->get_name();

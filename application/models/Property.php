@@ -122,6 +122,7 @@ class Property extends CI_Model {
 		$this->CI->db->trans_start();
 		
 		$this->CI->db->delete('properties', array('property_id' => $id));
+		$this->CI->Meta->delete($id, 'property');
 		
 		$this->CI->db->trans_complete();
 		

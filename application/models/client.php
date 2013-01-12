@@ -31,7 +31,7 @@ class Client extends CI_Model {
 	 */
 	public function commit($client)
 	{
-		log_message('error', '--- Client->commit() called for ' . $client->id . ' ' . $client->name);
+		//log_message('error', '--- Client->commit() called for ' . $client->id . ' ' . $client->name);
 
 		if(get_class($client) != 'StructClient' || !$client->is_valid())
 		{
@@ -67,7 +67,7 @@ class Client extends CI_Model {
 		}
 		else
 		{
-			log_message('error', '---!! Client->commit() SUCCESS ' . $client->id . ' ' . $client->name);
+			//log_message('error', '---!! Client->commit() SUCCESS ' . $client->id . ' ' . $client->name);
 			return $id;
 		}
 	}
@@ -80,7 +80,7 @@ class Client extends CI_Model {
 	 */
 	private function create($client)
 	{
-		log_message('error', '--- Client->create() called for ' . $client->id . ' ' . $client->name);
+		//log_message('error', '--- Client->create() called for ' . $client->id . ' ' . $client->name);
 		$this->CI->Event->trigger('client.commit.before.create', $client);
 
 		$this->CI->db->trans_start();
@@ -123,12 +123,12 @@ class Client extends CI_Model {
 		
 		if($this->CI->db->trans_status() === FALSE)
 		{
-			log_message('Error', 'Error in Client method create: transaction failed.');
+			//log_message('Error', 'Error in Client method create: transaction failed.');
 			return FALSE;
 		}
 		else
 		{
-			log_message('error', '---!! Client->create() SUCCESS ' . $client->id . ' ' . $client->name);
+			//log_message('error', '---!! Client->create() SUCCESS ' . $client->id . ' ' . $client->name);
 			$this->CI->Event->trigger('client.commit.after.create', $this->get($id));
 			return $id;
 		}
@@ -142,7 +142,7 @@ class Client extends CI_Model {
 	 */
 	private function update($client)
 	{
-		log_message('error', '--- Client->update() called ' . $client->id . ' ' . $client->name);
+		//log_message('error', '--- Client->update() called ' . $client->id . ' ' . $client->name);
 		$this->CI->db->trans_start();
 
 		$property_id = $this->CI->Property->commit($client->location);
@@ -174,8 +174,6 @@ class Client extends CI_Model {
 			$this->commit_contacts($client->id, $client->contact);
 		}
 
-		$client->add_note(0, 'Updated by ' . $this->CI->User->get_name() . '.');
-
 		$client->set_id($client->id);
 		$this->CI->Note->commit($client->notes);
 
@@ -188,7 +186,7 @@ class Client extends CI_Model {
 		}
 		else
 		{
-			log_message('error', '---!! Client->update() SUCCESS ' . $client->id . ' ' . $client->name);
+			//log_message('error', '---!! Client->update() SUCCESS ' . $client->id . ' ' . $client->name);
 			$this->CI->Event->trigger('client.commit.after.update', $this->get($client->id));
 			return $client->id;
 		}
@@ -204,7 +202,7 @@ class Client extends CI_Model {
 	public function delete($id, $include_property = FALSE)
 	{
 		$this->CI->Event->trigger('client.commit.delete', $id);
-		log_message('Error', 'Why are we deleting client ' . $id . '?');
+		//log_message('Error', 'Why are we deleting client ' . $id . '?');
 
 
 		$id = preg_replace('/[^0-9]/', '', $id);
@@ -382,12 +380,12 @@ class Client extends CI_Model {
 		if($query->num_rows() > 0)
 		{
 			$result = $query->row();
-			log_message('error', '---!! Client->exists() SUCCESS ' . $client->id . ' ' . $client->name);
+			//log_message('error', '---!! Client->exists() SUCCESS ' . $client->id . ' ' . $client->name);
 			return $result->client_id;
 		}
 		else
 		{
-			log_message('error', '--- Client->exist() client does not exist ' . $client->id . ' ' . $client->name);
+			//log_message('error', '--- Client->exist() client does not exist ' . $client->id . ' ' . $client->name);
 			return FALSE;
 		}
 	}
@@ -412,6 +410,7 @@ class Client extends CI_Model {
 	
 	public function insert_contacts($client_id, $contact)
 	{	
+		log_message('error', '--- inserting contact for ' . $client_id . ': ' . $contact->type . ' ' . $contact->info);
 		$this->CI->db->trans_start();
 		
 		$data = array('client_id' => $client_id, 'type' => $contact->type, 'info' => $contact->info);
@@ -445,9 +444,8 @@ class Client extends CI_Model {
 			
 			foreach($query->result() as $row)
 			{
-				$current_contact = new stdClass;
-				$current_contact->type = $row->type;
-				$current_contact->info = $row->info;
+				$current_contact = new StructContact();
+				$current_contact->set($row->type, $row->info);
 				
 				$result[] = $current_contact;
 				unset($current_contact);

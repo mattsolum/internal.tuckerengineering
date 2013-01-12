@@ -1,4 +1,5 @@
 <?PHP
+	$client = $job->requester;
 	$phone 		= array();
 	$contacts 	= array();
 	$email		= array();
@@ -45,6 +46,7 @@
 	}
 ?>
 <form method="POST" action="<?PHP echo(site_url($action)); ?>" id="client_edit_form" class="edit_form">
+	<h2>Requester</h2>
 	<ul>
 		<li>
 			<input type="text" name="cl_name" id="cl_name" title="Name" value="<?PHP echo($client->name); ?>" />
@@ -52,7 +54,7 @@
 		</li>
 		<li class="clear"></li>
 	</ul>
-	<h2>Client address</h2>
+	<h2>Requester address</h2>
 	<ul>
 		<li>
 			<input type="text" name="cl_addr_1" id="cl_addr_1" title="Address" value="<?PHP echo(trim($client->location->number . ' ' . $client->location->route)); ?>" />
@@ -85,7 +87,7 @@
 		</li>
 		<li class="clear"></li>
 	</ul>
-	<h2>Client contact information</h2>
+	<h2>Requester contact information</h2>
 	<ul>
 		<?PHP
 		foreach($phone AS $key => $ph)
@@ -140,7 +142,7 @@
 		}
 		?>
 		<li class="new_contact type_contact">
-			Add another contact <a href="#" title="Add another contact">+</a>
+			Add another contact <a href="#" tabindex="-1" title="Add another contact">+</a>
  		</li>
 		<li class="clear"></li>
 	</ul>
@@ -153,7 +155,7 @@
 	</ul>
 	<ul>
 		<li class="submit_container">
-			<input type="submit" value="Submit" />
+			<input type="submit" value="Next - Property" />
 		</li>
 	</ul>
 </form>
@@ -226,6 +228,7 @@
 				}
 			});
 		});
+
 
 
 		/**

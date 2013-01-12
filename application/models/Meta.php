@@ -48,13 +48,16 @@ class Meta extends CI_Model {
 		}
 	}
 	
-	public function delete($id, $type, $name)
+	public function delete($id, $type, $name = null)
 	{
 		$where = array();
 		
 		$where['id'] 	= preg_replace('/[^0-9]/', '', $id);
 		$where['type'] 	= preg_replace('/[^a-zA-Z]/', '', strtolower($type));
-		$where['name']	= strtolower(substr(preg_replace('/[^a-zA-Z_]/', '', str_replace(' ', '_', $name)), 0, 64));
+		if($name != null)
+		{
+			$where['name']	= strtolower(substr(preg_replace('/[^a-zA-Z_]/', '', str_replace(' ', '_', $name)), 0, 64));
+		}
 				
 		$this->CI->db->trans_start();
 		

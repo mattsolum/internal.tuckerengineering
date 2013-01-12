@@ -48,6 +48,32 @@ class StructProperty
 		$this->notes[] = $note;
 	}
 
+	public function set_addr_1($addr)
+	{
+		if($addr != '')
+		{
+			$matches = array();
+			preg_match_all('/^([0-9]+)(?!st|nd|rd|th)-?([0-9]+|[a-zA-Z]+)?/', $addr, $matches);
+
+			if(count($matches) > 0)
+			{
+				if(count($matches[1]) > 0)
+				{
+					$this->number = trim($matches[1][0]);
+				}
+
+				if(count($matches[2]) > 0)
+				{
+					$this->subpremise = trim($matches[2][0]);
+				}
+
+				$addr = str_replace($matches[0][0], '', $addr);
+			}
+
+			$this->route = trim($addr);
+		}
+	}
+
 	public function is_valid()
 	{
 		$location = $this->location_valid();
@@ -88,6 +114,11 @@ class StructProperty
 			$this->admin_level_1	== ''	||
 			$this->postal_code		== ''
 		)
+		{
+			return FALSE;
+		}
+
+		if(!preg_match('/^[0-9-]+$/', $this->postal_code))
 		{
 			return FALSE;
 		}

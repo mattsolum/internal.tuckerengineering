@@ -21,6 +21,11 @@ class User extends CI_Model {
 		$this->sess_auth();
 	}
 	
+	public function clear_for_this_session()
+	{
+		$this->user = $this->get_user(0);
+	}
+
 	public function get_user_id()
 	{
 		return $this->user->id;
@@ -65,7 +70,7 @@ class User extends CI_Model {
 
 		if(!$this->is_authed())
 		{
-			redirect('user/auth/' . urlencode(uri_string()));
+			redirect('user/auth/' . urlencode(base64_encode(uri_string())));
 			return FALSE;
 		}
 

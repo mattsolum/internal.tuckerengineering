@@ -108,33 +108,37 @@ class Note extends CI_Model {
 			$notes = array($notes);
 		}
 
-		$type 	= strtolower($notes[0]->type);
-		$id 	= $notes[0]->type_id;
-		
-		foreach($notes AS $note)
+		if(count($notes) > 0)
 		{
-			if($note->is_valid())
+			$type 	= strtolower($notes[0]->type);
+			$id 	= $notes[0]->type_id;
+		
+			foreach($notes AS $note)
 			{
-				$this->commit_single($note);
+				if($note->is_valid())
+				{
+					$this->commit_single($note);
+				}
+				else
+				{
+					log_message('Error', 'Note is not valid!');
+				}
+			}
+			
+			$this->CI->db->trans_complete();
+			
+			if($this->CI->db->trans_status() === FALSE)
+			{
+				log_message('Error', 'Error in Note method commit: transaction failed.');
+				return FALSE;
 			}
 			else
 			{
-				log_message('Error', 'Note is not valid!');
+				$this->Event->trigger($type . '.dirty', $id);
+				return TRUE;
 			}
 		}
-		
-		$this->CI->db->trans_complete();
-		
-		if($this->CI->db->trans_status() === FALSE)
-		{
-			log_message('Error', 'Error in Note method commit: transaction failed.');
-			return FALSE;
-		}
-		else
-		{
-			$this->Event->trigger($type . '.dirty', $id);
-			return TRUE;
-		}
+		else return TRUE;
 	}
 	
 	private function commit_single($note)

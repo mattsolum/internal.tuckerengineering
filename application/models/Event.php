@@ -25,7 +25,7 @@ class Event extends CI_Model
 	 */
 	public function trigger($event, &$data = NULL)
 	{
-		log_message('error', '--- Event->trigger() called for ' . $event);
+		//log_message('error', '--- Event->trigger() called for ' . $event);
 		//Organize everything
 		$event = $this->sanitize_event_name($event);
 		
@@ -43,7 +43,7 @@ class Event extends CI_Model
 			$return = array();
 			foreach($query->result() AS $listener)
 			{
-				log_message('error', '--- Event->trigger() calling listener ' . $listener->package . ' for ' . $listener->event);
+				//log_message('error', '--- Event->trigger() calling listener ' . $listener->package . ' for ' . $listener->event);
 				$item = $this->activate_listener($listener, $event_object);
 				
 				if($item != NULL)

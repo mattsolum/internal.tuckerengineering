@@ -113,9 +113,26 @@ input[type="password"] {
 	border-radius:		2px;
 }
 
+input[type="submit"] {
+	padding:			8px 16px;
+	background-color:	#507282;
+	border:				none;
+	border-radius:		2px;
+	color: 				#fff;
+	font-family: 		"Museo", "Palatino", "Hoefler Text", "Baskerville", "Georgia", "Times New Roman", serif;
+	font-weight:		200;
+	font-size:			24px;
+	cursor:				pointer;
+}
+
 input[type="submit"].hide {
 	display:			block;
 	visibility:			hidden;
+	height:				0;
+	width:				0;
+	margin:				0;
+	padding:			0;
+	border:				none;
 }
 
 .hide {
@@ -936,15 +953,15 @@ address.client {
  * CREATE/EDIT CLIENT
  */
 
-#client_edit_form {
+.edit_form {
 	margin-top:			32px;
 }
 
-#client_edit_form > ul {
+.edit_form > ul {
 	margin-bottom:		32px;
 }
 
-#client_edit_form > ul > li {
+.edit_form > ul > li {
 	display:			inline;
 	float: 				left;
 	position: 			relative;
@@ -954,7 +971,7 @@ address.client {
 	width:				944px;
 }
 
-#client_edit_form input[type="text"]
+.edit_form input[type="text"]
 {
 	display:			inline-block;
 	width:				608px;
@@ -1017,6 +1034,62 @@ label.hint.valid {
 
 label.hint.valid:before {
 	border-right:		8px solid #85b53d;
+}
+
+.edit_form > ul > li.submit_container {
+	text-align:  		right;
+	margin-right:		336px;
+	width:				624px;
+}
+
+
+.edit_form > ul > li.new_contact {
+	overflow:			hidden;
+	color:				#ccc3a9;
+	display:			block;
+	margin-right:		360px;
+	width:				600px;
+	text-align:			right;
+}
+
+.edit_form > ul > li.new_contact:hover {
+	color:				#5c4d40;
+}
+
+.edit_form > ul > li.new_contact:hover a {
+	background-color:	#5c4d40;
+}
+
+.new_contact a {
+	display:			inline-block;
+	text-decoration:	none;
+	width:				32px;
+	height:				32px;
+	line-height:		32px;
+	color:				#e5dac0;
+	text-align:			center;
+	background-color:	#ccc3a9;
+	border-radius:		2px;
+	font-size:			24px;
+}
+
+.edit_form > ul > li.new_contact:hover a:hover,
+.new_contact a:hover {
+	background-color:	#85b53d;
+}
+
+/**
+ * CREATE/EDIT JOBS
+ */
+
+.edit_form input[type="text"].job_item {
+	width:				448px;
+}
+
+.edit_form input[type="text"].job_amount {
+	width:				128px;
+	margin-right:		8px;
+	margin-left:		8px;
 }
 
 /**

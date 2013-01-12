@@ -1,4 +1,5 @@
 <?PHP
+	$client = $job->client;
 	$phone 		= array();
 	$contacts 	= array();
 	$email		= array();
@@ -45,6 +46,7 @@
 	}
 ?>
 <form method="POST" action="<?PHP echo(site_url($action)); ?>" id="client_edit_form" class="edit_form">
+	<h2>Client</h2>
 	<ul>
 		<li>
 			<input type="text" name="cl_name" id="cl_name" title="Name" value="<?PHP echo($client->name); ?>" />
@@ -140,7 +142,7 @@
 		}
 		?>
 		<li class="new_contact type_contact">
-			Add another contact <a href="#" title="Add another contact">+</a>
+			Add another contact <a href="#" tabindex="-1" title="Add another contact">+</a>
  		</li>
 		<li class="clear"></li>
 	</ul>
@@ -153,7 +155,7 @@
 	</ul>
 	<ul>
 		<li class="submit_container">
-			<input type="submit" value="Submit" />
+			<input type="submit" value="Next - Requester" />
 		</li>
 	</ul>
 </form>

@@ -5,6 +5,7 @@ class Api extends CI_Controller {
 	public function index()
 	{	
 		$this->error('No parameters provided');
+		$this->User->clear_for_this_session();
 	}
 	
 	public function v1($auth, $method)

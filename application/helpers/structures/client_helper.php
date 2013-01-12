@@ -46,6 +46,22 @@ class StructClient
 
 		$this->notes[] = $note;
 	}
+
+	public function add_contact_item($type, $info)
+	{
+		foreach($this->contact as $item)
+		{
+			if($item->type == $type && $item->info == $info)
+			{
+				return FALSE;
+			}
+		}
+
+		$con = new StructContact();
+		$con->set($type, $info);
+
+		$this->contact[] = $con;
+	}
 	
 	public function is_valid()
 	{
