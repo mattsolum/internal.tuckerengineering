@@ -81,6 +81,7 @@ class User extends CI_Model {
 		}
 		else
 		{
+			log_message('Error', 'User ' . $this->user->name . ' does not have permissions to view ' . uri_string());
 			$last_page = $this->CI->session->userdata('last_page');
 			
 			if($last_page == FALSE)

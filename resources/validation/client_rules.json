@@ -16,10 +16,13 @@
 		"number": true,
 		"minlength": 5
 	},
-	"cl_contact[phone]": {
+	"cl_contact[phone][]": {
 		"phoneUS": true
 	}, 
-	"cl_contact[email]": {
+	"cl_contact[email][]": {
 		"email": true
+	},
+	"cl_contact[fax][]": {
+		"phoneUS": true
 	}
 }

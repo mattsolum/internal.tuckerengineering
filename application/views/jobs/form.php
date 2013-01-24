@@ -93,6 +93,7 @@
 		?>
 		<li>
 			<input type="text" name="jb_item[]" id="jb_item[<?PHP echo($key); ?>]" title="Item" value="<?PHP echo($debit->item); ?>" class="job_item" /><input type="text" name="jb_item_amount[]" id="jb_item_amount[<?PHP echo($key); ?>]" title="Amount" value="<?PHP if($debit->amount != 0) echo('$' . number_format(abs($debit->amount), 2)) ?>" class="job_amount mousetrap" />
+			<label class="hint" for="jb_item[<?PHP echo($key); ?>]">Amount must be formatted as USD.</label>
 		</li>
 		<?PHP
 		}
@@ -121,13 +122,21 @@
 		var form = $('#job_edit_form');
 
 		$.getJSON('<?PHP echo(site_url()); ?>resources/validation/job_rules.json', function(json) {
+			$.fn.MSDebug('Validation rules loaded.');
 			form.validate({
 				rules: json,
 				errorPlacement: function(error, element) {
+				}
+			});
 
+			$('[name="jb_item_amount[]"]').rules("add", {
+				required: function(element) {
+					return jb_item_filled(element);
 				}
 			});
 		});
+
+
 
 		/**
 		 * Autocomplete
@@ -169,22 +178,21 @@
 			}
 		});
 
-
-
-
 		/**
 		 * Hiding and displaying hints.
 		 */
-		$('input').focusin(function(){
-			$(this).siblings('label.hint').each(function(){
+		$('li').focusin(function(e){
+			$(this).children('label.hint').each(function(){
 				$(this).animate({opacity: 1.0}, 150);
 			});
 		});
 
-		$('input').focusout(function(){
-			$(this).siblings('label.hint').each(function(){
-				$(this).animate({opacity: 0}, 150);
-			});
+		$('li').focusout(function(e){
+			if($(e.target).valid() == true) {
+				$(this).children('label.hint').each(function(){
+					$(this).animate({opacity: 0}, 150);
+				});
+			}
 		});
 
 		$('input').keyup(function(e){
@@ -207,7 +215,7 @@
 		 */
 		$('.new_contact').mousedown(function(e){addNew(e)});
 
-		Mousetrap.bind('tab+n', function(e){
+		Mousetrap.bind('+', function(e){
 			e.preventDefault();
 
 			if($(e.target).prop('tagName') == 'INPUT' && $(e.target).parent().next().children('a').length > 0){

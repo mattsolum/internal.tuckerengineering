@@ -1,0 +1,20 @@
+{
+	"jb_addr_1": {
+		"required": true
+	},
+	"jb_locality": {
+		"required": true
+	},
+	"jb_admin_level_1":  {
+		"required": true
+	},
+	"jb_postal_code":  {
+		"required": true,
+		"number": true,
+		"minlength": 5
+	},
+	"jb_item_amount[]": {
+		"JobItemFilled": true,
+		"USD": true
+	}
+}

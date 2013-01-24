@@ -27,6 +27,18 @@ h2 {
 	margin:				16px 8px;
 }
 
+p {
+	margin-bottom:		16px;
+}
+
+p:last-child {
+	margin-bottom:		0;
+}
+
+span.API_Result {
+	display:			none;
+}
+
 #body_wrapper {
 	display:			block;
 	margin-left: 		auto;
@@ -1137,10 +1149,10 @@ input[disabled] {
 	box-shadow:			0 1px 2px #5c4d40;
 }
 
-.SCList li {
-	margin:				0;
-	padding:			0;
-	text-indent:		0;
+.SCList > li {
+	margin:				0; !important
+	padding:			0; !important
+	text-indent:		0; !important
 }
 
 .SCList a {
@@ -1160,6 +1172,57 @@ input[disabled] {
 .SCList a:hover,
 .SCList:hover .SCSelected a:hover {
 	background-color:	#cbcbcb;
+}
+
+/**
+ * LOGS
+ */
+
+ul#log {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin-left: 		8px;
+	margin-right: 		8px;
+	margin-bottom:		48px;
+	width:				928px;
+	padding:			16px;
+	background-color:	#ccc3a9;
+}
+
+ul#log li {
+	margin-bottom:		16px;
+}
+
+ul#log li:last-child {
+	margin-bottom:		0;
+}
+
+#logs_form > ul > li {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin-left: 		8px;
+	margin-right: 		8px;
+	margin-bottom:		48px;
+	padding-left:		159px;
+	padding-right:		159px;
+	width:				626px;
+}
+
+#logs_form input[type="text"]
+{
+	display:			inline-block;
+	width:				608px;
+	height:				46px;
+	font-family: 		"Museo", "Palatino", "Hoefler Text", "Baskerville", "Georgia", "Times New Roman", serif;
+	font-weight:		200;
+	font-size:			24px;
+	padding:			0 7px;
+}
+
+#logs_form .SCButton {
+	margin-left: 		-46px;
 }
 
 /*

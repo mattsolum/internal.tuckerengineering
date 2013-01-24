@@ -5,6 +5,7 @@ class ApiHtml
 	public $mime 	= 'text/html';
 	private $CI 	= NULL;
 	private $API;
+	private $class 	= 'API_Result';
 		
 	function __construct(&$API)
 	{	
@@ -23,7 +24,7 @@ class ApiHtml
 		}
 		else
 		{
-			$html  = '<span class="result">';
+			$html  = '<span class="' . $this->class . '">';
 			$html .= ($error)?'error</span>':'success</span>';
 			
 			$html .= '<ul>';

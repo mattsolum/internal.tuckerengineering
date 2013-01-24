@@ -45,6 +45,36 @@ class Admin extends CI_Controller {
 		}
 	}
 
+	public function logs($date = NULL)
+	{
+		$data = '';
+		$dir_path = APPPATH . 'logs/';
+		$files = array();
+
+		if($date == NULL)
+		{
+			$date = date('Y-m-d');
+		}
+
+		if(is_dir($dir_path))
+		{
+			$file_path = $dir_path . 'log-' . $date . '.php';
+
+			$files = scandir($dir_path);
+
+			if(file_exists($file_path))
+			{
+				$data = file_get_contents($file_path);
+
+				$data = trim(substr($data, strpos($data, "\n", 1)));
+			}
+		}
+
+		$data = implode("\n", array_reverse(explode("\n", $data)));
+
+		$this->load->view('admin/logs', array('date' => $date, 'files' => $files, 'log' => $data));
+	}
+
 	public function database_migrate($id)
 	{
 		$this->load->library('migration/migrator');

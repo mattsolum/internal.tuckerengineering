@@ -64,7 +64,7 @@ class Jobs extends CI_Controller {
 		{
 			if($this->session->userdata('job_edit') != FALSE)
 			{
-				$job->set_from_json($this->session->userdata('job'));
+				$job->set_from_json(base64_decode($this->session->userdata('job_edit')));
 			}
 
 			if($page == 'client')
@@ -79,7 +79,7 @@ class Jobs extends CI_Controller {
 					$job->client = $this->set_client();
 				}
 
-				$this->session->set_userdata('job_edit', json_encode($job));
+				$this->session->set_userdata('job_edit', base64_encode(json_encode($job)));
 
 				if($job->client->is_valid())
 				{
@@ -105,7 +105,7 @@ class Jobs extends CI_Controller {
 					}
 				}
 
-				$this->session->set_userdata('job_edit', json_encode($job));
+				$this->session->set_userdata('job_edit', base64_encode(json_encode($job)));
 
 				if($job->requester->is_valid())
 				{
@@ -130,7 +130,7 @@ class Jobs extends CI_Controller {
 					}
 				}
 
-				$this->session->set_userdata('job_edit', json_encode($job));
+				$this->session->set_userdata('job_edit', base64_encode(json_encode($job)));
 
 				if($job->is_valid(FALSE))
 				{
@@ -166,7 +166,7 @@ class Jobs extends CI_Controller {
 		$job = new StructJob();
 		if($this->session->userdata('job') != FALSE)
 		{
-			$job->set_from_json($this->session->userdata('job'));
+			$job->set_from_json(base64_decode($this->session->userdata('job')));
 		}
 
 		if($page == 'client')
@@ -181,7 +181,7 @@ class Jobs extends CI_Controller {
 				$job->client = $this->set_client();
 			}
 
-			$this->session->set_userdata('job', json_encode($job));
+			$this->session->set_userdata('job', base64_encode(json_encode($job)));
 
 			if($job->client->is_valid())
 			{
@@ -207,7 +207,7 @@ class Jobs extends CI_Controller {
 				}
 			}
 
-			$this->session->set_userdata('job', json_encode($job));
+			$this->session->set_userdata('job', base64_encode(json_encode($job)));
 
 			if($job->requester->is_valid())
 			{
@@ -232,7 +232,7 @@ class Jobs extends CI_Controller {
 				}
 			}
 
-			$this->session->set_userdata('job', json_encode($job));
+			$this->session->set_userdata('job', base64_encode(json_encode($job)));
 
 			if($job->is_valid(FALSE))
 			{

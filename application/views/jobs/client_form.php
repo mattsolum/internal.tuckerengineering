@@ -233,16 +233,18 @@
 		/**
 		 * Hiding and displaying hints.
 		 */
-		$('input').focusin(function(){
-			$(this).siblings('label.hint').each(function(){
+		$('li').focusin(function(e){
+			$(this).children('label.hint').each(function(){
 				$(this).animate({opacity: 1.0}, 150);
 			});
 		});
 
-		$('input').focusout(function(){
-			$(this).siblings('label.hint').each(function(){
-				$(this).animate({opacity: 0}, 150);
-			});
+		$('li').focusout(function(e){
+			if($(e.target).valid() == true) {
+				$(this).children('label.hint').each(function(){
+					$(this).animate({opacity: 0}, 150);
+				});
+			}
 		});
 
 		$('input').keyup(function(e){

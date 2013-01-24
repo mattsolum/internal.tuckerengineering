@@ -54,6 +54,11 @@ class StructContact
 		$info = preg_replace('/[^0-9]/', '', $info);
 		$phone = '';
 
+		if(strlen($info) == 7)
+		{
+			$info = setting('company.locations.1.default_area_code') . $info;
+		}
+
 		for($i = 0; $i < strlen($info); $i++)
 		{
 			$phone .= $info[$i];
