@@ -58,12 +58,9 @@ class StructCredit
 			return FALSE;
 		}
 		
-		if($this->payment != NULL)
+		if($this->payment != NULL && !$this->payment->is_valid())
 		{
-			if(($this->payment->tender == 'credit' || $this->payment->tender == 'check') && $this->number == '')
-			{
-				return FALSE;
-			}
+			return false;
 		}
 		//I just concatinate them. Probably not the fastest method, but the least
 		//number of lines.
@@ -82,7 +79,7 @@ class StructCredit
 	
 	public function amount()
 	{
-		return $amount;
+		return $this->amount;
 	}
 	
 	public function __toString()

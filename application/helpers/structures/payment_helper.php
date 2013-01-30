@@ -48,4 +48,13 @@ class StructPayment
 		
 		return $string;
 	}
+
+	public function is_valid() {
+		if(($this->tender == 'credit' || $this->tender == 'check') && $this->number == '')
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
 }
