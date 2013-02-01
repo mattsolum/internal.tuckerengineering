@@ -32,93 +32,11 @@
 
 		$.ajax({
 			type: 		'GET',
-			url: 		'<?PHP echo(base_url()); ?>/resources/migration/data/test.xml',
-			dataType: 	'xml',
-			success: 	function(xml){
-				add_status('INFO', 'test.xml loaded.')
-				$(xml).find('clients').each(function(){
-					var rows = $(xml).find('row');
-					var total_rows = rows.length;
-					var i = 0;
-
-					var doNext = null;
-					doNext = function() {
-						if(!pause())
-						{
-							var row = rows.eq(i);
-
-							var client = new Object();
-							client.location = new Object();
-							client.contact = new Array();
-							client.notes = new Array();
-
-							client.name 					= row.find('CLNAME').text();
-							client.id						= row.find('CLNTNO').text();
-
-							client.location.route			= row.find('ADDR1').text();
-							client.location.sub_premise		= row.find('ADDR2').text();
-							client.location.locality		= row.find('CITY').text();
-							client.location.admin_level_1	= row.find('STATE').text();
-							client.location.postal_code		= row.find('ZIP').text();
-
-							var phone 	= row.find('PHONE').text();
-							var email 	= row.find('EMAIL').text();
-							var fax	  	= row.find('FAX').text();
-							var contact = row.find('CONTACT').text();
-
-							if(phone != '')
-							{
-								var con = new Object();
-								con.id 		= client.id;
-								con.type 	= 'phone';
-								con.info 	= phone;
-
-								client.contact.push(con);
-							}
-
-							if(email != '')
-							{
-								var con = new Object();
-								con.id 		= client.id;
-								con.type 	= 'email';
-								con.info 	= email;
-
-								client.contact.push(con);
-							}
-
-							if(fax != '')
-							{
-								var con = new Object();
-								con.id 		= client.id;
-								con.type 	= 'fax';
-								con.info 	= fax;
-
-								client.contact.push(con);
-							}
-
-							if(contact != '')
-							{
-								var con = new Object();
-								con.id 		= client.id;
-								con.type 	= 'contact';
-								con.info 	= contact;
-
-								client.contact.push(con);
-							}
-
-							var note_message = "CLNTNO " + client.id + "; CLNAME " + client.name + "; ADDR1 " + client.location.route + "; ADDR2 " + client.location.sub_premise + "; CITY " + client.location.locality + "; STATE " + client.location.admin_level_1 + "; ZIP " + client.location.postal_code + "; PHONE " + phone + "; FAX " + fax + "; EMAIL " + email + "; CONTACT " + contact + "; CURBAL " + row.find('CURBAL').text() + "; BEGBAL " + row.find('BEGBAL').text();
-							var note = new Object();
-							note.type_id = client.id;
-							note.type = 'client';
-							note.user = new Object();
-							note.user.id = 0;
-							note.text = note_message;
-
-							client.notes.push(note);
-
-							add_status('Info', 'Begin ID ' + client.id + ': ' + client.name);
-
-							var json_string = JSON.stringify(client);
+			url: 		'<?PHP echo(base_url()); ?>/resources/migration/data/te_billing.csv',
+			dataType: 	'csv',
+			success: 	function(csv){
+				add_status('INFO', 'te_billing.csv loaded.')
+							
 							$.ajax({
 								type: 		'POST',
 								url: 		'<?PHP echo(base_url()); ?>api/v2/migration/client/' + client.id + '.json',

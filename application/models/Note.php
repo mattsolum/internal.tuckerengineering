@@ -68,7 +68,7 @@ class Note extends CI_Model {
 		$this->CI->db->join('users', 'notes.user_id = users.user_id');
 		$this->CI->db->where('notes.id', $id);
 		$this->CI->db->where('notes.type', $type);
-		$this->CI->db->order_by('notes.date_added', 'DESC');
+		$this->CI->db->order_by('notes.date_added', 'ASC');
 		
 		$query = $this->CI->db->get();
 		

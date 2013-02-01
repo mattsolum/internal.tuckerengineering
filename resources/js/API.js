@@ -1,5 +1,110 @@
 function API() {
+	this.root = 'http://local/internal.tuckerengineering/';
+	this.url = 'api/v2/';
 
+
+	this.post = function() {
+		this.client = function(client) {
+			var end = '.json';
+			if(client instanceof Client && client.is_valid()) {
+				if(client.id != null) {
+					end = '/' + client.id + '.json';
+				}
+
+				this.ajax('http://local/internal.tuckerengineering/api/v2/client' + end, client);
+			}
+		}
+
+		this.property = function(property) {
+			var end = '.json';
+			if(property instanceof Property && property.is_valid()) {
+				if(property.id != null) {
+					end = '/' + property.id + '.json';
+				}
+
+				this.ajax('http://local/internal.tuckerengineering/api/v2/property' + end, property);
+			}
+		}
+
+		this.job = function(job) {
+			var end = '.json';
+			if(job instanceof Job && job.is_valid()) {
+				if(job.id != null) {
+					end = '/' + job.id + '.json';
+				}
+
+				this.ajax('http://local/internal.tuckerengineering/api/v2/job' + end, job);
+			}
+		}
+
+		this.payment = function(payment) {
+			var end = '.json';
+			if(payment instanceof Payment && payment.is_valid()) {
+				if(payment.id != null) {
+					end = '/' + payment.id + '.json';
+				}
+
+				this.ajax('http://local/internal.tuckerengineering/api/v2/payment' + end, payment);
+			}
+		}
+
+		this.invoice = function(invoice) {
+			var end = '.json';
+			if(invoice instanceof Invoice && invoice.is_valid()) {
+				if(invoice.id != null) {
+					end = '/' + invoice.id + '.json';
+				}
+
+				this.ajax('http://local/internal.tuckerengineering/api/v2/invoice' + end, invoice);
+			}
+		}
+
+		this.ajax = function(url, data) {
+			var message = '';
+			var status = false;
+
+			if(typeof data == 'string') {
+				data = JSON.stringify(data);
+			}
+
+			$.ajax({
+				type: 		'POST',
+				url: 		url,
+				data: 		{data: data},
+				success: 	function(returned) {
+					if(returned.result == undefined)
+					{
+						add_status('error', returned);
+					}
+
+					if(returned.result == 'success')
+					{
+						message = returned.data['id'];
+					}
+					else
+					{
+						message = returned.data.message;
+					}
+				},
+				error: 		function(jqxhr) {
+					var response = JSON.parse(jqxhr.responseText);
+					
+					if(response.data.message == undefined)
+					{
+						message = jqxhr.responseText;
+					}
+					else
+					{
+						message = response.data.message;
+					}
+				}
+			});
+		}
+	}
+
+	this.get = function() {
+
+	}
 }
 
 function Client() {
@@ -574,7 +679,7 @@ function Credit() {
 		return true;
 	}
 
-	public function amount()
+	this.amount = function()
 	{
 		return this.amount;
 	}
@@ -617,7 +722,7 @@ function Debit() {
 		return true;
 	}
 
-	public function amount()
+	this.amount = function()
 	{
 		return this.amount;
 	}
@@ -687,5 +792,151 @@ function User() {
 		}
 		
 		return true;
+	}
+}
+
+function invoice() {
+	var id 			= NULL;
+
+	var client		= new Client();
+	var jobs		= new Array();
+
+	var date_added	= NULL;
+	var date_sent	= NULL;
+
+	this.is_valid = function() {
+		if(!this.client.is_valid())
+		{
+			return false;
+		}
+
+		if(this.jobs.length == 0)
+		{
+			return false;
+		}
+
+		for(var i = 0; i < this.jobs.length; i++)
+		{
+			if(!this.jobs[i].is_valid())
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Sums the totals of all included jobs
+	 * @return float
+	 */
+	this.debits_total = function()
+	{
+		var total = 0;
+
+		for(var i = 0; i < this.jobs.length; i++) {
+			total += this.jobs[i].accounting.debits_total();
+		}
+
+		return total;
+	}
+
+	/**
+	 * Sums the balance of all included jobs
+	 * @return float
+	 */
+	this.balance = function()
+	{
+		var total = 0;
+
+		for(var i = 0; i < this.jobs.length; i++) {
+			total += this.jobs[i].balance();
+		}
+
+		return total;
+	}
+
+	/**
+	 * Gets the date, as GMT unix timestamp, of the last payment 
+	 * applied to a job on this invoice. 
+	 * 
+	 * If no credits have been applied to any
+	 * job in this invoice it will return FALSE.
+	 * 
+	 * @return BOOL FALSE on failure, int on success
+	 */
+	this.date_paid = function()
+	{
+		var date_paid = FALSE;
+
+		for(var i = 0; i < this.jobs.length; i++) {
+			for(var ii = 0; i < this.jobs[i].credits.length; ii++)
+			{
+				if(this.jobs[i].credits[ii].date_added > date_paid)
+				{
+					date_paid = this.jobs[i].credits[ii].date_added;
+				}
+			}
+		}
+
+		return date_paid;
+	}
+
+	this.sort_jobs = function()
+	{
+		this.jobs = this.quicksort_by_property(this.jobs, 'id');
+	}
+
+	this.quicksort_by_property = function(arr, property, left = 0, right = NULL)
+	{
+		// when the call is recursive we need to change
+		//the array passed to the function yearlier
+		quicksort_by_property.array = new Array();
+		if( right == NULL )
+		{
+			quicksort_by_property.array = arr;
+			right = quicksort_by_property.array.length-1;//last element of the array
+		}
+		 
+		var i = left;
+		var j = right;
+		 
+		var tmp = quicksort_by_property.array[parseInt((left+right)/2)][property];
+		 
+		// partion the array in two parts.
+		// left from tmp are with smaller values,
+		// right from tmp are with bigger ones
+		do
+		{
+			while( quicksort_by_property.array[i][property] < tmp )
+			i++;
+			 
+			while( tmp < quicksort_by_property.array[j][property] )
+			j--;
+			 
+			// swap elements from the two sides
+			if( i <= j )
+			{
+				w = quicksort_by_property.array[i];
+				quicksort_by_property.array[i] = quicksort_by_property.array[j];
+				quicksort_by_property.array[j] = w;
+				 
+				i++;
+				j--;
+			}
+		}while( i <= j );
+		 
+		// devide left side if it is longer the 1 element
+		if( left < j )
+		this.quicksort_by_property(NULL, property, left, j);
+		 
+		// the same with the right side
+		if( i < right )
+		this.quicksort_by_property(NULL, property, i, right);
+		 
+		// when all partitions have one element
+		// the array is sorted
+		 
+		return quicksort_by_property.array;
 	}
 }

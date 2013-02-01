@@ -872,6 +872,7 @@ address.client {
 	display:			block;
 	text-align:			right;
 	color:				#e5dac0;
+	margin-top:			16px;
 }
 
 #notes li {
