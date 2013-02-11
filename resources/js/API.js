@@ -74,16 +74,16 @@ function API() {
 				success: 	function(returned) {
 					if(returned.result == undefined)
 					{
-						add_status('error', returned);
+						$.fn.MSDebug(returned);
 					}
 
 					if(returned.result == 'success')
 					{
-						message = returned.data['id'];
+						$.fn.MSDebug('Success! ' + url + ' returned id ' + returned.data['id']);
 					}
 					else
 					{
-						message = returned.data.message;
+						$.fn.MSDebug(returned.data.message);
 					}
 				},
 				error: 		function(jqxhr) {
@@ -91,11 +91,11 @@ function API() {
 					
 					if(response.data.message == undefined)
 					{
-						message = jqxhr.responseText;
+						$.fn.MSDebug(jqxhr.responseText);
 					}
 					else
 					{
-						message = response.data.message;
+						$.fn.MSDebug(response.data.message);
 					}
 				}
 			});
@@ -150,18 +150,18 @@ function Client() {
 		this.notes.push(note);
 	}
 
-	this.add_contact = function(type, info) {
+	this.add_contact_item = function(type, info) {
 
 		for(var i = 0; i < this.contact.length; i++) {
-			if(this.contact[i].type.toLowerCase == type.toLowerCase && this.contact[i].info.toLowerCase == info.toLowerCase) {
+			if(this.contact[i].type.toLowerCase() == type.toLowerCase() && this.contact[i].info.toLowerCase() == info.toLowerCase()) {
 				return false;
 			}
-
-			var contact = new StructContact();
-
-			contact.set(type, info);
-			this.contact.push(contact);
 		}
+
+		var contact = new Contact();
+
+		contact.set(type, info);
+		this.contact.push(contact);
 	}
 
 	this.set_id = function(id)
@@ -274,7 +274,7 @@ function Property() {
 		{
 			var matches = addr.match(/^([0-9]+)(?!st|nd|rd|th)-?([0-9]+|[a-zA-Z]+)?/);
 
-			if(matches.length > 0)
+			if(matches != null && matches.length > 0)
 			{
 				if(matches[1] != null)
 				{
@@ -290,6 +290,75 @@ function Property() {
 			}
 
 			this.route = addr.replace(/^\s+|\s+$/, '');
+		}
+	}
+
+	this.set_city_state = function(addr) {
+		var sections = addr.split(',');
+
+		this.admin_level_1 = sections[1].replace(/^\s+|\s+$/, '');
+		this.locality = sections[0].replace(/^\s+|\s+$/, '');
+	}
+
+	this.set_admin_level_1 = function(a) {
+		if(a.length == 2) {
+			var abbr = new Array();
+			abbr['AL'] = 'Alabama';
+			abbr['AK'] = 'Alaska';
+			abbr['AZ'] = 'Arizona';
+			abbr['AR'] = 'Arkansas';
+			abbr['CA'] = 'California';
+			abbr['CO'] = 'Colorado';
+			abbr['CT'] = 'Connecticut';
+			abbr['DE'] = 'Delaware';
+			abbr['FL'] = 'Florida';
+			abbr['GA'] = 'Georgia';
+			abbr['HI'] = 'Hawaii';
+			abbr['ID'] = 'Idaho';
+			abbr['IL'] = 'Illinois';
+			abbr['IN'] = 'Indiana';
+			abbr['IA'] = 'Iowa';
+			abbr['KS'] = 'Kansas';
+			abbr['KY'] = 'Kentucky';
+			abbr['LA'] = 'Louisiana';
+			abbr['ME'] = 'Maine';
+			abbr['MD'] = 'Maryland';
+			abbr['MA'] = 'Massachusetts';
+			abbr['MI'] = 'Michigan';
+			abbr['MN'] = 'Minnesota';
+			abbr['MS'] = 'Mississippi';
+			abbr['MO'] = 'Missouri';
+			abbr['MT'] = 'Montana';
+			abbr['NE'] = 'Nebraska';
+			abbr['NV'] = 'Nevada';
+			abbr['NH'] = 'Hampshire';
+			abbr['NJ'] = 'Jersey';
+			abbr['NM'] = 'Mexico';
+			abbr['NY'] = 'York';
+			abbr['NC'] = 'Carolina';
+			abbr['ND'] = 'Dakota';
+			abbr['OH'] = 'Ohio';
+			abbr['OK'] = 'Oklahoma';
+			abbr['OR'] = 'Oregon';
+			abbr['PA'] = 'Pennsylvania';
+			abbr['RI'] = 'Island';
+			abbr['SC'] = 'Carolina';
+			abbr['SD'] = 'Dakota';
+			abbr['TN'] = 'Tennessee';
+			abbr['TX'] = 'Texas';
+			abbr['UT'] = 'Utah';
+			abbr['VT'] = 'Vermont';
+			abbr['VA'] = 'Virginia';
+			abbr['WA'] = 'Washington';
+			abbr['WV'] = 'Virginia';
+			abbr['WI'] = 'Wisconsin';
+			abbr['WY'] = 'Wyoming';
+
+			this.admin_level_1 = abbr[a.toUpperCase()];
+		}
+		else
+		{
+			this.admin_level_1 = a;
 		}
 	}
 
@@ -736,8 +805,8 @@ function Payment() {
 	this.number			= null;
 	this.amount			= 0.0;
 	
-	this.date_added		0;
-	this.date_posted	0;
+	this.date_added		= 0;
+	this.date_posted	= 0;
 
 	this.is_valid = function() {
 		if((this.tender == 'credit' || this.tender == 'check') && this.number == '')

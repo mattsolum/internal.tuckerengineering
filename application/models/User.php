@@ -20,6 +20,10 @@ class User extends CI_Model {
 		
 		$this->sess_auth();
 	}
+
+	public function get_current_user() {
+		return $this->user;
+	}
 	
 	public function clear_for_this_session()
 	{
@@ -369,10 +373,13 @@ class User extends CI_Model {
 		else
 		{
 			//User does not exist. Create a new one.
+			$data['user_id']             = $this->get_next_id();
 			$data['email']			= $user->get_email();
 			$data['name'] 			= $user->name;
 			$data['password']		= $user->get_hash();
-			$data['date_created'] 	= now();
+			$data['date_added'] 	= now();
+
+			$id = $data['user_id'];
 			
 			$this->CI->db->insert('users', $data);
 			
@@ -433,7 +440,7 @@ class User extends CI_Model {
 		return $new_password;
 	}
 	
-	private function generate_password($length)
+	public function generate_password($length)
 	{
 		$valid_chars = str_shuffle('abcdefghijklmnopABCDEFGHIJKLMNOP1234567890');
 	
@@ -459,5 +466,22 @@ class User extends CI_Model {
 		
 		// return our finished random string
 		return $random_string;
+	}
+
+	private function get_next_id()
+	{
+		$this->CI->db->order_by('user_id', 'DESC');
+		$this->CI->db->limit(1);
+
+		$query = $this->CI->db->get('users');
+
+		if($query->num_rows() > 0)
+		{
+			$result = $query->row(0);
+
+			return $result->user_id + 1;
+		}
+
+		return 0;
 	}
 }

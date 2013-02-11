@@ -59,7 +59,8 @@ true),collapseSelection:e(m,true),deleteSelectedText:e(q,true),deleteText:e(l,tr
 				$('#MSDebug li').each(function(){
 					if($(this).css('display') != 'none' && $(this).data('MSDCreated') + 5000 < date.getTime())
 					{
-						$(this).animate({'height': 0, 'padding-top': 0, 'padding-bottom': 0});
+						//$(this).animate({'height': 0, 'padding-top': 0, 'padding-bottom': 0});
+						$(this).remove();
 					}
 				});
 
@@ -77,7 +78,9 @@ true),collapseSelection:e(m,true),deleteSelectedText:e(q,true),deleteText:e(l,tr
 					'max-height': 	'100%',
 					'overflow-x': 	'hidden',
 					'overflow-y': 	'hidden',
-					'font-family': 	'"Courier New", Courier, monospace'
+					'font-family': 	'"Courier New", Courier, monospace',
+					'font-size': 	'16px',
+					'line-height':  '16px'
 				},
 				'id': 		'MSDebug'
 			});
@@ -89,20 +92,18 @@ true),collapseSelection:e(m,true),deleteSelectedText:e(q,true),deleteText:e(l,tr
 					$('#MSDebug li').each(function(){
 						if($(this).css('display') != 'none' && $(this).data('MSDCreated') + 5500 < date.getTime())
 						{
-							$(this).hide();
+							$(this).remove();
 						}
 					});
 
 					var li = $('<li></li>', {
 						css: {
 							'background-color': 		'rgba(0,0,0,0.5)',
-							'padding': 					'0 16px',
-							'height':  					'0',
-							'color': 					'#ffffff',
-							'overflow': 				'hidden'
+							'padding': 					'4px 16px',
+							'color': 					'#ffffff'
 						},
 						html: 		'- Show debug',
-					}).data('MSDCreated', date.getTime()).animate({'height': '16px', 'padding-top': '4px', 'padding-bottom': '4px'});
+					}).data('MSDCreated', date.getTime());
 
 					$('#MSDebug').append(li);
 
@@ -113,13 +114,11 @@ true),collapseSelection:e(m,true),deleteSelectedText:e(q,true),deleteText:e(l,tr
 					var li = $('<li></li>', {
 						css: {
 							'background-color': 		'rgba(0,0,0,0.5)',
-							'padding': 					'0 16px',
-							'height':  					'0',
-							'color': 					'#ffffff',
-							'overflow': 				'hidden'
+							'padding': 					'4px 16px',
+							'color': 					'#ffffff'
 						},
 						html: 		'- Hide debug',
-					}).data('MSDCreated', date.getTime()).animate({'height': '16px', 'padding-top': '4px', 'padding-bottom': '4px'});
+					}).data('MSDCreated', date.getTime());
 
 					$('#MSDebug').append(li);
 
@@ -139,15 +138,22 @@ true),collapseSelection:e(m,true),deleteSelectedText:e(q,true),deleteText:e(l,tr
 			var li = $('<li></li>', {
 				css: {
 					'background-color': 		'rgba(0,0,0,0.5)',
-					'padding': 					'0 16px',
-					'height':  					'0',
-					'color': 					'#ffffff',
-					'overflow': 				'hidden'
+					'padding': 					'4px 16px',
+					'color': 					'#ffffff'
 				},
 				html: 		'- ' + msg,
-			}).data('MSDCreated', date.getTime()).animate({'height': '16px', 'padding-top': '4px', 'padding-bottom': '4px'});
+			}).data('MSDCreated', date.getTime());
 
 			$('#MSDebug').append(li);
+			$('#MSDebug').trigger('MSDMessage', msg);
+
+			var max_height = Math.floor(($(window).height() * 0.5) / 16) * 16;
+
+			if($('#MSDebug').outerHeight() > max_height) {
+				$('#MSDebug li:visible:first').each(function() {
+					$(this).remove();
+				});
+			}
 		}
 	}
 })(jQuery);

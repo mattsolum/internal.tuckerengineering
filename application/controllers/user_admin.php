@@ -16,7 +16,7 @@ class user_admin extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('user/index');
+		$this->load->view('user/account_controls');
 	}
 
 	public function messages($alert_id = '')

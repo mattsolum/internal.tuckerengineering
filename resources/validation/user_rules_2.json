@@ -1,0 +1,26 @@
+{
+	"user_name": {
+		"required": true
+	},
+	"user_addr_1": {
+		"required": true
+	},
+	"user_locality": {
+		"required": true
+	},
+	"user_admin_level_1":  {
+		"required": true
+	},
+	"user_postal_code":  {
+		"required": true,
+		"number": true,
+		"minlength": 5
+	},
+	"user_email": {
+		"required": true,
+		"email": true
+	},
+	"user_password": {
+		"minlength": 6
+	}
+}

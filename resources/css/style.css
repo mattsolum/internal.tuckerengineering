@@ -957,6 +957,12 @@ address.client {
 	background-position:0 -1px;
 }
 
+#action_links li.create_user a {
+	background-image:	url('../img/user_sprite_large.png');
+	background-repeat:	no-repeat;
+	background-position:0 -1px;
+}
+
 #action_links li a:hover {
 	background-position:0 -305px;
 	color:				#000;
@@ -984,7 +990,9 @@ address.client {
 	width:				944px;
 }
 
-.edit_form input[type="text"]
+.edit_form input[type="text"],
+.edit_form input[type="password"]
+
 {
 	display:			inline-block;
 	width:				608px;

@@ -76,10 +76,18 @@ class StructProperty
 
 	public function is_valid()
 	{
+		$this->process_route();
 		$location = $this->location_valid();
 		$meta = $this->meta_valid();
 		
 		return ($location && $meta);
+	}
+	
+	private function process_route() {
+		$this->route = preg_replace('/(^| )n\.?( |$)/i', '$1North$2', $this->route);
+		$this->route = preg_replace('/(^| )s\.?( |$)/i', '$1South$2', $this->route);
+		$this->route = preg_replace('/(^| )e\.?( |$)/i', '$1East$2', $this->route);
+		$this->route = preg_replace('/(^| )n\.?( |$)/i', '$1West$2', $this->route);
 	}
 	
 	public function set_id($id)

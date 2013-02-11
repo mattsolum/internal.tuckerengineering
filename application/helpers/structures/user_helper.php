@@ -7,6 +7,7 @@ class StructUser
 	public $id				= NULL;
 	public $name			= NULL;
 	public $office_id		= NULL;
+	public $location		= NULL;
 	
 	private $email			= NULL;
 	private $permissions	= NULL;
@@ -17,6 +18,7 @@ class StructUser
 	public function __construct($json = NULL)
 	{
 		$this->permissions = array();
+		$this->location = new StructProperty();
 		
 		if($json !== NULL)
 		{
@@ -55,11 +57,13 @@ class StructUser
 	{
 		if($this->email == NULL || $this->name == NULL || $this->hash == NULL)
 		{
+			log_message('Error', 'User email, name, or hash is not set: ' . $this);
 			return FALSE;
 		}
 	
 		if(!validate_email($this->email) || strlen($this->hash) < 20)
 		{
+			log_message('Error', 'User email is not valid or the hash is shorter than 20 characters: ' . $this);
 			return FALSE;
 		}
 		

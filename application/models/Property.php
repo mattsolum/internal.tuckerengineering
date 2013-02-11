@@ -190,10 +190,10 @@ class Property extends CI_Model {
 	
 	public function get_by_string($str)
 	{
-		$str = preg_replace('/(^| )e($| )/i', ' east ', $str);
-		$str = preg_replace('/(^| )w($| )/i', ' west ', $str);
-		$str = preg_replace('/(^| )n($| )/i', ' north ', $str);
-		$str = preg_replace('/(^| )s($| )/i', ' south ', $str);
+		$str = preg_replace('/(^| )e\.?($| )/i', '$1East$2', $str);
+		$str = preg_replace('/(^| )w\.?($| )/i', '$1West$2', $str);
+		$str = preg_replace('/(^| )n\.?($| )/i', '$1North$2', $str);
+		$str = preg_replace('/(^| )s\.?($| )/i', '$1South$2', $str);
 		
 		$where = array('search_text' => trim(strtolower($str)));
 		

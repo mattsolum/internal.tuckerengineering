@@ -108,6 +108,48 @@ class Navigation extends CI_Model {
 		return $links;
 	}
 
+	public function build_database_admin_links()
+	{
+		$links = array();
+		$links['Backup'] 						= 'admin/database/backup';
+		$links['Restore']						= 'admin/database/restore';
+		$links['Migrate']						= 'admin/database/migrate';
+
+		$package_links = $this->CI->Event->trigger('nav.build.database_admin');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
+	public function build_user_admin_links()
+	{
+		$links = array();
+		$links['Create user'] 					= 'admin/users/create';
+
+		$package_links = $this->CI->Event->trigger('nav.build.user_admin');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
 	public function build_job_links()
 	{
 		$links = array();
