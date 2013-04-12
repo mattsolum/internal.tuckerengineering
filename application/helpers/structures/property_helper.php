@@ -74,6 +74,18 @@ class StructProperty
 		}
 	}
 
+	public function get_subpremise()
+	{
+		$delineator = '';
+			
+		if($this->subpremise != '')
+		{
+			$delineator = (is_numeric($this->subpremise))?'#':'Unit ';
+		}
+
+		return $delineator . $this->subpremise;
+	}
+
 	public function is_valid()
 	{
 		$this->process_route();
@@ -88,6 +100,8 @@ class StructProperty
 		$this->route = preg_replace('/(^| )s\.?( |$)/i', '$1South$2', $this->route);
 		$this->route = preg_replace('/(^| )e\.?( |$)/i', '$1East$2', $this->route);
 		$this->route = preg_replace('/(^| )n\.?( |$)/i', '$1West$2', $this->route);
+
+		$this->subpremise = trim(preg_replace('/apt|appartment|unit|[^a-zA-Z0-9 -]/i', '', $this->subpremise));
 	}
 	
 	public function set_id($id)
@@ -188,18 +202,11 @@ class StructProperty
 	
 	public function location_string()
 	{
-		$delineator = '';
-			
-		if($this->subpremise != '')
-		{
-			$delineator = (is_numeric($this->subpremise))?'#':'Unit ';
-		}
-	
 		$formatted =  ($this->number != '')?$this->number:'';
 		
 		$formatted .=  ($this->route != '')?' ' . $this->route:'';
 		
-		$formatted .= ($this->subpremise != '')?' ' . $delineator . $this->subpremise:'';
+		$formatted .= ($this->subpremise != '')?' ' . $this->get_subpremise():'';
 		
 		$formatted .= ($this->locality != '')?', ' . $this->locality:'';
 		$formatted .= ($this->admin_level_1 != '')?', ' . $this->admin_level_1:'';

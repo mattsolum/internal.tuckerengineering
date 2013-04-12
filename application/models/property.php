@@ -10,6 +10,7 @@ class Property extends CI_Model {
 		$this->CI =& get_instance();
 		$this->CI->load->model('Meta');
 		$this->CI->load->model('Note');
+		$this->CI->load->model('Checksum');
 	}
 	
 	
@@ -40,6 +41,13 @@ class Property extends CI_Model {
 			if(!is_array($id))
 			{
 				$property->id = $id;
+
+				if($this->CI->Checksum->compare($property))
+				{
+					//If the property has not changed, return true and move on.
+					//Nothing to see here.
+					return TRUE;
+				}
 
 				$updated = TRUE;
 				$this->CI->Event->trigger('property.commit.before.update', $property);
@@ -111,6 +119,8 @@ class Property extends CI_Model {
 			{
 				$this->CI->Event->trigger('property.commit.after.create', $this->get($id));
 			}
+
+			$this->CI->Checksum->store($property);
 			return $id;
 		}
 	}

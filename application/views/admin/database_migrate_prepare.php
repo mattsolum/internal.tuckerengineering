@@ -131,8 +131,6 @@
 		}
 
 		client.add_note(0, "Imported from the old database. The old information was: " + line);
-
-
 	}
 
 	function job(line) {
@@ -150,7 +148,7 @@
 		job.location.admin_level_2 = 'United States';
 
 		
-		//$.fn.MSDebug(line);
+		$.fn.MSDebug(JSON.stringify(job));
 	}
 
 	function payment(line) {

@@ -153,11 +153,11 @@ class Admin extends CI_Controller {
 		{
 			if($this->input->post('migrator') != NULL)
 			{
-
+				
 			}
 			else
 			{
-
+				
 			}
 
 			$this->load->view('admin/database_migrate_prepare');

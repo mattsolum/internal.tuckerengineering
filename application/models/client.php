@@ -11,6 +11,7 @@ class Client extends CI_Model {
 		$this->CI->load->model('Property');
 		$this->CI->load->model('Accounting');
 		$this->CI->load->model('Note');
+		$this->CI->load->model('Checksum');
 	}
 	
 	/**
@@ -21,7 +22,7 @@ class Client extends CI_Model {
 	 */
 	public function insert($client)
 	{
-		return $this->insert($client);
+		return $this->commit($client);
 	}
 	
 	/**
@@ -53,6 +54,13 @@ class Client extends CI_Model {
 		}
 		else
 		{
+			if($this->checksum->compare($client))
+			{
+				//If the checksums match stop and return true
+				//nothing has changed.
+				return TRUE;
+			}
+
 			//Client exists; update it.
 			$client->set_id($id);
 			$this->update($client);
@@ -68,6 +76,7 @@ class Client extends CI_Model {
 		else
 		{
 			//log_message('error', '---!! Client->commit() SUCCESS ' . $client->id . ' ' . $client->name);
+			$this->CI->checksum->store($client);
 			return $id;
 		}
 	}

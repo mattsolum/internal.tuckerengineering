@@ -4,7 +4,7 @@ class Job extends CI_Model {
 	
 	private $CI = NULL;
 	
-	public function Job()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->CI =& get_instance();
@@ -12,6 +12,7 @@ class Job extends CI_Model {
 		$this->CI->load->model('Note');
 		$this->CI->load->model('Client');
 		$this->CI->load->model('Property');
+		$this->CI->load->model('Checksum');
 	}
 	
 	public function insert($job)
@@ -37,6 +38,16 @@ class Job extends CI_Model {
 		$id = $this->exists($job);
 		if($id !== FALSE)
 		{
+			//The job exists, has it changed?
+			if($this->CI->Checksum->compare($job))
+			{
+				//Checksum will return true if the record is the same
+				//as the record in the database
+				//If they are the same, return true and stop; nothing to see here!
+				
+				return TRUE;
+			}
+
 			$this->CI->Event->trigger('job.commit.update', $job);
 			//It exists, keep the date added and assign the old ID
 			$data['job_id'] 	= $id;
@@ -109,6 +120,8 @@ class Job extends CI_Model {
 		}
 		else
 		{
+			//Update the stored checksum.
+			$this->CI->checksum->store($job);
 			return $data['job_id'];
 		}
 	}

@@ -10,9 +10,35 @@ class Invoices extends CI_Controller {
 		$this->User->check_auth();
 	}
 
-	public function index()
+	public function _remap($method)
+	{
+		$param_offset = 2;
+
+		// Default to index
+		if ( ! method_exists($this, $method))
+		{
+			// We need one more param
+			$param_offset = 1;
+			$method = 'index';
+		}
+
+		// Since all we get is $method, load up everything else in the URI
+		$params = array_slice($this->uri->rsegment_array(), $param_offset);
+
+		// Call the determined method with all params
+		call_user_func_array(array($this, $method), $params);
+	} 
+
+	public function index($invoice_id = NULL)
 	{	
-		$this->load->view('invoices/index');
+		if($invoice_id == NULL)
+		{
+			$this->load->view('invoices/index');
+		}
+		else
+		{
+			$this->load->view('invoices/invoice');
+		}
 	}
 	
 	/**
