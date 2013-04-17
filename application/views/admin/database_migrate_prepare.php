@@ -10,6 +10,7 @@
 	</ul>
 </section>
 
+<script type="text/javascript" src="<?PHP echo(site_url()); ?>resources/js/jquery.csv-0.71.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#status').height(status_height());
@@ -32,12 +33,14 @@
 			}
 		});
 
+		var data_file = 'te_billing_parsed';
+
 		$.ajax({
 			type: 		'GET',
-			url: 		'<?PHP echo(base_url()); ?>/resources/migration/data/te_billing.csv',
+			url: 		'<?PHP echo(base_url()); ?>/resources/migration/data/' + data_file,
 			dataType: 	'text',
 			success: 	function(csv){
-				$.fn.MSDebug('te_billing.csv loaded.');
+				$.fn.MSDebug(data_file + ' loaded.');
 
 				var timeout = 0;
 				var num_lines = csv.split("\n").length;
@@ -99,38 +102,72 @@
 
 	function client(line) {
 		var client = new Client();
-		var cells = line.split(',');
-		for(var i = 0; i < cells.length; i++) {
-			cells[i] = cells[i].replace(/^"(.*)"$/, "$1");
-			cells[i] = cells[i].replace(/^\s+|\s+$/, '');
-		}
+		var cells = $.csv.toArray(line);
 
 		client.id = cells[0];
 		client.name = cells[1];
-		client.location.set_addr_1(cells[2]);
-		client.location.subpremise = cells[3];
-		client.location.locality = cells[4];
-		client.location.set_admin_level_1(cells[5]);
-		client.location.admin_level_2 = "United States";
-		client.location.postal_code = cells[6];
+		client.location.number = cells[6];
+		client.location.route = cells[7];
+		client.location.subpremise = cells[8];
+		client.location.locality = cells[9];
+		client.location.admin_level_1 = cells[10];
+		client.location.admin_level_2 = expand_abbr(cells[11]);
+		client.location.postal_code = cells[12];
 
-		if(cells[7] != '') {
-			client.add_contact_item('phone', cells[7]);
+		//If there name is not set it will come back invalid. 
+		//I have checked on every no-name record on the database and they
+		//are all orphans; no connected data. It is safe to ignore them.
+		if(client.name == '')
+		{
+			return false;
 		}
 
-		if(cells[8] != '') {
-			client.add_contact_item('fax', cells[8]);
+		if(cells[3] != '') {
+			var phone = new Contact();
+			phone.set('phone', cells[3]);
+
+			if(phone.is_valid(false))
+			{
+				client.add_contact_item('phone', cells[3]);
+			}
 		}
 
-		if(cells[9] != '') {
-			client.add_contact_item('contact', cells[9]);
+		if(cells[4] != '') {
+			var fax = new Contact();
+			fax.set('fax', cells[4]);
+
+			if(fax.is_valid(false))
+			{
+				client.add_contact_item('fax', cells[4]);
+			}
 		}
 
-		if(cells[10] != '') {
-			client.add_contact_item('email', cells[10]);
+		if(cells[5] != '') {
+			var contact = new Contact();
+			contact.set('contact', cells[5]);
+
+			if(contact.is_valid(false))
+			{
+				client.add_contact_item('contact', cells[5]);
+			}
 		}
 
-		client.add_note(0, "Imported from the old database. The old information was: " + line);
+		if(cells[2] != '') {
+			var email = new Contact();
+			email.set('email', cells[2]);
+
+			if(email.is_valid(false))
+			{
+				client.add_contact_item('email', cells[2]);
+			}
+		}
+
+		client.add_note(0, "Imported from the old database. The old information was: " + cells[13]);
+
+		if(!client.is_valid())
+		{
+			$.fn.MSDebug('[' + client.id + '] ' + client.name + ', ' + client.location.number + ' ' + client.location.route);	
+		}
 	}
 
 	function job(line) {
@@ -143,19 +180,21 @@
 		var job = new Job();
 		job.client.id = cells[0];
 		job.id = cells[1];
-		job.location.set_addr_1(cells[3] + ' ' + cells[4]);
-		job.location.set_city_state(cells[5]);
-		job.location.admin_level_2 = 'United States';
-
-		
-		$.fn.MSDebug(JSON.stringify(job));
+		job.location.number = cells[3];
+		job.location.route = cells[4];
+		job.location.subpremise = cells[5];
+		job.location.locality = cells[6];
+		job.location.admin_level_1 = cells[7];
+		job.location.admin_level_2 = expand_abbr(cells[8]);
+		job.location.postal_code = cells[9];
+		//$.fn.MSDebug(JSON.stringify(job));
 	}
 
 	function payment(line) {
 		//$.fn.MSDebug(line);
 	}
 
-	function expand_abbr(a) {
+	function expand_abbr(state) {
 		var abbr = new Array();
 		abbr['AL'] = 'Alabama';
 		abbr['AK'] = 'Alaska';
@@ -208,8 +247,10 @@
 		abbr['WI'] = 'Wisconsin';
 		abbr['WY'] = 'Wyoming';
 
-		return abbr[a.toUpperCase()];
-
+		if(state != '')
+		{
+			return abbr[state.toUpperCase()];
+		}
 	}
 
 	function pause()

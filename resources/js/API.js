@@ -124,13 +124,17 @@ function Client() {
 	this.date_updated 	= 0;
 
 	this.is_valid = function() {
+		
+
 		if(this.name == '' || !this.location.is_valid()) {
+			$.fn.MSDebug('Invalid; name is not set or location is invalid.');
 			return false;
 		}
 
 		for(var i = 0; i < this.contact.length; i++) {
 			if(!this.contact[i].is_valid())
 			{
+				$.fn.MSDebug('Invalid; a contact method is invalid.');
 				return false;
 			}
 		}
@@ -159,6 +163,8 @@ function Client() {
 		}
 
 		var contact = new Contact();
+
+		contact.id = this.id;
 
 		contact.set(type, info);
 		this.contact.push(contact);
@@ -211,11 +217,14 @@ function Property() {
 	this.date_updated 	= 0;
 
 	this.is_valid = function() {
+		
 		return (this.location_valid() && this.meta_valid());
 	}
 
 	this.location_valid = function() {
+		
 		if(!this.is_pobox() && (this.number == '' || this.route == '')) {
+			$.fn.MSDebug('Invalid; Not a po box and number and route are not set. [' + this.number + ' ' + this.route + ']');
 			return false;
 		}
 
@@ -224,10 +233,12 @@ function Property() {
 			this.admin_level_1 == '' ||
 			this.postal_code == ''
 		) {
+			$.fn.MSDebug('Invalid; city, state or postal code is not set.');
 			return false;
 		}
 
 		if(this.postal_code.match(/^[0-9-]+$/) == null) {
+			$.fn.MSDebug('Invalid; postal code is invalid.');
 			return false;
 		}
 
@@ -235,11 +246,13 @@ function Property() {
 	}
 
 	this.meta_valid = function() {
+		
 		var result = true;
 
 		if(this.info.length > 0) {
 			this.info.forEach(function(value, key, arr) {
 				if(key.match(/^[a-zA-Z_]+$/) == null) {
+					$.fn.MSDebug('Invalid; meta value has illegal characters.');
 					result = false;
 				}
 			});
@@ -401,16 +414,19 @@ function Job() {
 	this.is_valid = function(strict = true) {
 		if(!this.client.is_valid() || !this.location.is_valid() || !this.accounting.is_valid(strict))
 		{
+			$.fn.MSDebug('Invalid; client, location or accounting is invalid.');
 			return false;
 		}
 
 		if(this.requester.name != '' && !this.requester.is_valid())
 		{
+			$.fn.MSDebug('Invalid; requester is invalid.');
 			return false;
 		}
 
 		for(var i = 0; i < this.notes.length; i++) {
 			if(!this.notes[i].is_valid()) {
+				$.fn.MSDebug('Invalid; a note is invalid.');
 				return false;
 			}
 		}
@@ -485,13 +501,15 @@ function Contact() {
 
 	this.is_valid = function(strict = true)
 	{
-		if(strict == true && this.id == NULL)
+		if(strict == true && this.id == null)
 		{
+			//$.fn.MSDebug('Invalid; strict is set and the ID is not.');
 			return false;
 		}
 		
 		if(this.type == '' || this.info == '')
 		{
+			//$.fn.MSDebug('Invalid; type or info is not set.');
 			return false;
 		}
 
@@ -509,7 +527,7 @@ function Contact() {
 		type = type.replace(/[^a-zA-Z0-9 _-]/, '').toLowerCase();
 		this.type = type;
 
-		var method_name = 'prepare_' . type;
+		var method_name = 'prepare_' + type;
 
 		if(method_name in this)
 		{
@@ -520,17 +538,19 @@ function Contact() {
 	}
 
 	this.prepare_email = function(info) {
-		return info.replace(/^\s+|\s+$/, '');
+		return info.replace(/^\s+|\s+$/g, '');
 	}
 
 	this.prepare_phone = function(info) {
-		info = preg_replace('/[^0-9]/', '', info);
-		phone = '';
+		info = info.replace(/[^0-9]/g, '');
+		var phone = '';
 
-		if(strlen(info) == 7)
+		//$.fn.MSDebug('Contact::prepare_phone; ' + info);
+
+		if(info.length == 7)
 		{
 			//TODO: Fix this so it pulls from the settings database
-			info = '512' . info;
+			info = '512' + info;
 		}
 
 		for(var i = 0; i < info.length; i++)
@@ -551,10 +571,11 @@ function Contact() {
 	}
 
 	this.email_valid = function() {
-		if(this.info.match(/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/) != null) {
+		if(this.info.match(/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i) != null) {
 			return true;
 		}
 
+		//$.fn.MSDebug('Invalid; email address "' + this.info + '" is not valid.');
 		return false;
 	}
 
@@ -563,6 +584,7 @@ function Contact() {
 			return true;
 		}
 
+		//$.fn.MSDebug('Invalid; phone number "' + this.info + '" is not valid.');
 		return false;
 	}
 
@@ -579,12 +601,20 @@ function Accounting() {
 	{
 		for(var i = 0; i < this.credits.length; i++)
 		{
-			if(!this.credits[i].is_valid()) return false;
+			if(!this.credits[i].is_valid())
+			{	
+				$.fn.MSDebug('Invalid; credit is not valid.');
+				return false;
+			}
 		}
 		
 		for(var i = 0; i < this.debits.length; i++)
 		{
-			if(!this.debits[i].is_valid(strict)) return false;
+			if(!this.debits[i].is_valid(strict))
+			{
+				$.fn.MSDebug('Invalid; debit is not valid.');
+				return false;
+			}
 		}
 		
 		return true;
@@ -727,10 +757,12 @@ function Credit() {
 
 	this.is_valid = function(){
 		if(	this.job_id == null || this.client_id == null || this.amount == 0){
+			$.fn.MSDebug('Invalid; either the job or client ID is not set or the amount is zero.');
 			return false;
 		}
 		
 		if(this.payment != null && !this.payment.is_valid()){
+			$.fn.MSDebug('Invalid; payment is set but not valid.');
 			return false;
 		}
 		//I just concatinate them. Probably not the fastest method, but the least
@@ -738,6 +770,7 @@ function Credit() {
 		
 		var ids = this.client_id + this.job_id;
 		if(ids.match('/^[0-9]+$/') == null){
+			$.fn.MSDebug('Invalid; the client or job ID is invalid.');
 			return false;
 		}
 		
@@ -768,6 +801,7 @@ function Debit() {
 	this.is_valid = function(strict = false){
 		if(strict == true){
 			if(this.client_id == null || this.job_id == null){
+				$.fn.MSDebug('Invalid; client and/or job ID are not set.');
 				return false;
 			}
 			
@@ -775,6 +809,7 @@ function Debit() {
 			//number of lines.
 			var ids = this.client_id + this.job_id;
 			if(ids.match('/^[0-9]+$/') == null){
+				$.fn.MSDebug('Invalid; either the client or job ID is invalid.');
 				return false;
 			}
 		}
@@ -811,6 +846,7 @@ function Payment() {
 	this.is_valid = function() {
 		if((this.tender == 'credit' || this.tender == 'check') && this.number == '')
 		{
+			$.fn.MSDebug('Invalid; the tender that is set requires a identifying number.');
 			return false;
 		}
 
@@ -832,6 +868,7 @@ function Note() {
 	this.is_valid = function(){
 		if(this.type_id == null || this.type == null || this.user.id === null || this.text == null)
 		{
+			$.fn.MSDebug('Invalid; type ID, type, ID, user ID, or body text is not set.');
 			return false;	
 		}
 		
@@ -852,11 +889,13 @@ function User() {
 	this.is_valid = function() {
 		if(this.email == null || this.name == null || this.hash == null)
 		{
+			$.fn.MSDebug('Invalid; email, name or hash is not set.');
 			return false;
 		}
 	
 		if(this.email.match(/^[a-z0-9!#$%&*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/) == null || this.hash.length < 20)
 		{
+			$.fn.MSDebug('Invalid; email address is invalid.');
 			return false;
 		}
 		
@@ -876,11 +915,13 @@ function invoice() {
 	this.is_valid = function() {
 		if(!this.client.is_valid())
 		{
+			$.fn.MSDebug('Invalid; client is invalid.');
 			return false;
 		}
 
 		if(this.jobs.length == 0)
 		{
+			$.fn.MSDebug('Invalid; no jobs are included in this invoice.');
 			return false;
 		}
 
@@ -888,6 +929,7 @@ function invoice() {
 		{
 			if(!this.jobs[i].is_valid())
 			{
+				$.fn.MSDebug('Invalid; a job is invalid.');
 				return false;
 			}
 		}

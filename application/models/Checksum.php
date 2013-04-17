@@ -103,7 +103,7 @@ class Checksum extends CI_Model {
 	{
 		$where = array(
 						'id' => $data->id,
-						'type' => $this->data_type($data);
+						'type' => $this->data_type($data)
 						);
 		$query = $this->CI->db->get_where('checksums', $where);
 
