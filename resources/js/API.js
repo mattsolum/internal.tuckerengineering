@@ -402,17 +402,19 @@ function Job() {
 	
 	this.relation 		= null;
 
+	this.location 		= new Property();
+
 	this.notes 			= new Array();
 	this.assets 		= new Array();
 
-	this.accounting 	= null;
+	this.accounting 	= new Accounting();
 
 	this.date_added 	= 0;
 	this.date_updated 	= 0;
 	this.date_billed 	= 0;
 
 	this.is_valid = function(strict = true) {
-		if(!this.client.is_valid() || !this.location.is_valid() || !this.accounting.is_valid(strict))
+		if(/*!this.client.is_valid() || */!this.location.is_valid() || !this.accounting.is_valid(true))
 		{
 			$.fn.MSDebug('Invalid; client, location or accounting is invalid.');
 			return false;
@@ -472,6 +474,81 @@ function Job() {
 		this.accounting.set_client_id(id);
 		
 		return true;
+	}
+
+	this.add_item = function(item_name, amount)
+	{
+		//Clean it up!
+		item_name = item_name.replace(/\s*&\s*/, ' and ');
+		item_name = item_name.replace(/([^a-zA-Z0-9, -]|^\s+|\s+$|written\s+)/ig, '');
+		item_name = item_name.replace(/\s+/g, ' ');
+
+		if(item_name == '')
+		{
+			item_name = 'Engineering service';
+		}
+
+		if(item_name.match(/verbal/i) && item_name.replace(/(and )?verbal( report)?/i, '') != '')
+		{
+			item_name = item_name.replace(/(and )?verbal( report)?/i, '');
+		}
+		else
+		{
+			if(item_name.match(/and report/i) && amount - 100 > 0)
+			{
+				amount -= 100;
+
+				this.new_debit('Written report', 100.00);
+			}
+			else if(item_name.match(/and letter/i) && amount - 100 > 0)
+			{
+				amount -= 100;
+
+				this.new_debit('Letter', 100.00);
+			}
+			else if(item_name.match(/and (construction |repair )?certification/i) && amount - 100 > 0)
+			{
+				amount -= 100;
+
+				this.new_debit('Certification', 100.00);
+
+				item_name = item_name.replace(/and (construction |repair )?certification/i, '');
+			}
+
+			item_name = item_name.replace(/and (report|letter)/i, '');
+		}
+
+		if(item_name.match(/structural inspection/i) && amount >= 450)
+		{
+			amount -= 450;
+
+			this.new_debit('Structural Inspection', 450.00);
+
+			if(amount > 0)
+			{
+				amount = 0;
+
+				this.new_debit('Property type and travel surcharges', amount);
+			}
+		}
+
+		if(amount > 0)
+		{
+			this.new_debit(item_name.replace(/\s+/, ' ').replace(/^\s+|\s+$|^\s*-\s*|\s*-\s*$/g, ''), amount);
+		}
+
+	}
+
+	this.new_debit = function(name, amount)
+	{
+		var debit = new Debit();
+		debit.item = name;
+		debit.amount = amount;
+		debit.job_id = this.id;
+		debit.client_id = this.client.id;
+		debit.date_added = this.date_billed;
+
+		this.accounting.debits.push(debit);
 	}
 
 	this.service = function()
@@ -640,39 +717,39 @@ function Accounting() {
 		return true;
 	}
 
-	this.quicksort_by_property = function(arr, property, left = 0, right = NULL)
+	this.quicksort_by_property = function(arr, property, left = 0, right = null)
 	{
 		// when the call is recursive we need to change
 		//the array passed to the function yearlier
-		quicksort_by_property.array = new Array();
-		if( right == NULL )
+		this.quicksort_by_property.array = new Array();
+		if( right == null )
 		{
-			quicksort_by_property.array = arr;
-			right = quicksort_by_property.array.length-1;//last element of the array
+			this.quicksort_by_property.array = arr;
+			right = this.quicksort_by_property.array.length-1;//last element of the array
 		}
 		 
 		var i = left;
 		var j = right;
 		 
-		var tmp = quicksort_by_property.array[parseInt((left+right)/2)][property];
+		var tmp = this.quicksort_by_property.array[parseInt((left+right)/2)][property];
 		 
 		// partion the array in two parts.
 		// left from tmp are with smaller values,
 		// right from tmp are with bigger ones
 		do
 		{
-			while( quicksort_by_property.array[i][property] < tmp )
+			while( this.quicksort_by_property.array[i][property] < tmp )
 			i++;
 			 
-			while( tmp < quicksort_by_property.array[j][property] )
+			while( tmp < this.quicksort_by_property.array[j][property] )
 			j--;
 			 
 			// swap elements from the two sides
 			if( i <= j )
 			{
-				w = quicksort_by_property.array[i];
-				quicksort_by_property.array[i] = quicksort_by_property.array[j];
-				quicksort_by_property.array[j] = w;
+				w = this.quicksort_by_property.array[i];
+				this.quicksort_by_property.array[i] = this.quicksort_by_property.array[j];
+				this.quicksort_by_property.array[j] = w;
 				 
 				i++;
 				j--;
@@ -681,23 +758,23 @@ function Accounting() {
 		 
 		// devide left side if it is longer the 1 element
 		if( left < j )
-		this.quicksort_by_property(NULL, property, left, j);
+		this.quicksort_by_property(null, property, left, j);
 		 
 		// the same with the right side
 		if( i < right )
-		this.quicksort_by_property(NULL, property, i, right);
+		this.quicksort_by_property(null, property, i, right);
 		 
 		// when all partitions have one element
 		// the array is sorted
 		 
-		return quicksort_by_property.array;
+		return this.quicksort_by_property.array;
 	}
 
 	this.sort_debits = function()
 	{
 		if(this.debits.length > 1)
 		{
-			this.debits = this.quicksort_by_property(this.debits, 'amount');
+			this.debits = this.quicksort_by_property(this.debits, 'amount').reverse();
 		}
 	}
 
@@ -712,7 +789,7 @@ function Accounting() {
 		
 		for(var i = 0; i < this.debits.length; i++)
 		{
-			total += this.debits[i].amount;
+			total += parseFloat(this.debits[i].amount);
 		}
 		
 		return total;
@@ -769,7 +846,7 @@ function Credit() {
 		//number of lines.
 		
 		var ids = this.client_id + this.job_id;
-		if(ids.match('/^[0-9]+$/') == null){
+		if(ids.match(/^[0-9]+$/) == null){
 			$.fn.MSDebug('Invalid; the client or job ID is invalid.');
 			return false;
 		}
@@ -779,6 +856,19 @@ function Credit() {
 		}
 		
 		return true;
+	}
+
+	this.make_payment = function(amount, tender, number = '')
+	{
+		this.payment = new Payment();
+		this.payment.client_id = this.client_id;
+		this.payment.amount = amount;
+		this.payment.tender = tender;
+		this.payment.number = number;
+
+		this.payment.date_added = this.date_added;
+		this.amount = amount;
+		this.item = 'Payment';
 	}
 
 	this.amount = function()
@@ -808,8 +898,8 @@ function Debit() {
 			//I just concatinate them. Probably not the fastest method, but the least
 			//number of lines.
 			var ids = this.client_id + this.job_id;
-			if(ids.match('/^[0-9]+$/') == null){
-				$.fn.MSDebug('Invalid; either the client or job ID is invalid.');
+			if(ids.match(/^[0-9]+$/) == null){
+				$.fn.MSDebug('Invalid; either the client or job ID is invalid. c' + this.client_id + ', j' + this.job_id + ', ids' + ids);
 				return false;
 			}
 		}
@@ -904,13 +994,13 @@ function User() {
 }
 
 function invoice() {
-	var id 			= NULL;
+	var id 			= null;
 
 	var client		= new Client();
 	var jobs		= new Array();
 
-	var date_added	= NULL;
-	var date_sent	= NULL;
+	var date_added	= null;
+	var date_sent	= null;
 
 	this.is_valid = function() {
 		if(!this.client.is_valid())
@@ -998,12 +1088,12 @@ function invoice() {
 		this.jobs = this.quicksort_by_property(this.jobs, 'id');
 	}
 
-	this.quicksort_by_property = function(arr, property, left = 0, right = NULL)
+	this.quicksort_by_property = function(arr, property, left = 0, right = null)
 	{
 		// when the call is recursive we need to change
 		//the array passed to the function yearlier
 		quicksort_by_property.array = new Array();
-		if( right == NULL )
+		if( right == null )
 		{
 			quicksort_by_property.array = arr;
 			right = quicksort_by_property.array.length-1;//last element of the array
@@ -1039,11 +1129,11 @@ function invoice() {
 		 
 		// devide left side if it is longer the 1 element
 		if( left < j )
-		this.quicksort_by_property(NULL, property, left, j);
+		this.quicksort_by_property(null, property, left, j);
 		 
 		// the same with the right side
 		if( i < right )
-		this.quicksort_by_property(NULL, property, i, right);
+		this.quicksort_by_property(null, property, i, right);
 		 
 		// when all partitions have one element
 		// the array is sorted

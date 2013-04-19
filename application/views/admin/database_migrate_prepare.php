@@ -101,6 +101,8 @@
 	});
 
 	function client(line) {
+		return true;
+
 		var client = new Client();
 		var cells = $.csv.toArray(line);
 
@@ -113,6 +115,9 @@
 		client.location.admin_level_1 = cells[10];
 		client.location.admin_level_2 = expand_abbr(cells[11]);
 		client.location.postal_code = cells[12];
+
+		client.location.latitude = cells[13];
+		client.location.latitude = cells[14];
 
 		//If there name is not set it will come back invalid. 
 		//I have checked on every no-name record on the database and they
@@ -162,22 +167,18 @@
 			}
 		}
 
-		client.add_note(0, "Imported from the old database. The old information was: " + cells[13]);
+		client.add_note(0, "Imported from the old database. The old information was: " + cells[15]);
 
 		if(!client.is_valid())
 		{
-			$.fn.MSDebug('[' + client.id + '] ' + client.name + ', ' + client.location.number + ' ' + client.location.route);	
+			add_status('error', '[' + client.id + '] ' + client.name + ', ' + client.location.number + ' ' + client.location.route);	
 		}
 	}
 
 	function job(line) {
-		var cells = line.split(',');
-		for(var i = 0; i < cells.length; i++) {
-			cells[i] = cells[i].replace(/^"(.*)"$/, "$1");
-			cells[i] = cells[i].replace(/^\s+|\s+$/, '');
-		}
-
 		var job = new Job();
+		var cells = $.csv.toArray(line);
+
 		job.client.id = cells[0];
 		job.id = cells[1];
 		job.location.number = cells[3];
@@ -187,11 +188,54 @@
 		job.location.admin_level_1 = cells[7];
 		job.location.admin_level_2 = expand_abbr(cells[8]);
 		job.location.postal_code = cells[9];
-		//$.fn.MSDebug(JSON.stringify(job));
+
+		job.location.latitude = cells[16];
+		job.location.longitude = cells[17];
+
+		job.date_added = job.date_billed = from_datetime(cells[13]);
+
+		job.add_item(cells[2], cells[14]);
+
+		job.add_note(0, 'Document file: ' + cells[12]);
+		job.add_note(0, "Imported from the old database. The old information was: " + cells[15]);
+
+		if(!job.is_valid())
+		{
+			add_status('error', '[' + job.id + '] ' + job.service() + ', ' + job.location.number + ' ' + job.location.route);	
+		}
+
+		//add_status('info', job.service() + '; $' + job.accounting.debit_total().toFixed(2) + ' {' + cells[2] + ' - ' + cells[14] + '}');
 	}
 
 	function payment(line) {
-		//$.fn.MSDebug(line);
+		var payment = new Credit();
+		var cells = $.csv.toArray(line);
+
+		if(cells[4] == 0)
+		{
+			return true;
+		}
+
+		payment.client_id = cells[0];
+		payment.job_id = cells[1];
+
+		payment.date_added = from_datetime(cells[2]);
+
+		var tender = 'Cash';
+
+		if(cells[3] != 0)
+		{
+			tender = 'Check';
+		}
+
+		payment.make_payment(cells[4], tender, cells[3]);
+
+		payment.payment.date_posted = from_datetime(cells[5]);
+
+		if(!payment.is_valid())
+		{
+			add_status('error', '[' + payment.client_id + ', ' + payment.job_id + '] ' + payment.amount);
+		}
 	}
 
 	function expand_abbr(state) {
@@ -311,6 +355,23 @@
 		var percent			= positive_offset / total_width;
 
 		return percent * 100;
+	}
+
+	function from_datetime(datetime)
+	{
+		//1999-11-04 00:00:00
+		
+		var year = datetime.substr(0, 4);
+		var month = datetime.substr(5, 2);
+		var day = datetime.substr(8, 2);
+
+		var hour = datetime.substr(11, 2);
+		var minute = datetime.substr(14, 2);
+		var second = datetime.substr(17, 2);
+
+		var date = new Date(year, month, day, hour, minute, second);
+
+		return date.getTime();
 	}
 </script>
 <?PHP $this->load->view('sections/footer') ?>
