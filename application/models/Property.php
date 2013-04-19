@@ -46,7 +46,7 @@ class Property extends CI_Model {
 				{
 					//If the property has not changed, return true and move on.
 					//Nothing to see here.
-					return TRUE;
+					return $property->id;
 				}
 
 				$updated = TRUE;

@@ -54,11 +54,12 @@ class Client extends CI_Model {
 		}
 		else
 		{
+			$client->id = $id;
 			if($this->checksum->compare($client))
 			{
 				//If the checksums match stop and return true
 				//nothing has changed.
-				return TRUE;
+				return $id;
 			}
 
 			//Client exists; update it.

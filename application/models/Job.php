@@ -38,6 +38,7 @@ class Job extends CI_Model {
 		$id = $this->exists($job);
 		if($id !== FALSE)
 		{
+			$job->id = $id;
 			//The job exists, has it changed?
 			if($this->CI->Checksum->compare($job))
 			{
@@ -45,7 +46,7 @@ class Job extends CI_Model {
 				//as the record in the database
 				//If they are the same, return true and stop; nothing to see here!
 				
-				return TRUE;
+				return $id;
 			}
 
 			$this->CI->Event->trigger('job.commit.update', $job);
