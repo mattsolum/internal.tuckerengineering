@@ -126,7 +126,7 @@ class Checksum extends CI_Model {
 		$this->CI->db->trans_start();
 
 		$this->CI->db->where('id', $data->id);
-		$this->CI->db->where('type', $data->type);
+		$this->CI->db->where('type', $this->data_type($data));
 		$query = $this->CI->db->update('checksums', $values);
 
 		//End the transaction

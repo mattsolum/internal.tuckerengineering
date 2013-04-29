@@ -4,17 +4,6 @@ function API() {
 
 
 	this.post = function() {
-		this.client = function(client) {
-			var end = '.json';
-			if(client instanceof Client && client.is_valid()) {
-				if(client.id != null) {
-					end = '/' + client.id + '.json';
-				}
-
-				this.ajax('http://local/internal.tuckerengineering/api/v2/client' + end, client);
-			}
-		}
-
 		this.property = function(property) {
 			var end = '.json';
 			if(property instanceof Property && property.is_valid()) {
@@ -58,8 +47,21 @@ function API() {
 				this.ajax('http://local/internal.tuckerengineering/api/v2/invoice' + end, invoice);
 			}
 		}
+	}
 
-		this.ajax = function(url, data) {
+	this.post_client = function(client) {
+		$.fn.MSDebug('API::post::client()');
+		var end = '.json';
+		if(client instanceof Client && client.is_valid()) {
+			if(client.id != null) {
+				end = '/' + client.id + '.json';
+			}
+
+			this.ajax(this.root + this.url + 'client' + end, client);
+		}
+	}
+
+	this.ajax = function(url, data) {
 			var message = '';
 			var status = false;
 
@@ -67,10 +69,13 @@ function API() {
 				data = JSON.stringify(data);
 			}
 
+			$.fn.MSDebug('AJAXIFY! ' + url);
+
 			$.ajax({
 				type: 		'POST',
 				url: 		url,
 				data: 		{data: data},
+				aync: 		false,
 				success: 	function(returned) {
 					if(returned.result == undefined)
 					{
@@ -100,7 +105,6 @@ function API() {
 				}
 			});
 		}
-	}
 
 	this.get = function() {
 
@@ -217,7 +221,7 @@ function Property() {
 	this.date_updated 	= 0;
 
 	this.is_valid = function() {
-		
+		//$.fn.MSDebug('Property::is_valid() ' + JSON.stringify(this));
 		return (this.location_valid() && this.meta_valid());
 	}
 

@@ -42,14 +42,16 @@ class ClientAPI extends PrototypeAPI
 		//Geocode and parse if no lat/lon provided.
 		if($client->location->latitude == '')
 		{
-			$parsed_location = $this->CI->Map->parse_address($client->location->location_string());
+			//Until we can find a reliable geocoding system it is probably best to ignore this.
+			
+			/*$parsed_location = $this->CI->Map->parse_address($client->location->location_string());
 			
 			if(!is_array($parsed_location) && get_class($parsed_location) == 'StructProperty')
 			{
 				$client->location->set_location($parsed_location);
 			}
 			
-			unset($parsed_location);
+			unset($parsed_location);*/
 		}
 		
 		if($client->is_valid())

@@ -12,6 +12,21 @@
 
 <script type="text/javascript" src="<?PHP echo(site_url()); ?>resources/js/jquery.csv-0.71.min.js"></script>
 <script type="text/javascript">
+	var dup = new Array();
+	var data_file = 'te_billing_parsed';
+	var timeout = 600;
+	var num_lines = 0;
+	var last_position = 0;
+	var i = 0;
+	var sections = new Array('duplicate', 'client', 'job', 'payment');
+	var current_section = 0;
+	var time_last = new Date();
+	var time_start = new Date();
+	var start = 0;
+	var end = 0;
+	var length = 0;
+	var doNext = null;
+
 	$(document).ready(function(){
 		$('#status').height(status_height());
 
@@ -33,8 +48,6 @@
 			}
 		});
 
-		var data_file = 'te_billing_parsed';
-
 		$.ajax({
 			type: 		'GET',
 			url: 		'<?PHP echo(base_url()); ?>/resources/migration/data/' + data_file,
@@ -42,29 +55,25 @@
 			success: 	function(csv){
 				$.fn.MSDebug(data_file + ' loaded.');
 
-				var timeout = 0;
-				var num_lines = csv.split("\n").length;
-				var last_position = 0;
-				var i = 0;
-				var sections = new Array('client', 'job', 'payment');
-				var current_section = 0;
-				var time_last = new Date();
-				var time_start = new Date();
+				num_lines = csv.split("\n").length;
 
 				csv = "\n" + csv;
 
-				var doNext = null;
 				doNext = function() {
 					if(!pause()) {
-						var start = csv.indexOf("\n", last_position);
-						var end = csv.indexOf("\n", start + 1);
-						var length = end - start;
+						start = csv.indexOf("\n", last_position);
+						end = csv.indexOf("\n", start + 1);
+						length = end - start;
 
 						var line = csv.substr(start + 1, length);
 
 						if(line.substr(0, 8) == '--------') {
 							current_section++;
+							next(1);
 						} else {
+
+							$.fn.MSDebug('line #' + i + ' / ' + num_lines + ', ' + sections[current_section] + "; time left: " + hours + ':' + mins + ':' + secs);
+							
 							window[sections[current_section]](line);
 							var time_current = new Date();
 							var tDiff = ((time_current.getTime() - time_last.getTime()) / 1000);
@@ -74,18 +83,10 @@
 							var hours = Math.floor(time_left / 36e5),
 								mins = Math.floor((time_left % 36e5) / 6e4),
 								secs = Math.floor((time_left % 6e4) / 1000);
-
-							$.fn.MSDebug('line #' + i + ' / ' + num_lines + ', ' + sections[current_section] + "; time left: " + hours + ':' + mins + ':' + secs);
 							time_last = time_current;
 						}
 
-						set_progress(i/num_lines * 100);
-
-						if(i < num_lines) {
-							last_position = end;
-							i++;
-							setTimeout(doNext, timeout);
-						}	
+						set_progress(i/num_lines * 100);	
 					}
 					else {
 						setTimeout(doNext, timeout);
@@ -100,9 +101,28 @@
 		});
 	});
 
-	function client(line) {
-		return true;
+	function next(time = null)
+	{
+		if(time == null)
+		{
+			time = timeout;
+		}
 
+		if(i < num_lines) {
+			last_position = end;
+			i++;
+			setTimeout(doNext, time);
+		}
+	}
+
+	function duplicate(line) {
+		var cells = $.csv.toArray(line);
+		dup[cells[0]] = cells[1];
+
+		next(1);
+	}
+
+	function client(line) {
 		var client = new Client();
 		var cells = $.csv.toArray(line);
 
@@ -112,18 +132,19 @@
 		client.location.route = cells[7];
 		client.location.subpremise = cells[8];
 		client.location.locality = cells[9];
-		client.location.admin_level_1 = cells[10];
-		client.location.admin_level_2 = expand_abbr(cells[11]);
+		client.location.admin_level_1 = expand_abbr(cells[10]);
+		client.location.admin_level_2 = cells[11];
 		client.location.postal_code = cells[12];
 
 		client.location.latitude = cells[13];
-		client.location.latitude = cells[14];
+		client.location.longitude = cells[14];
 
 		//If there name is not set it will come back invalid. 
 		//I have checked on every no-name record on the database and they
 		//are all orphans; no connected data. It is safe to ignore them.
 		if(client.name == '')
 		{
+			next(1);
 			return false;
 		}
 
@@ -173,13 +194,50 @@
 		{
 			add_status('error', '[' + client.id + '] ' + client.name + ', ' + client.location.number + ' ' + client.location.route);	
 		}
+		else
+		{
+			$.ajax({
+				type: 		'POST',
+				url: 		'http://local/internal.tuckerengineering/api/v2/client/' + client.id + '.json',
+				data: 		{data: JSON.stringify(client)},
+				aync: 		true,
+				success: 	function(returned) {
+					if(returned.result == undefined)
+					{
+						add_status('error', returned);
+					}
+
+					if(returned.result == 'success')
+					{
+						//add_status('info', 'Success! returned id ' + returned.data['id'] + ' ' + client.name);
+					}
+					else
+					{
+						add_status('error', returned.data.message);
+					}
+				},
+				error: 		function(jqxhr) {
+					add_status('error', jqxhr.responseText);
+				},
+				complete: 	function() {
+					next(1);
+				}
+			});
+		}
 	}
 
 	function job(line) {
 		var job = new Job();
 		var cells = $.csv.toArray(line);
 
-		job.client.id = cells[0];
+		if(dup[cells[0]] != undefined && dup[cells[0]] != null) {
+			job.client.id = dup[cells[0]];
+		}
+		else
+		{
+			job.client.id = cells[0];
+		}
+
 		job.id = cells[1];
 		job.location.number = cells[3];
 		job.location.route = cells[4];
@@ -239,6 +297,11 @@
 	}
 
 	function expand_abbr(state) {
+		if(state == undefined)
+		{
+			return 'Texas';
+		}
+
 		var abbr = new Array();
 		abbr['AL'] = 'Alabama';
 		abbr['AK'] = 'Alaska';

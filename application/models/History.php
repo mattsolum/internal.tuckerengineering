@@ -36,12 +36,12 @@ class History extends CI_Model {
 		$type = strtolower(str_replace('Struct', '', get_class($e->data)));
 
 		$name = $this->CI->User->get_name();
-		$message = 'This ' . $type . ' was created by ' . $name . '.';
+		$message = 'This ' . $type . ' record was created by ' . $name . '.';
 
-		if($this->CI->User->get_name() == '')
+		if($this->CI->User->get_user_id() == 0)
 		{
 			//Belongs to the system.
-			$message = "I imported this.";
+			$message = 'I imported this ' . $type . ' record.';
 		}
 
 		$note = new StructNote();
@@ -60,16 +60,15 @@ class History extends CI_Model {
 
 		$name = $this->CI->User->get_name();
 
-		if($this->CI->User->get_name() == '')
+		if($this->CI->User->get_user_id() == 0)
 		{
-			$system = $this->CI->User->get_user(0);
-			$name = $system->name;
+			$name = 'myself';
 		}
 
 		$note = new StructNote();
 		$note->user->id = 0;
 		$note->type 	= strtolower($type);
-		$note->text 	= 'This ' . $note->type . ' was updated by ' . $name . '.';
+		$note->text 	= 'This ' . $note->type . ' record was updated by ' . $name . '.';
 		$note->type_id 	= $e->data->id;
 
 		$this->CI->Note->commit($note);

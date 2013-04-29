@@ -102,6 +102,8 @@ class Setting extends CI_Model {
 	{
 		$query = $this->CI->db->get_where('config', array('name' => strtolower($name)));
 		
+		//echo($this->db->last_query());
+
 		if($query->num_rows() > 0)
 		{
 			return TRUE;

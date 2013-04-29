@@ -19,7 +19,7 @@ class Extension extends CI_Model
 		{
 			if(!strstr($file, '.'))
 			{
-				$this->load_extension($file);	
+				//$this->load_extension($file);	
 			}
 		}
 	}

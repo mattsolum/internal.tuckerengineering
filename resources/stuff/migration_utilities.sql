@@ -130,3 +130,17 @@ OR everything.state = ''
 OR everything.zipcode = ''
 ON DUPLICATE KEY UPDATE
 sequence = everything.sequence;
+
+SELECT clients_parsed.client_id, t1.client_id AS 'final_id', t1.name
+FROM clients_parsed
+ JOIN
+(
+SELECT client_id, name
+FROM clients_parsed 
+GROUP BY name
+HAVING COUNT(name) > 1
+AND name != ''
+ORDER BY client_id ASC
+) AS t1 ON t1.name = clients_parsed.name
+WHERE clients_parsed.client_id != t1.client_id
+ORDER BY t1.name ASC, clients_parsed.client_id ASC;

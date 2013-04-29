@@ -22,7 +22,7 @@
 		?>
 		<li<?PHP if($key == count($client->contact) - 1) echo(' class="clear-after"'); ?>>
 			<span class="contact_label"><?PHP echo($contact->type); ?></span>
-			<?PHP echo($contact->info); ?>
+			<?PHP echo(str_replace('@', '<br />@', $contact->info)); ?>
 		</li>
 		<?PHP
 		}

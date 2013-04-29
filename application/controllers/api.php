@@ -2,10 +2,17 @@
 
 class Api extends CI_Controller {
 	
+	public function __construct()
+	{
+		parent::__construct();
+		
+		$this->load->model('User');
+		$this->User->clear_for_this_session();
+	}
+
 	public function index()
 	{	
 		$this->error('No parameters provided');
-		$this->User->clear_for_this_session();
 	}
 	
 	public function v1($auth, $method)

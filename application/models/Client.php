@@ -55,7 +55,7 @@ class Client extends CI_Model {
 		else
 		{
 			$client->id = $id;
-			if($this->checksum->compare($client))
+			if($this->CI->Checksum->compare($client))
 			{
 				//If the checksums match stop and return true
 				//nothing has changed.
@@ -77,7 +77,7 @@ class Client extends CI_Model {
 		else
 		{
 			//log_message('error', '---!! Client->commit() SUCCESS ' . $client->id . ' ' . $client->name);
-			$this->CI->checksum->store($client);
+			$this->CI->Checksum->store($client);
 			return $id;
 		}
 	}
@@ -138,7 +138,7 @@ class Client extends CI_Model {
 		}
 		else
 		{
-			//log_message('error', '---!! Client->create() SUCCESS ' . $client->id . ' ' . $client->name);
+			log_message('error', '---!! Client->create() SUCCESS ' . $client->id . ' ' . $client->name);
 			$this->CI->Event->trigger('client.commit.after.create', $this->get($id));
 			return $id;
 		}
@@ -375,7 +375,7 @@ class Client extends CI_Model {
 		}
 		else
 		{
-			log_message('Error', 'Error in Client method get: no data found with given numeric ID.');
+			log_message('Error', 'Error in Client method get: no data found with given numeric ID "' . $id . '".');
 			return FALSE;
 		}
 	}
@@ -383,7 +383,12 @@ class Client extends CI_Model {
 	//Return ID on success and FALSE on failure
 	public function exists($client)
 	{
-		$this->CI->db->like('search_name', preg_replace('/[^a-zA-Z ]/', '', strtolower($client->name)), 'none');
+		if($client->id != NULL && $this->get_by_id($client->id) !== FALSE)
+		{
+			return $client->id;
+		}
+
+		$this->CI->db->like('search_name', str_replace('_', ' ', $this->slug($client->name)), 'none');
 		
 		$query = $this->CI->db->get('clients');
 		

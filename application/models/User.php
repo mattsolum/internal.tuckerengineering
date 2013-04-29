@@ -27,7 +27,16 @@ class User extends CI_Model {
 	
 	public function clear_for_this_session()
 	{
-		$this->user = $this->get_user(0);
+		$user = $this->get_user(0);
+
+		if($user == FALSE)
+		{
+			$this->user = new StructUser();
+			$this->user->id = 0;
+			$this->user->name = 'Io';
+		}
+
+		else $this->user = $user;
 	}
 
 	public function get_user_id()
@@ -104,7 +113,10 @@ class User extends CI_Model {
 		{
 			$user = $this->get_user($this->CI->session->userdata('user_id'));
 			
-			$this->user = $user;
+			if($user != FALSE)
+			{
+				$this->user = $user;
+			}
 		}
 	}
 	
