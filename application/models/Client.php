@@ -289,7 +289,7 @@ class Client extends CI_Model {
 	{
 		//For the time being any id that is not a number will be treated as a name
 		$id =  str_replace('_', ' ', $this->slug($id));
-		$this->CI->db->like('search_name', $id);
+		$this->CI->db->like('search_name', $id, 'none');
 		$query = $this->CI->db->get('clients');
 		
 		//echo('Query: ' . $this->CI->db->last_query());

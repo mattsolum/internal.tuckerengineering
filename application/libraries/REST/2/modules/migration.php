@@ -68,6 +68,29 @@ class MigrationAPI extends PrototypeAPI
 		}
 	}
 
+	public function job_post()
+	{
+		$this->CI->load->model('Map');
+		$this->CI->load->model('Property');
+		$this->CI->load->model('Client');
+		$this->CI->load->model('Job');
+
+		$job = new StructJob($this->CI->input->post('data'));
+		$job->client = $this->CI->Client->get($job->client->id);
+		
+		$id = $this->CI->Job->commit($job);
+
+		if($id !== FALSE)
+		{
+			return array('id' => $id);
+		}
+		else
+		{
+			$this->error = 'Failed to commit job.';
+			return FALSE;
+		}
+	}
+
 	public function client_post()
 	{
 		$json = json_decode($this->CI->input->post('data'));

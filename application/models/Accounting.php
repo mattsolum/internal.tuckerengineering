@@ -39,14 +39,19 @@ class Accounting extends CI_Model
 			}
 		}
 		
-		if($this->job_exists($accounting->debits[0]->job_id))
+		if(isset($accounting->debits[0]) && $this->job_exists($accounting->debits[0]->job_id))
 		{
 			$this->delete_by_job($accounting->debits[0]->job_id);
 		}
 		
 		//Let's check their balance!
-		$bal = $this->get_balance_by_client($accounting->debits[0]->client_id);
-		
+		$bal = 0;
+
+		if(isset($accounting->debits[0]))
+		{
+			$bal = $this->get_balance_by_client($accounting->debits[0]->client_id);
+		}
+
 		//Look, there is money in the account!
 		if($bal > 0)
 		{
@@ -247,7 +252,7 @@ class Accounting extends CI_Model
 		
 		//Three queries because MySQL does not support full outer joins
 		//First the balance of all jobs the client is attached to
-		$balance_by_job = $this->CI->db->query('SELECT jobs.client_id, SUM(ledger.amount) AS balance FROM jobs JOIN ledger ON jobs.job_id = ledger.job_id WHERE jobs.client_id = ' . $client_id . ' AND ledger.amount < 0 GROUP BY jobs.job_id');
+		$balance_by_job = $this->CI->db->query('SELECT client_id, SUM(amount) AS balance FROM ledger WHERE client_id = ' . $client_id . ' AND amount < 0 GROUP BY client_id');
 		
 		//Second summation of all payments
 		$payments = $this->CI->db->query('SELECT client_id, sum(amount) AS payments FROM payments WHERE client_id = ' . $client_id . ' GROUP BY client_id');

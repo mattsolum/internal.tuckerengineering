@@ -760,6 +760,10 @@ h1.client {
 	margin-top:			16px;
 }
 
+#balance.negative_balance {
+	background-color: #bf492f;
+}
+
 address.client {
 	display:			inline;
 	float: 				left;

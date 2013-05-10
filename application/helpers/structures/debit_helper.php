@@ -43,10 +43,13 @@ class StructDebit
 	
 	public function is_valid($strict = FALSE)
 	{
+		log_message('error', json_encode($this));
+
 		if($strict == TRUE)
 		{
 			if($this->client_id == NULL || $this->job_id == NULL)
 			{
+				log_message('error', 'StructDebit::is_valid() #' . $this->job_id . ' is invalid. Client_id or job_id is not set.');
 				return FALSE;
 			}
 			
@@ -54,12 +57,14 @@ class StructDebit
 			//number of lines.
 			if(!preg_match('/^[0-9]+$/', $this->client_id . $this->job_id))
 			{
+				log_message('error', 'StructDebit::is_valid() #' . $this->job_id . ' is invalid. Client_id or job_id is not numeric.');
 				return FALSE;
 			}
 		}
 
 		if($this->item == NULL)
 		{
+			log_message('error', 'StructDebit::is_valid() #' . $this->job_id . ' is invalid. Item is null.');
 			return FALSE;
 		}
 		
@@ -69,6 +74,7 @@ class StructDebit
 			$this->amount = $this->amount * -1;
 		}
 		
+		log_message('error', 'StructDebit::is_valid() #' . $this->job_id . ' is valid.');
 		return TRUE;
 	}
 	

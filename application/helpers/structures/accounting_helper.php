@@ -50,7 +50,7 @@ class StructAccounting
 			{
 				$this->credits[] = new StructCredit($credit);
 			}
-			
+
 			foreach($json->debits AS $debit)
 			{
 				$this->debits[] = new StructDebit($debit);
@@ -160,14 +160,24 @@ class StructAccounting
 	
 	public function is_valid($strict = TRUE)
 	{
+		log_message('error', json_encode($this->debits));
+
 		foreach($this->credits AS $credit)
 		{
-			if(!$credit->is_valid()) return FALSE;
+			if(!$credit->is_valid())
+				{
+					log_message('error', 'StructAccounting::is_valid() a credit is invalid.');
+					return FALSE;
+				}
 		}
 		
 		foreach($this->debits AS $debit)
 		{
-			if(!$debit->is_valid($strict)) return FALSE;
+			if(!$debit->is_valid($strict))
+			{
+				log_message('error', 'StructAccounting::is_valid() a debit is invalid.');
+				return FALSE;
+			} 
 		}
 		
 		return TRUE;

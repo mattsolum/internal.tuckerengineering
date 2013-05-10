@@ -482,11 +482,11 @@ class Search extends CI_Model {
 			$job = $this->CI->Job->get($e->data);
 		}
 
-		$search->id 	= $e->data->id;
+		$search->id 	= $job->id;
 		$search->type 	= 'job';
-		$search->title	= 'Job #' . $e->data->id . ', ' . $e->data->service() . ', at ' . $e->data->location->number . ' ' . $e->data->location->route . ' for ' . $e->data->client->name;
-		$search->link	= site_url('jobs/' . $e->data->id);
-		$search->body	= (string)$e->data;
+		$search->title	= 'Job #' . $job->id . ', ' . $job->service() . ', at ' . $job->location->number . ' ' . $job->location->route . ' for ' . $job->client->name;
+		$search->link	= site_url('jobs/' . $job->id);
+		$search->body	= (string)$job;
 
 		return $search;
 	}

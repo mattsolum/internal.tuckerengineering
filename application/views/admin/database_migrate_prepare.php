@@ -66,14 +66,14 @@
 						length = end - start;
 
 						var line = csv.substr(start + 1, length);
+						//$.fn.MSDebug(line);
 
 						if(line.substr(0, 8) == '--------') {
+							$.fn.MSDebug('Next section');
 							current_section++;
 							next(1);
 						} else {
 
-							$.fn.MSDebug('line #' + i + ' / ' + num_lines + ', ' + sections[current_section] + "; time left: " + hours + ':' + mins + ':' + secs);
-							
 							window[sections[current_section]](line);
 							var time_current = new Date();
 							var tDiff = ((time_current.getTime() - time_last.getTime()) / 1000);
@@ -84,6 +84,8 @@
 								mins = Math.floor((time_left % 36e5) / 6e4),
 								secs = Math.floor((time_left % 6e4) / 1000);
 							time_last = time_current;
+
+							$.fn.MSDebug('line #' + i + ' / ' + num_lines + ', ' + sections[current_section] + "; time left: " + hours + ':' + mins + ':' + secs);
 						}
 
 						set_progress(i/num_lines * 100);	
@@ -259,9 +261,37 @@
 
 		if(!job.is_valid())
 		{
-			add_status('error', '[' + job.id + '] ' + job.service() + ', ' + job.location.number + ' ' + job.location.route);	
+			add_status('error', '[' + job.id + '] ' + job.service() + ', ' + job.location.number + ' ' + job.location.route);
+			return false;
 		}
 
+		$.ajax({
+			type: 		'POST',
+			url: 		'http://local/internal.tuckerengineering/api/v2/migration/job/' + job.id + '.json',
+			data: 		{data: JSON.stringify(job)},
+			aync: 		true,
+			success: 	function(returned) {
+				if(returned.result == undefined)
+				{
+					add_status('error', returned);
+				}
+
+				if(returned.result == 'success')
+				{
+					add_status('info', 'Success! returned id ' + returned.data['id']);
+				}
+				else
+				{
+					add_status('error', returned.data.message);
+				}
+			},
+			error: 		function(jqxhr) {
+				add_status('error', jqxhr.responseText);
+			},
+			complete: 	function() {
+				next(1);
+			}
+		});
 		//add_status('info', job.service() + '; $' + job.accounting.debit_total().toFixed(2) + ' {' + cells[2] + ' - ' + cells[14] + '}');
 	}
 
@@ -423,18 +453,19 @@
 	function from_datetime(datetime)
 	{
 		//1999-11-04 00:00:00
+		//1992-07-21 00:00:00
 		
 		var year = datetime.substr(0, 4);
-		var month = datetime.substr(5, 2);
+		var month = datetime.substr(5, 2) - 1;
 		var day = datetime.substr(8, 2);
 
-		var hour = datetime.substr(11, 2);
+		var hour = datetime.substr(11, 2) + 5; //Get it into GMT
 		var minute = datetime.substr(14, 2);
 		var second = datetime.substr(17, 2);
 
 		var date = new Date(year, month, day, hour, minute, second);
 
-		return date.getTime();
+		return date.getTime() / 1000;
 	}
 </script>
 <?PHP $this->load->view('sections/footer') ?>

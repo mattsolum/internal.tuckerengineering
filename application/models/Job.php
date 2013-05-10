@@ -58,7 +58,7 @@ class Job extends CI_Model {
 		{
 			$this->CI->Event->trigger('job.commit.create', $job);
 			//It does not exist. Set date_added to now.
-			$data['job_id'] 	= $this->get_next_index();
+			$data['job_id'] 	= ($job->id != null)?$job->id:$this->get_next_index();
 			$data['date_added']	= ($job->date_added != '')?$job->date_added:now();	
 		}
 		
@@ -122,7 +122,7 @@ class Job extends CI_Model {
 		else
 		{
 			//Update the stored checksum.
-			$this->CI->checksum->store($job);
+			$this->CI->Checksum->store($job);
 			return $data['job_id'];
 		}
 	}
@@ -222,7 +222,7 @@ class Job extends CI_Model {
 		}
 		else
 		{
-			return 0;
+			return 1;
 		}
 	}
 }
