@@ -56,4 +56,60 @@ class TestAPI extends PrototypeAPI
 
 		return $this->CI->Client->commit($client) . "\n" . $client;
 	}
+
+	public function checksum_get()
+	{
+		$this->CI->load->model('Client');
+		$this->CI->load->model('Checksum');
+
+		$data_1 = new StructClient('{"id":"1","name":"ACE FOUNDATION REPAIR","title":"","balance":0,"location":{"id":null,"route":"W Saint Johns Ave","subpremise":"","locality":"Austin","admin_level_1":"Texas","admin_level_2":"Travis","postal_code":"78752","neighborhood":"","latitude":"30.33884","longitude":"-97.71665","info":[],"assets":[],"notes":[],"date_added":0,"date_updated":0,"number":"624"},"contact":[{"id":"1","type":"phone","info":"512-451-8120","note":""},{"id":"1","type":"contact","info":"JERRY SALLAS","note":""}],"notes":[{"id":null,"type_id":"1","type":"Client","user":{"id":0,"name":null,"office_id":null,"email":null,"permissions":null,"password":null,"hash":null},"text":"Imported from the old database. The old information was: 1; ACE FOUNDATION REPAIR; 624 W. ST JOHN; 0; AUSTIN; TX; 78752; 512-451-8120; ; JERRY SALLAS; ; 0.00; 0.00; 0.00","date_added":0,"user_id":0}],"date_added":0,"date_updated":0}');
+		$data_2 = new StructClient('{"id":"1","name":"ACE FOUNDATION REPAIR","title":"","balance":1500.00,"location":{"id":"1","number":"624","route":"W Saint Johns Ave","subpremise":"","locality":"Austin","admin_level_1":"Texas","admin_level_2":"Travis","postal_code":"78752","neighborhood":"","latitude":"30.33884","longitude":"-97.71665","info":[],"assets":{},"notes":[{"id":"1","type_id":"1","type":"property","user":{"id":"0","name":"Io","office_id":null,"location":{"id":null,"number":"","route":"","subpremise":"","locality":"","admin_level_1":"","admin_level_2":"","postal_code":"","neighborhood":"","latitude":"","longitude":"","info":[],"assets":{},"notes":[],"date_added":null,"date_updated":null}},"text":"I imported this property record.","date_added":"1368219554"}],"date_added":"1368219554","date_updated":"1368219554"},"contact":[{"id":null,"type":"contact","info":"JERRY SALLAS","note":""},{"id":null,"type":"phone","info":"512-451-8120","note":""}],"notes":[{"id":"2","type_id":"1","type":"client","user":{"id":"0","name":"Io","office_id":null,"location":{"id":null,"number":"","route":"","subpremise":"","locality":"","admin_level_1":"","admin_level_2":"","postal_code":"","neighborhood":"","latitude":"","longitude":"","info":[],"assets":{},"notes":[],"date_added":null,"date_updated":null}},"text":"Imported from the old database. The old information was: 1; ACE FOUNDATION REPAIR; 624 W. ST JOHN; 0; AUSTIN; TX; 78752; 512-451-8120; ; JERRY SALLAS; ; 0.00; 0.00; 0.00","date_added":"1368219554"},{"id":"3","type_id":"1","type":"client","user":{"id":"0","name":"Io","office_id":null,"location":{"id":null,"number":"","route":"","subpremise":"","locality":"","admin_level_1":"","admin_level_2":"","postal_code":"","neighborhood":"","latitude":"","longitude":"","info":[],"assets":{},"notes":[],"date_added":null,"date_updated":null}},"text":"I imported this client record.","date_added":"1368219554"}],"date_added":"1368219554","date_updated":"1368219554"}');
+			
+		echo($data_1 . "\n\n\n--------\n\n\n" . $data_2 . "\n\n\n");
+
+		echo($this->CI->Checksum->hash($data_1) . "\n" . $this->CI->Checksum->hash($data_2));
+	}
+
+	public function cardinal_get()
+	{
+		$a = 'catatonic';
+		$b = 'bat';
+
+		$ap = preg_replace('/[^a-z]/', '', strtolower($a));
+		$bp = preg_replace('/[^a-z]/', '', strtolower($b));
+		
+		$ord = array('a' => 0, 'b' => 1, 'c' => 2, 'd' => 3, 'e' => 4, 'f' => 5, 'g' => 6, 'h' => 7, 'i' => 8, 'j' => 9, 'k' => 10, 'l' => 11, 'm' => 12, 'n' => 13, 'o' => 14, 'p' => 15, 'q' => 16, 'r' => 17, 's' => 18, 't' => 19, 'u' => 20, 'v' => 21, 'w' => 22, 'x' => 23, 'y' => 24, 'z' => 25);
+
+		$va = 0;
+		$vb = 0;
+		$i 	= 0;
+
+		$min_length = min(strlen($a), strlen($b));
+
+		while($i < $min_length && $va == $vb)
+		{
+			$char_a = substr($ap, $i, 1);
+			$char_b = substr($bp, $i, 1);
+
+			if($ord[$char_b] > $ord[$char_a])
+			{
+				$vb += 1;
+			}
+			else if($ord[$char_b] < $ord[$char_a])
+			{
+				$va += 1;
+			}
+
+			$i++;
+		}
+
+		if($va <= $vb)
+		{
+			return $a . ', ' . $b;
+		}
+		else
+		{
+			return $b . ', ' . $a;
+		}
+	}
 }

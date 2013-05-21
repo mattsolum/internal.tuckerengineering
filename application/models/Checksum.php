@@ -146,7 +146,7 @@ class Checksum extends CI_Model {
 		}
 	}
 
-	private function hash($data)
+	public function hash($data)
 	{
 		$this->clear_generic($data);
 
@@ -160,7 +160,10 @@ class Checksum extends CI_Model {
 			$this->$method($data);
 		}
 
-		return MD5((string)$data);
+		//echo($data . "\n\n");
+
+		//echo(' ' . MD5(trim((string)$data)) . "\n\n\n");
+		return MD5(trim((string)$data));
 	}
 
 	private function prepare_client(&$data)
@@ -172,37 +175,28 @@ class Checksum extends CI_Model {
 	{
 		foreach($data as $key => $value)
 		{
-			if($key == 'notes')
+			if($key == 'notes' && is_object($data))
 			{
 
 				//Backwards for-loop so that the length doesn't change while
 				//I am looping through
-				for($i = count($value) - 1; $i > 0; $i--)
+				for($i = count($data->notes) - 1; $i >= 0; $i--)
 				{
 					if($data->notes[$i]->user->id == 0)
 					{
-						log_message('error', 'Deleting note ' . $key . ' from ' . $this->data_type($data) . ' - ' . $data->id);
 						unset($data->notes[$i]);
 					}
 				}
 			}
-			elseif ($key == 'date_added' || $key == 'date_updated')
-			{
-				$data->$key = 0;
-			}
-			elseif($key = 'id' || stristr($key, '_id'))
-			{
-				$data->$key = 0;
-			}
-			elseif(is_array($value) || is_object($value))
+			else if(is_array($value) || is_object($value))
 			{
 				if(is_array($data))
 				{
-					$this->clear_system_notes($data[$key]);
+					$this->clear_generic($data[$key]);
 				}
 				else
 				{
-					$this->clear_system_notes($data->$key);
+					$this->clear_generic($data->$key);
 				}
 			}
 		}

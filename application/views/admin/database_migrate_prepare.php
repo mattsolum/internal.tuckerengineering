@@ -278,7 +278,7 @@
 
 				if(returned.result == 'success')
 				{
-					add_status('info', 'Success! returned id ' + returned.data['id']);
+					//add_status('info', 'Success! returned id ' + returned.data['id']);
 				}
 				else
 				{
@@ -292,7 +292,6 @@
 				next(1);
 			}
 		});
-		//add_status('info', job.service() + '; $' + job.accounting.debit_total().toFixed(2) + ' {' + cells[2] + ' - ' + cells[14] + '}');
 	}
 
 	function payment(line) {

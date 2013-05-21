@@ -16,7 +16,11 @@ class Index extends CI_Controller {
 	
 	function index()
 	{	
-		$this->load->view('index');
+		$this->load->model('History');
+
+		$recent = $this->History->recent_activity();
+
+		$this->load->view('index', array('recent_activity' => $recent));
 	}
 }
 

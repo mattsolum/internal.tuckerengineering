@@ -35,6 +35,11 @@ class StructClient
 		}
 	}
 
+	private function sort_contacts()
+	{
+		usort($this->contact, "usort_contacts");
+	}
+
 	public function add_note($user_id, $text)
 	{
 		$note = new StructNote();
@@ -120,6 +125,8 @@ class StructClient
 		
 		if(count($this->contact) > 0)
 		{
+			$this->sort_contacts();
+
 			foreach($this->contact AS $contact_item)
 			{
 				$str .= $contact_item->type . ' - ' . $contact_item->info . ', ';
@@ -188,5 +195,49 @@ class StructClient
 				$this->notes[] = new StructNote($note);
 			}
 		}
+	}
+}
+
+function usort_contacts($a, $b)
+{
+	$ap = preg_replace('/[^a-z0-9]/', '', strtolower($a->type));
+	$bp = preg_replace('/[^a-z0-9]/', '', strtolower($b->type));
+	
+	$ord = array('9' => -10, '8' => -9, '7' => -8, '6' => -7, '5' => -6, '4' => -5, '3' => -4, '2' => -3, '1' => -2, '0' => -1, 'a' => 0, 'b' => 1, 'c' => 2, 'd' => 3, 'e' => 4, 'f' => 5, 'g' => 6, 'h' => 7, 'i' => 8, 'j' => 9, 'k' => 10, 'l' => 11, 'm' => 12, 'n' => 13, 'o' => 14, 'p' => 15, 'q' => 16, 'r' => 17, 's' => 18, 't' => 19, 'u' => 20, 'v' => 21, 'w' => 22, 'x' => 23, 'y' => 24, 'z' => 25);
+
+	$va = 0;
+	$vb = 0;
+	$i 	= 0;
+
+	$min_length = min(strlen($a->type), strlen($b->type));
+
+	while($i < $min_length && $va == $vb)
+	{
+		$char_a = substr($ap, $i, 1);
+		$char_b = substr($bp, $i, 1);
+
+		if($ord[$char_b] > $ord[$char_a])
+		{
+			$vb += 1;
+		}
+		else if($ord[$char_b] < $ord[$char_a])
+		{
+			$va += 1;
+		}
+
+		$i++;
+	}
+
+	if($va == $vb)
+	{
+		return 0;
+	}
+	else if($va < $vb)
+	{
+		return -1;
+	}
+	else
+	{
+		return 1;
 	}
 }

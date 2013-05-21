@@ -4,8 +4,8 @@
 		<meta charset="utf-8">
 		<title>TE Internal</title>
 
-		<script src="<?PHP echo base_url(); ?>resources/js/API.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/aggregate.js" type="text/javascript"></script>
+		<script src="<?PHP echo base_url(); ?>resources/js/API.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/jquery.formLabels1.0.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/jquery.validate.min.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/jquery.shadowComplete.js" type="text/javascript"></script>

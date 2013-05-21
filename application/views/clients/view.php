@@ -22,7 +22,7 @@
 		?>
 		<li<?PHP if($key == count($client->contact) - 1) echo(' class="clear-after"'); ?>>
 			<span class="contact_label"><?PHP echo($contact->type); ?></span>
-			<?PHP echo(str_replace('@', '<br />@', $contact->info)); ?>
+			<?PHP echo($contact->info); ?>
 		</li>
 		<?PHP
 		}
@@ -31,6 +31,33 @@
 	<?PHP
 	}
 	?>
+	<table id="list">
+		<thead>
+			<tr>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<?PHP 
+				foreach($jobs AS $key => $job)
+				{
+			?>
+			<tr<?PHP if($key % 2 == 1) echo(' class="odd"'); ?>>
+				<td>
+					<a href="<?PHP echo(base_url() . 'jobs/' . $job->id); ?>">#<?PHP echo($job->id); ?></a>
+				</td>
+				<td>
+					<a href="<?PHP echo(base_url() . 'jobs/' . $job->id); ?>"><?PHP echo($job->service() . ' at ' . $job->location->number . ' ' . $job->location->route); ?></a>
+				</td>
+				<td>
+					<a href="<?PHP echo(base_url() . 'jobs/' . $job->id); ?>">$<?PHP echo(number_format($job->balance(),2)); ?></a>
+				</td>
+			</tr>
+			<?PHP
+				}
+			?>
+		</tbody>
+	</table>
 	<?PHP $this->load->view('sections/notes', array('notes' => $client->notes, 'uri' => 'notes/client/' . $client_slug)); ?>
 	<div class="clear"></div>
 </div>

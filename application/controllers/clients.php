@@ -8,6 +8,7 @@ class Clients extends CI_Controller {
 
 		$this->load->model('Navigation');
 		$this->load->model('Client');
+		$this->load->model('Job');
 
 		$this->User->check_auth();
 	}
@@ -54,6 +55,8 @@ class Clients extends CI_Controller {
 	{
 		$client_id = str_replace('_', ' ', $client_id);
 		$client = $this->Client->get($client_id);
+		$jobs = $this->Job->get_by_client_id($client_id);
+
 
 		if($client != FALSE)
 		{
@@ -62,7 +65,7 @@ class Clients extends CI_Controller {
 				redirect(site_url('clients/' . url_title($client->name, '_', TRUE)));
 			}
 
-			$this->load->view('clients/view', array('client' => $client));
+			$this->load->view('clients/view', array('client' => $client, 'jobs' => $jobs));
 		}
 		else
 		{

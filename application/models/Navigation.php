@@ -64,6 +64,35 @@ class Navigation extends CI_Model {
 		return $links;
 	}
 
+	public function build_job_tools($job_id = NULL)
+	{
+		$id = '';
+		if($job_id != NULL)
+		{
+			$id = $job_id;
+		}
+
+		$links = array();
+		$links['View'] 				= 'jobs/' . $id;
+		$links['Edit'] 				= 'jobs/edit/' . $id;
+		$links['Apply Payment']		= 'payments/apply/job/'. $id;
+		$links['Make Invoice']		= 'invoices/create/job/' . $id;
+
+		$package_links = $this->CI->Event->trigger('nav.build.job_tools');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
 	public function build_user_links()
 	{
 		$links = array();

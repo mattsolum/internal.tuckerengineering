@@ -143,7 +143,7 @@ class StructJob {
 
 	public function balance()
 	{
-		return $this->debits->total() - $this->credits->total();
+		return $this->accounting->total();
 	}
 	
 	public function is_valid($strict = TRUE)

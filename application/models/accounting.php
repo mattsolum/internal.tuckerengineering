@@ -149,9 +149,61 @@ class Accounting extends CI_Model
 	public function get_by_job($job_id)
 	{
 		$accounting = new StructAccounting();
-		
-		$credits 	= $this->get_credits_by_job($job_id);
-		$debits		= $this->get_debits_by_job($job_id);
+		$credits = FALSE;
+		$debits = FALSE; 
+
+		$query = $this->CI->db->get_where('ledger', array('job_id' => $job_id));
+
+		if($query->num_rows() > 0)
+		{
+			foreach($query->result() AS $row)
+			{
+
+				if($row->amount > 0)
+				{
+					//Is a credit
+					$credit = new StructCredit();
+				
+					$credit->client_id 		= $row->client_id;
+					$credit->job_id			= $row->job_id;
+					$credit->ledger_id		= $row->ledger_id;
+					
+					$credit->item			= $row->item;
+					
+					$credit->date_added 	= $row->date_added;
+					$credit->date_updated	= $row->date_updated;
+					
+					$credit->amount			= $row->amount;
+					
+					if($row->payment_id != NULL)
+					{
+						$credit->payment = $this->CI->Payment->get($row->payment_id);
+					}
+					
+					$credits[] = $credit;
+					
+					unset($credit);
+				}
+				else
+				{
+					//Is a debit
+					$ledger = new StructDebit();
+				
+					$ledger->ledger_id 	= $row->ledger_id;
+					$ledger->client_id 	= $row->client_id;
+					$ledger->job_id		= $job_id;
+					
+					$ledger->item		= $row->item;
+					$ledger->amount		= $row->amount;
+					
+					$ledger->date_added	= $row->date_added;
+					
+					$debits[] = $ledger;
+					
+					unset($ledger);
+				}
+			}
+		}
 		
 		if($credits !== FALSE)
 			$accounting->credits	= $credits;

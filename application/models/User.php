@@ -87,9 +87,15 @@ class User extends CI_Model {
 			return FALSE;
 		}
 
+		/*if($this->read_enabled('/admin'))
+		{
+			$this->CI->output->enable_profiler(TRUE);
+		}/**/
+
 		if($this->read_enabled($permissions))
 		{
 			$this->CI->session->set_userdata('last_page', uri_string());
+
 			return TRUE;
 		}
 		else

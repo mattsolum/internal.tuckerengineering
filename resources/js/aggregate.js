@@ -51,7 +51,9 @@ true),collapseSelection:e(m,true),deleteSelectedText:e(q,true),deleteText:e(l,tr
 	var list;
 	var check = null;
 
-	$.fn.MSDebug = function(msg = ''){
+	$.fn.MSDebug = function(msg){
+		msg = typeof msg !== 'undefined' ? msg : '';
+		
 		if($('#MSDebug').length == 0) {
 			
 			check = function(){

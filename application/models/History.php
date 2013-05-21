@@ -11,9 +11,21 @@ class History extends CI_Model {
 		$this->CI->load->model('Note');	
 	}
 
-	public function recent_activity()
+	public function recent_activity($limit = 10)
 	{
 		//TODO
+		//SELECT * FROM notes GROUP BY id, type ORDER BY date_added DESC LIMIT 10;
+		//SELECT notes.*, users.name FROM notes JOIN users ON notes.user_id = users.user_id GROUP BY notes.id, notes.type ORDER BY date_added DESC LIMIT 10;
+		$limit = intval($limit);
+
+		$query = $this->CI->db->query('SELECT * FROM (SELECT id, type, note, notes.date_added, users.name FROM notes JOIN users ON notes.user_id = users.user_id ORDER BY notes.date_added DESC) AS t1 GROUP BY id, type ORDER BY date_added DESC LIMIT ' . $limit . ';');
+
+		if($query->num_rows() > 0)
+		{
+			return $query->result();
+		}
+
+		return array();
 	}
 
 	public function committed($e)

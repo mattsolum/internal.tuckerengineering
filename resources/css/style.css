@@ -739,8 +739,7 @@ h1.client {
 	margin:				11px 8px 0 8px;
 	width:				784px;
 	font-size:			40px;
-	line-height:		16px;
-	height:				16px;
+	line-height:		40px;
 	padding:			16px 0;
 }
 
@@ -764,8 +763,8 @@ h1.client {
 	background-color: #bf492f;
 }
 
-address.client {
-	display:			inline;
+address.client, address.job {
+	display:			inline-block;
 	float: 				left;
 	position: 			relative;
 	margin-left: 		8px;
@@ -794,6 +793,7 @@ address.client {
 	margin-right: 		8px;
 	width:				304px;
 	font-size:			24px;
+	word-wrap: 			break-word;
 }
 
 .clear {
@@ -813,6 +813,41 @@ address.client {
 	margin-bottom:		16px;
 	display:			block;
 	font-family:		Helvetica, Arial, sans-serif;
+}
+
+/**
+ * Job List
+ */
+
+#list {
+	width: 				960px;
+	overflow:			hidden;
+	float: 				left;
+	margin-bottom: 		48px;
+	border-top: 		1px solid #ccc3a9;
+}
+
+#list tr {
+	height: 			48px;
+	line-height: 		48px;
+}
+
+#list tr:hover a {
+	background-color: 	#8eb640;
+	color: 				#e5dac0;
+}
+
+#list tr.odd {
+	background-color: 	#ccc3a9;
+}
+
+#list a {
+	display: 			inline-block;
+	width: 				100%;
+	height: 			100%;
+	text-decoration: 	none;
+	padding: 			0 8px;
+	color: 				#000;
 }
 
 /**

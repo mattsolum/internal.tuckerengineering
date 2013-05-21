@@ -40,7 +40,7 @@ class Jobs extends CI_Controller {
 		else
 		{
 			$job = $this->Job->get($job_id);
-			$this->load->view('jobs/view', $job);
+			$this->load->view('jobs/view', array('job' => $job));
 		}
 	}
 	

@@ -417,7 +417,9 @@ function Job() {
 	this.date_updated 	= 0;
 	this.date_billed 	= 0;
 
-	this.is_valid = function(strict = true) {
+	this.is_valid = function(strict) {
+		strict = typeof strict !== 'undefined' ? strict : true;
+
 		if(/*!this.client.is_valid() || */!this.location.is_valid() || !this.accounting.is_valid(true))
 		{
 			$.fn.MSDebug('Invalid; client, location or accounting is invalid.');
@@ -580,8 +582,10 @@ function Contact() {
 	this.info 			= '';
 	this.note 			= '';
 
-	this.is_valid = function(strict = true)
+	this.is_valid = function(strict)
 	{
+		strict = typeof strict !== 'undefined' ? strict : true;
+
 		if(strict == true && this.id == null)
 		{
 			//$.fn.MSDebug('Invalid; strict is set and the ID is not.');
@@ -604,7 +608,9 @@ function Contact() {
 		return true;
 	}
 
-	this.set = function(type, info, note = '') {
+	this.set = function(type, info, note) {
+		note = typeof note !== 'undefined' ? note : '';
+
 		type = type.replace(/[^a-zA-Z0-9 _-]/, '').toLowerCase();
 		this.type = type;
 
@@ -678,8 +684,10 @@ function Accounting() {
 	this.credits 	= new Array();
 	this.debits 	= new Array();
 
-	this.is_valid = function(strict = true)
+	this.is_valid = function(strict)
 	{
+		strict = typeof strict !== 'undefined' ? strict : true;
+
 		for(var i = 0; i < this.credits.length; i++)
 		{
 			if(!this.credits[i].is_valid())
@@ -721,8 +729,11 @@ function Accounting() {
 		return true;
 	}
 
-	this.quicksort_by_property = function(arr, property, left = 0, right = null)
+	this.quicksort_by_property = function(arr, property, left, right)
 	{
+		left = typeof left !== 'undefined' ? left : 0;
+		right = typeof right !== 'undefined' ? right : null;
+
 		// when the call is recursive we need to change
 		//the array passed to the function yearlier
 		this.quicksort_by_property.array = new Array();
@@ -862,8 +873,10 @@ function Credit() {
 		return true;
 	}
 
-	this.make_payment = function(amount, tender, number = '')
+	this.make_payment = function(amount, tender, number)
 	{
+		number = typeof number !== 'undefined' ? number : '';
+
 		this.payment = new Payment();
 		this.payment.client_id = this.client_id;
 		this.payment.amount = amount;
@@ -892,7 +905,9 @@ function Debit() {
 	this.date_added		= 0;
 	this.date_updated	= 0;
 
-	this.is_valid = function(strict = false){
+	this.is_valid = function(strict){
+		strict = typeof strict !== 'undefined' ? strict : true;
+
 		if(strict == true){
 			if(this.client_id == null || this.job_id == null){
 				$.fn.MSDebug('Invalid; client and/or job ID are not set.');
@@ -1092,8 +1107,11 @@ function invoice() {
 		this.jobs = this.quicksort_by_property(this.jobs, 'id');
 	}
 
-	this.quicksort_by_property = function(arr, property, left = 0, right = null)
+	this.quicksort_by_property = function(arr, property, left, right)
 	{
+		left = typeof left !== 'undefined' ? left : 0;
+		right = typeof right !== 'undefined' ? right : null;
+
 		// when the call is recursive we need to change
 		//the array passed to the function yearlier
 		quicksort_by_property.array = new Array();

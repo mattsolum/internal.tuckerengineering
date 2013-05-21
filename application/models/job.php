@@ -169,7 +169,15 @@ class Job extends CI_Model {
 			$job->relation		= $result->requester_relationship;
 			
 			$job->client		= $this->CI->Client->get($result->client_id);
-			$job->requester		= $this->CI->Client->get($result->requester_id);
+
+			if($result->client_id == $result->requester_id)
+			{
+				$job->requester = $job->client;
+			}
+			else
+			{
+				$job->requester		= $this->CI->Client->get($result->requester_id);
+			}
 			
 			$job->accounting	= $this->CI->Accounting->get_by_job($id);
 			
@@ -184,6 +192,25 @@ class Job extends CI_Model {
 			log_message('Error', 'Error in Job method get: no data found with given ID.');
 			return FALSE;
 		}
+	}
+
+	public function get_by_client_id($client_id, $end = 10, $start = 0)
+	{
+		$client_id = $this->CI->Client->get_id($client_id);
+		$jobs = array();
+
+		$this->CI->db->limit($end);
+		$query = $this->CI->db->get_where('jobs', array('client_id' => $client_id));
+
+		if($query->num_rows() > 0)
+		{
+			foreach($query->result() AS $row)
+			{
+				$jobs[] = $this->get($row->job_id);
+			}
+		}
+
+		return $jobs;
 	}
 	
 	//Return ID on success and FALSE on failure
