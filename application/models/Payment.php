@@ -281,6 +281,7 @@ class Payment extends CI_Model {
 				$credit->item		= 'Payment';
 
 				$this->CI->Accounting->create_ledger_item($credit);
+				$this->CI->Event->trigger('job.dirty', $job);
 
 				$amount_remaining -= $credit->amount;
 			}

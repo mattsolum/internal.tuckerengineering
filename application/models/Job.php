@@ -123,6 +123,8 @@ class Job extends CI_Model {
 		{
 			//Update the stored checksum.
 			$this->CI->Checksum->store($job);
+			$this->CI->Event->trigger('job.dirty', $job->id);
+			
 			return $data['job_id'];
 		}
 	}

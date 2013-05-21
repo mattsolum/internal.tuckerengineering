@@ -70,46 +70,10 @@ class TestAPI extends PrototypeAPI
 		echo($this->CI->Checksum->hash($data_1) . "\n" . $this->CI->Checksum->hash($data_2));
 	}
 
-	public function cardinal_get()
+	public function dirty_get()
 	{
-		$a = 'catatonic';
-		$b = 'bat';
-
-		$ap = preg_replace('/[^a-z]/', '', strtolower($a));
-		$bp = preg_replace('/[^a-z]/', '', strtolower($b));
-		
-		$ord = array('a' => 0, 'b' => 1, 'c' => 2, 'd' => 3, 'e' => 4, 'f' => 5, 'g' => 6, 'h' => 7, 'i' => 8, 'j' => 9, 'k' => 10, 'l' => 11, 'm' => 12, 'n' => 13, 'o' => 14, 'p' => 15, 'q' => 16, 'r' => 17, 's' => 18, 't' => 19, 'u' => 20, 'v' => 21, 'w' => 22, 'x' => 23, 'y' => 24, 'z' => 25);
-
-		$va = 0;
-		$vb = 0;
-		$i 	= 0;
-
-		$min_length = min(strlen($a), strlen($b));
-
-		while($i < $min_length && $va == $vb)
-		{
-			$char_a = substr($ap, $i, 1);
-			$char_b = substr($bp, $i, 1);
-
-			if($ord[$char_b] > $ord[$char_a])
-			{
-				$vb += 1;
-			}
-			else if($ord[$char_b] < $ord[$char_a])
-			{
-				$va += 1;
-			}
-
-			$i++;
-		}
-
-		if($va <= $vb)
-		{
-			return $a . ', ' . $b;
-		}
-		else
-		{
-			return $b . ', ' . $a;
-		}
+		$this->CI->load->model('Event');
+		$id = 261;
+		$this->CI->Event->trigger('job.dirty', $id);
 	}
 }

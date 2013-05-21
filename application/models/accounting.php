@@ -340,6 +340,15 @@ class Accounting extends CI_Model
 		return $p + $bbj - $op;
 	}
 
+	public function get_balance_by_job($job)
+	{
+		$job = intval($job);
+
+		$arr = $this->get_balance_by_jobs($job);
+
+		return array_shift($arr);
+	}
+
 	public function get_balance_by_jobs($jobs)
 	{
 		if(is_int($jobs))

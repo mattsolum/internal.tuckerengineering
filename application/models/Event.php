@@ -6,7 +6,7 @@ class Event extends CI_Model
 	
 	private $listeners;
 	
-	public function Event()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->CI =& get_instance();

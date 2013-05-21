@@ -316,6 +316,25 @@ class Client extends CI_Model {
 		} 
 	}
 	
+	public function get_by_job_id($id)
+	{	
+		$id = preg_replace('/[^0-9]/', '', $id);
+
+		$query = $this->CI->db->get_where('jobs', array('job_id' => $id));
+
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row(0);
+
+			return $this->get_by_id($row->client_id);
+		}
+		else
+		{
+			log_message('Error', 'Error in Client method get_by_job_id: no data found with given numeric ID "' . $id . '".');
+			return FALSE;
+		}
+	}
+
 	public function get_by_property_id($id)
 	{
 		$id = preg_replace('/[^0-9]/', '', $id);
@@ -362,7 +381,7 @@ class Client extends CI_Model {
 			$client->name			= $result->name;
 			$client->title			= $result->title;
 			
-			$client->balance 		= $this->CI->Accounting->get_balance_by_client($client->id);
+			$client->balance 		= $result->balance;
 			
 			$client->location		= ($result->property_id != NULL)?$this->CI->Property->get($result->property_id):NULL;
 			$client->notes			= $this->CI->Note->get_by_client($client->id);
