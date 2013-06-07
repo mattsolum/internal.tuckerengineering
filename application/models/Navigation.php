@@ -46,7 +46,7 @@ class Navigation extends CI_Model {
 		$links = array();
 		$links['View'] 				= 'clients/' . $id;
 		$links['Edit'] 				= 'clients/edit/' . $id;
-		$links['Apply Payment']		= 'payments/apply/client/'. $id;
+		$links['Apply Payment']		= 'clients/apply_payment/' . $id;
 		$links['Make Invoice']		= 'invoices/create/client/' . $id;
 
 		$package_links = $this->CI->Event->trigger('nav.build.client_tools');

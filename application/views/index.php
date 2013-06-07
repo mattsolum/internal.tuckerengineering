@@ -8,11 +8,7 @@
 <div id="body_wrapper">
 	<table id="list">
 		<thead>
-			<tr>
-				<td>
-
-
-			</tr>
+			<tr></tr>
 		</thead>
 		<tbody>
 			<?PHP 

@@ -1,0 +1,13 @@
+{
+	"tender": {
+		"required": true
+	},
+	"number": {
+		"required": "#number_required:checked",
+		"digits": 	true
+	},
+	"amount": {
+		"required": true,
+		"USD":		true
+	}
+}

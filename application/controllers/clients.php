@@ -56,6 +56,7 @@ class Clients extends CI_Controller {
 		$client_id = str_replace('_', ' ', $client_id);
 		$client = $this->Client->get($client_id);
 		$jobs = $this->Job->get_by_client_id($client_id);
+		$num_jobs = $this->Job->number_of_jobs_for_client_id($client_id);
 
 
 		if($client != FALSE)
@@ -65,7 +66,7 @@ class Clients extends CI_Controller {
 				redirect(site_url('clients/' . url_title($client->name, '_', TRUE)));
 			}
 
-			$this->load->view('clients/view', array('client' => $client, 'jobs' => $jobs));
+			$this->load->view('clients/view', array('client' => $client, 'jobs' => $jobs, 'num_jobs' => $num_jobs));
 		}
 		else
 		{
@@ -183,6 +184,37 @@ class Clients extends CI_Controller {
 		}
 
 		return $client;
+	}
+
+	public function apply_payment($client_id)
+	{
+		$client_id = str_replace('_', ' ', $client_id);
+		$client = $this->Client->get($client_id);
+		$jobs = $this->Job->get_by_client_id($client_id);
+
+		if($this->input->post('tender') != false)
+		{
+			$payment = new StructPayment();
+			$payment->client_id = $this->Client->get_id($client_id);
+
+			$payment->tender = strtolower($this->input->post('tender'));
+			$payment->number = strtolower($this->input->post('number'));
+			$payment->amount = strtolower(preg_replace('/[^0-9\.]/', '', $this->input->post('amount')));
+
+			if($payment->is_valid())
+			{
+				$jobs = $this->input->post('job');
+
+				/*if($this->Payment->apply_by_job($payment, $jobs))
+				{
+					//Success!
+				}/**/
+			}
+		}
+		else
+		{
+			$this->load->view('clients/payment', array('jobs' => $jobs, 'client' => $client));
+		}
 	}
 }
 

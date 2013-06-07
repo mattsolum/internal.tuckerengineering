@@ -202,6 +202,7 @@ class Job extends CI_Model {
 		$jobs = array();
 
 		$this->CI->db->limit($end);
+		$this->CI->db->order_by('job_id', 'desc');
 		$query = $this->CI->db->get_where('jobs', array('client_id' => $client_id));
 
 		if($query->num_rows() > 0)
@@ -213,6 +214,15 @@ class Job extends CI_Model {
 		}
 
 		return $jobs;
+	}
+
+	public function number_of_jobs_for_client_id($client_id)
+	{
+		$client_id = $this->CI->Client->get_id($client_id);
+
+		$query = $this->CI->db->get_where('jobs', array('client_id' => $client_id));
+
+		return $query->num_rows();
 	}
 	
 	//Return ID on success and FALSE on failure

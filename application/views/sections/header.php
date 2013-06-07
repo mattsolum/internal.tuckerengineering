@@ -42,6 +42,7 @@
 		<link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/style.css">
 	</head>
 	<body>
+		<?PHP echo($this->Messages->load_flash_messages()); ?>
 		<header>
 			<?PHP $this->load->view('sections/top_level_nav'); ?>
 			<?PHP $this->load->view('sections/account_controls'); ?>
