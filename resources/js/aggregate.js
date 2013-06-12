@@ -164,3 +164,6 @@ function MSDebug(msg) {
 	}
 })(jQuery);
 
+/**
+ * Flash messages
+ */
