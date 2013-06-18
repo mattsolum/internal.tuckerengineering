@@ -167,3 +167,73 @@ function MSDebug(msg) {
 /**
  * Flash messages
  */
+
+(function($){
+	var opts;
+	var check;
+	var mouseover = false;
+
+	var methods = {
+		check: function() {
+			/*$('#flash_messages li').each(function(i){
+				if($(this).data('FMTime') <= date.getTime())
+				{
+					$(this).animate({
+						'margin-top': '-48px'
+					});
+				}
+			});*/
+		},
+
+		//Moves the list up one more space
+		hide: function(element, index) {
+			$(element).animate({
+				'margin-top': '-48px'
+			});
+
+			var date = new Date();
+			//Minus one for the "show all" element 
+			//Perhaps that is symantically weird markup but you can shut up.
+			if(index < $(element).siblings('li').length - 1)
+			{
+				$(element).siblings('li').index(index + 1).data('FMTime', date.getTime() + opts.life);
+			}
+		}
+	}
+
+	$.fn.FlashMessages = function(options){
+		opts = $.extend({
+			life: 		3000
+		}, options);
+
+		check = function() {
+			var date = new Date();
+
+			$('#flash_messages li').each(function(i){
+				if(mouseover == false && $(this).data('FMTime') <= date.getTime() && $(this).css('margin_top') == 0)
+				{
+					methods.hide(this, i);
+				}
+			});
+
+			setTimeout(check, 100);
+		}
+
+		$('#flash_messages li').each(function(i){
+			if(!$(this).hasClass('show_all'))
+			{
+				var date = new Date();
+
+				$(this).data('FMTime', date.getTime() + i * opts.life);
+			}
+		});
+
+		$('#flash_messages').mouseenter(function(){
+			mouseover = true;
+		}).mouseout(function(){
+			mouseover = false;
+		});
+
+		check();
+	}
+})(jQuery);

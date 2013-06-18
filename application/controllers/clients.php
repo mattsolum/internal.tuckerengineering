@@ -213,6 +213,8 @@ class Clients extends CI_Controller {
 		}
 		else
 		{
+			$this->Messages->flash('This is a test flash!');
+			$this->Messages->flash('This is another test flash!');
 			$this->load->view('clients/payment', array('jobs' => $jobs, 'client' => $client));
 		}
 	}

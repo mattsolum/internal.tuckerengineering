@@ -57,10 +57,33 @@ span.API_Result {
 	max-height: 		48px;
 	overflow:			hidden;
 	text-align:			center;
+	background-color:	#333;
 }
 
 #flash_messages li {
+	position:			relative;
+}
 
+#flash_messages li.show_all {
+	position:			absolute;
+	display:			block;
+	z-index: 			1001;
+	background-color: 	transparent;
+	left: 				50%;
+	margin-left:		456px;
+}
+
+#flash_messages li.show_all a {
+	display: 			block;
+	text-decoration: 	none;
+	width:				32px;
+	height:				32px;
+	padding:			8px;
+	opacity: 			0.25;
+}
+
+#flash_messages li.show_all a:hover {
+	opacity: 			1;
 }
 
 #flash_messages a {

@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://local/internal.tuckerengineering/';
+$config['base_url']	= 'http://localhost/internal.tuckerengineering/';
 
 //I like to have this constant available - Matthew Solum
 define( 'BASE_URL', $config ['base_url'] );

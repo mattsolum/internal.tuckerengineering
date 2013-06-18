@@ -35,6 +35,7 @@
 			});
 
 			$.fn.MSDebug();
+			$.fn.FlashMessages();
 		});
 		</script>
 
