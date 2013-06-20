@@ -9,8 +9,8 @@
 	</head>
 	<body>
 		<header>
-			<img src="<?PHP echo base_url(); ?>resources/img/white_logo.svg" />
-			<div>
+			<img src="<?PHP echo base_url(); ?>resources/img/color_logo.svg" />
+			<div id="company">
 				<address>
 					1311 Chisholm Trail
 					<br />Suite 303
@@ -23,34 +23,129 @@
 					tuckerengineering.net
 				</p>
 			</div>
-			<div>
-				<p>
+			<div id="invoice_number" class="six">
+				Invoice # <span class="number">12345</span>
+			</div>
+			<div id="client" class="six">
+				<h1>
 					Superior Foundation Repair
-					<br />Care of Brady Barnet
-				</p>
+				</h1>
 				<address>
 					123 Duval St
 					<br />Pflugerville, Texas 78783
 				</address>
+				<ul>
+					<li>
+						Attention Brady Barnet
+					</li>
+					<li>
+						(123) 456-7890
+					</li>
+					<li>
+						brady@superiorfoundationrepair.com
+					</li>
+				</ul>
 			</div>
-			<div>
-				<p>
-					Invoice number 12345
-				</p>
-				<p>
-					Issued March 3rd, 2013
-				</p>
+			<div id="date" class="six">
+				Date issued: <span class="date">June 20th, 2013</date>
 			</div>
+			<div class="clear">&nbsp;</span>
 		</header>
-		<table>
+		<table id="items">
+			<thead>
+				<tr>
+					<td>
+						Job Number
+					</td>
+					<td>
+						Description
+					</td>
+					<td>
+						Subtotal
+					</td>
+				</tr>
+			</thead>
 			<tr>
-				<td>123</td>
+				<td>#10876</td>
 				<td>
-					Structural Inspection / Report
-					<address>1343 Becca Teal Pl</address>
+					Consultation, review of report / Letter
+					<address>1009 Whispering Dr</address>
 				</td>
 				<td>$550.00</td>
 			</tr>
 		</table>
+
+		<table id="totals">
+			<tr>
+				<td></td>
+				<td>
+					Billed
+				</td>
+				<td>
+
+				</td>
+				<td>
+					$550.00
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					Credit
+				</td>
+				<td>
+
+				</td>
+				<td>
+					$0.00
+				</td>
+			</tr>
+			<tr>
+				<td>6/20/2013</td>
+				<td>
+					Payment
+				</td>
+				<td>
+					Check *123
+				</td>
+				<td>
+					$550.00
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					Due
+				</td>
+				<td>
+
+				</td>
+				<td>
+					$0.00
+				</td>
+			</tr>
+		</table>
+		<footer>
+			<ul>
+				<li>
+					<p>
+						Tucker Engineering, inc.
+						<br />1311 Chisholm Trail, Suite 303, Round Rock, Texas 78681
+					</p>
+					<p>
+						tuckerengineering.net
+						<br />(512) 255-7477
+					</p>
+				</li>
+				<li>
+					<p>
+						When making payment by check include the invoice number on the memo line.
+					</p>
+					<p>
+						Any additional work, including construction inspections, will be an additional charge due at the time of the inspection.
+					</p>
+				</li>
+			</ul>
+		</footer>
 	</body>
 </html>
