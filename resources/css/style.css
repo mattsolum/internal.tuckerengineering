@@ -104,11 +104,23 @@ span.API_Result {
 	background-color:	#f7a21b;
 }
 
+.flash_error {
+	background-color: 	#bf492f;
+}
+
+.flash_success {
+	background-color: 	#8eb640;;
+}
+
 /**
  * LOG IN
  */
-body#log_in {
-	min-height:			100%;
+html#log_in {
+	height:				100%;
+ }
+
+html#log_in body {
+	height:				100%;
 	background: 		#507282; /* Old browsers */
 	background: 		-moz-radial-gradient(center, ellipse cover,  #507282 0%, #274352 100%); /* FF3.6+ */
 	background: 		-webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#507282), color-stop(100%,#274352)); /* Chrome,Safari4+ */
@@ -165,7 +177,7 @@ body#log_in {
 	margin-right: 		auto;
 	width: 				960px;
 	text-align:			right;
-	margin-top:			16px;
+	padding-top:		32px;
 	color:				rgba(255,255,255,0.3);
 }
 

@@ -210,11 +210,14 @@ class Clients extends CI_Controller {
 					//Success!
 				}/**/
 			}
+			else
+			{
+				$this->Messages->flash('Something was wrong with the submitted payment information.', 'error');
+				$this->load->view('clients/payment', array('jobs' => $jobs, 'client' => $client));
+			}
 		}
 		else
 		{
-			$this->Messages->flash('This is a test flash!');
-			$this->Messages->flash('This is another test flash!');
 			$this->load->view('clients/payment', array('jobs' => $jobs, 'client' => $client));
 		}
 	}

@@ -83,6 +83,7 @@ class User extends CI_Model {
 
 		if(!$this->is_authed())
 		{
+			$this->CI->Messages->flash('You need to be logged in to view this information.', 'error');
 			redirect('user/auth/' . urlencode(base64_encode(uri_string())));
 			return FALSE;
 		}

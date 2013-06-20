@@ -40,6 +40,10 @@ class user_admin extends CI_Controller {
 				{
 					redirect($redirect);
 				}
+				else
+				{
+					$this->Messages->flash('Username or password was invalid.', 'error');
+				}
 			}
 
 			if($redirect != '' && substr($redirect, 0, 1) != '/')

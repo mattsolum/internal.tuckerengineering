@@ -54,7 +54,7 @@
 	</table>
 <div id="body_wrapper">
 <script type="text/javascript">
-	<?PHP $api = (trim($search_type))?trim($search_type). '/':''; ?>
+	<?PHP $api = ''; ?>
 	$("#search").shadowComplete({source: "<?PHP echo(site_url()); ?>api/v2/autocomplete/<?PHP echo($api); ?>", sourceSuffix: ".json", dataContainer: 'data'});
 </script>
 <?PHP $this->load->view('sections/footer'); ?>
