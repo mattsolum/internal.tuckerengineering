@@ -16,6 +16,7 @@
 				{
 
 				$link = base_url();
+				$row->type = strtolower($row->type);
 
 				switch($row->type)
 				{

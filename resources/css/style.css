@@ -27,6 +27,12 @@ h2 {
 	margin:				16px 8px;
 }
 
+h4 {
+	display:			block;
+	margin-bottom:		16px;
+	margin-left:		8px;
+}
+
 p {
 	margin-bottom:		16px;
 }
@@ -111,6 +117,17 @@ span.API_Result {
 .flash_success {
 	background-color: 	#8eb640;;
 }
+
+/*
+ * Invoice Frame
+ */
+
+ #invoice_frame {
+ 	width:				958px;
+ 	height:				1242px;
+ 	background-color:	#fff;
+ 	border:				1px solid #333;
+ }
 
 /**
  * LOG IN
@@ -801,7 +818,7 @@ span.search_term {
  * View Client
  */
 
-h1.client {
+h1.client, h1.invoice {
 	display:			inline;
 	float: 				left;
 	position: 			relative;
@@ -817,6 +834,7 @@ ul#accounting {
 	float: 				left;
 	position: 			absolute;
 	width:				144px;
+	margin-top:			8px;
 	z-index:			500;
 }
 
@@ -920,6 +938,70 @@ address.client, address.job {
 	font-family:		Helvetica, Arial, sans-serif;
 }
 
+h1.job {
+	display:			inline;
+	float: 				left;
+	position: 			relative;
+	margin:				11px 8px 0 8px;
+	width:				784px;
+	font-size:			40px;
+	line-height:		40px;
+	padding:			16px 0;
+}
+
+/**
+ * View Job
+ */
+
+#client_information {
+	width:				944px;
+	padding:			16px 8px;
+	background-color: 	#d8ceb4;
+	clear:				both;
+	margin-bottom:		48px;
+}
+
+#client_information #client_contact, 
+#requester_information #client_contact {
+	margin-bottom:		8px;
+}
+
+#requester_information {
+	width:				944px;
+	padding:			16px 8px;
+	clear:				both;
+}
+
+/**
+ * VIEW INVOICE
+ */
+
+ h1.invoice {
+ 	margin-bottom:		48px;
+ }
+
+ /**
+  *	Publish invoice
+  */
+#publish_options {
+	display: 			block;
+	height:				32px;
+	text-align:			right;
+}
+
+#publish_options li {
+	display:			inline;
+	text-align:			left;
+}
+
+#publish_options a {
+	padding:			8px 16px;
+	text-decoration: 	none;
+	color:				#fff;
+	background-color:	#507282;
+	border-radius: 		2px;
+}
+
 /**
  * Job List
  */
@@ -980,11 +1062,15 @@ address.client, address.job {
 }
 
 #showAllButton:hover {
-	border-bottom: 1px solid #3c5965;
+	text-decoration: 	underline;
 }
 
 .show_limited {
-	max-height:				528px;
+	max-height:			528px;
+}
+
+.deactivate {
+	color: 				rgba(128, 128, 128, 0.5);
 }
 
 /**

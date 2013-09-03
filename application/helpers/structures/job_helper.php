@@ -30,6 +30,7 @@ class StructJob {
 
 		$this->accounting	= new StructAccounting();
 		
+		$this->assets = array();
 		$this->notes = array();
 		
 		if($json != NULL)
@@ -108,6 +109,15 @@ class StructJob {
 			$this->location = new StructProperty();
 			$this->location->set_from_json($json->location);
 		}
+
+		if(isset($json->assets))
+		{
+			foreach($json->assets AS $asset)
+			{
+				$next_asset = new StructAsset($asset);
+				$this->assets[] = $next_asset;
+			}
+		}
 		
 		if(isset($json->accounting))
 		{
@@ -150,11 +160,13 @@ class StructJob {
 	{
 		if(!$this->client->is_valid() || !$this->location->is_valid() || !$this->accounting->is_valid($strict))
 		{
+			log_message('error', 'Client, location, or accounting is invalid.');
 			return FALSE;
 		}
 
 		if($this->requester->name != '' && !$this->requester->is_valid())
 		{
+			log_message('error', 'Requester is named, but invalid.');
 			return FALSE;
 		}
 
@@ -162,6 +174,16 @@ class StructJob {
 		{
 			if(!$note->is_valid())
 			{
+				log_message('error', 'Note is invalid.');
+				return FALSE;
+			}
+		}
+
+		foreach($this->assets AS $asset)
+		{
+			if(!$asset->is_valid())
+			{
+				log_message('error', 'Asset is invalid');
 				return FALSE;
 			}
 		}
@@ -195,6 +217,11 @@ class StructJob {
 			{
 				$str .= "\n$note";
 			}
+		}
+
+		foreach($this->assets AS $asset)
+		{
+			$str .= "\n" . $asset;
 		}
 		
 		return $str;

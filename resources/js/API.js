@@ -198,6 +198,23 @@ function Client() {
 	}
 }
 
+function Asset() {
+	this.id 			= null;
+	this.filename 		= '';
+	this.date_added 	= 0;
+	this.date_updated 	= 0;
+
+	this.is_valid = function() {
+		if(this.filename == '')
+		{
+			MSDebug('Asset is invalid: ' + this.filename);
+			return false;
+		};
+
+		return true;
+	}
+}
+
 function Property() {
 	this.id 			= null;
 
@@ -435,6 +452,13 @@ function Job() {
 		for(var i = 0; i < this.notes.length; i++) {
 			if(!this.notes[i].is_valid()) {
 				$.fn.MSDebug('Invalid; a note is invalid.');
+				return false;
+			}
+		}
+
+		for(var i = 0; i < this.assets.length; i++) {
+			if(!this.assets[i].is_valid()) {
+				$.fn.MSDebug('Invalid; an asset is invalid.');
 				return false;
 			}
 		}
@@ -956,6 +980,12 @@ function Payment() {
 		if((this.tender == 'credit' || this.tender == 'check') && this.number == '')
 		{
 			$.fn.MSDebug('Invalid; the tender that is set requires a identifying number.');
+			return false;
+		}
+
+		if(this.amount == 0)
+		{
+			MSDebug('Invalid payment; amount is zero.');
 			return false;
 		}
 

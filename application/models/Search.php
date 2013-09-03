@@ -461,7 +461,7 @@ class Search extends CI_Model {
 		$search->id 	= $client->id;
 		$search->type 	= 'client';
 		$search->title	= $client->name;
-		$search->link	= site_url('clients/' . url_title($client->name, '_', TRUE));
+		$search->link	= 'clients/' . url_title($client->name, '_', TRUE);
 		$search->body	= (string)$client;
 
 		return $search;
@@ -485,7 +485,7 @@ class Search extends CI_Model {
 		$search->id 	= $job->id;
 		$search->type 	= 'job';
 		$search->title	= 'Job #' . $job->id . ', ' . $job->service() . ', at ' . $job->location->number . ' ' . $job->location->route . ' for ' . $job->client->name;
-		$search->link	= site_url('jobs/' . $job->id);
+		$search->link	= 'jobs/' . $job->id;
 		$search->body	= (string)$job;
 
 		return $search;
@@ -510,7 +510,7 @@ class Search extends CI_Model {
 		$search->id 	= $property->id;
 		$search->type 	= 'property';
 		$search->title	= $property->number . ' ' . $property->route . $subpremise;
-		$search->link	= site_url('properties/' . $property->id);
+		$search->link	= 'properties/' . $property->id;
 		$search->body 	= (string)$property;
 
 		return $search;

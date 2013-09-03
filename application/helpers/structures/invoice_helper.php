@@ -21,6 +21,11 @@ class StructInvoice
 		}
 	}
 
+	public function slug()
+	{
+		return $this->client->id . '-' . $this->id;
+	}
+
 	/**
 	 * Loads data from a json dump of this object
 	 * accepts a raw string of json or an interpreted object
@@ -180,6 +185,55 @@ class StructInvoice
 		}
 
 		return $total;
+	}
+
+	public function payments()
+	{
+		$payments = array();
+
+		$payments['credit'] = array(
+									'date' => 0,
+									'tender' => '',
+									'number' => '',
+									'amount' => 0,
+									'type' 	 => 'credit'
+								);
+
+		foreach($this->jobs AS $job)
+		{
+			if(count($job->accounting->credits) > 0)
+			{
+				foreach($job->accounting->credits AS $credit)
+				{
+					if($credit->payment != NULL)
+					{
+						//It is a payment, sort it by payment_id
+
+						if(isset($payments[$credit->payment->id]))
+						{
+							$payments[$credit->payment->id]['amount'] += $credit->amount;
+						}
+						else
+						{
+							$payments[$credit->payment->id] = array(
+																'date' => $credit->date_added,
+																'tender' => $credit->payment->tender,
+																'number' => $credit->payment->number,
+																'amount' => $credit->amount,
+																'type' 	 => 'payment'
+															);
+						}
+					}
+					else
+					{
+						//Some other type of credit.
+						$payments['credit']['amount'] += $credit->amount;
+					}
+				}
+			}
+		}
+
+		return $payments;
 	}
 
 	/**

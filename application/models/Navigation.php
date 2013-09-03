@@ -47,7 +47,7 @@ class Navigation extends CI_Model {
 		$links['View'] 				= 'clients/' . $id;
 		$links['Edit'] 				= 'clients/edit/' . $id;
 		$links['Apply Payment']		= 'clients/apply_payment/' . $id;
-		$links['Make Invoice']		= 'invoices/create/client/' . $id;
+		$links['Make Invoice']		= 'clients/invoice/' . $id;
 
 		$package_links = $this->CI->Event->trigger('nav.build.client_tools');
 
@@ -75,8 +75,8 @@ class Navigation extends CI_Model {
 		$links = array();
 		$links['View'] 				= 'jobs/' . $id;
 		$links['Edit'] 				= 'jobs/edit/' . $id;
-		$links['Apply Payment']		= 'payments/apply/job/'. $id;
-		$links['Make Invoice']		= 'invoices/create/job/' . $id;
+		$links['Apply Payment']		= 'jobs/apply_payment/'. $id;
+		$links['View Invoice']		= 'jobs/invoice/' . $id;
 
 		$package_links = $this->CI->Event->trigger('nav.build.job_tools');
 
@@ -252,6 +252,34 @@ class Navigation extends CI_Model {
 		$links['Apply payment']			= 'payments/invoice';
 
 		$package_links = $this->CI->Event->trigger('nav.build.invoice');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
+	public function build_invoice_tools($invoice_id = NULL)
+	{
+		$id = '';
+		if($invoice_id != NULL)
+		{
+			$id = $invoice_id;
+		}
+
+		$links = array();
+		$links['View'] 				= 'invoices/' . $id;
+		$links['Apply Payment']		= 'invoices/apply_payment/'. $id;
+		$links['Publish']			= 'invoices/publish/' . $id;
+
+		$package_links = $this->CI->Event->trigger('nav.build.invoice_tools');
 
 		if($package_links != NULL)
 		{

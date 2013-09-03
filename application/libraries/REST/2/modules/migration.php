@@ -76,9 +76,22 @@ class MigrationAPI extends PrototypeAPI
 		$this->CI->load->model('Job');
 
 		$job = new StructJob($this->CI->input->post('data'));
-		$job->client = $this->CI->Client->get($job->client->id);
-		
-		$id = $this->CI->Job->commit($job);
+		$client = $this->CI->Client->get($job->client->id);
+
+		if($client != FALSE)
+		{
+			$job->client = $client;
+		}
+
+		if($job->is_valid())
+		{
+			$id = $this->CI->Job->commit($job);
+		}
+		else
+		{
+			$this->error = 'Job is invalid.';
+			return FALSE;
+		}
 
 		if($id !== FALSE)
 		{
@@ -105,7 +118,7 @@ class MigrationAPI extends PrototypeAPI
 			$client->id = $this->API->id;
 		}
 
-		log_message('error', '--- migration/client:POST called for ' . $client->id . ' ' . $client->name);
+		//log_message('error', '--- migration/client:POST called for ' . $client->id . ' ' . $client->name);
 
 		$client->name = trim(ucwords(strtolower($client->name)));
 
@@ -137,7 +150,7 @@ class MigrationAPI extends PrototypeAPI
 
 		if(!$client->location->is_valid())
 		{
-			log_message('error', '--- migration/client:POST address received is invalid');
+			//log_message('error', '--- migration/client:POST address received is invalid');
 			$client->location = $this->office_location;
 			$client->add_note(0, 'The address given was formatted poorly. The client has been given the office address. Old address was: ' . $old_location->location_string());
 		}
@@ -147,7 +160,7 @@ class MigrationAPI extends PrototypeAPI
 			$id = $this->CI->Client->commit($client);
 			if($id !== FALSE)
 			{
-				log_message('error', '--- migration/client:POST Client successefully committed ' . $client->id . ' ' . $client->name);
+				//log_message('error', '--- migration/client:POST Client successefully committed ' . $client->id . ' ' . $client->name);
 				return array('id' => $id);
 			}
 			else
@@ -163,5 +176,27 @@ class MigrationAPI extends PrototypeAPI
 			$this->error = 'Data given is not a valid client object. Client given: ' . $client;
 			return FALSE;	
 		}
+	}
+
+	public function payment_post()
+	{
+		$this->CI->load->model('Payment');
+
+		$json = json_decode($this->CI->input->post('data'));
+
+		$passed_id = preg_replace('/[^0-9]/', '', $this->API->id);
+		
+		$payment = new StructPayment();
+		$payment->set_from_json($json);
+
+		$payment_id = $this->CI->Payment->apply_by_job($payment, $passed_id);
+
+		if($payment_id != FALSE)
+		{
+			return array('id' => $payment_id);
+		} 
+
+		$this->error = 'Error applying payment';
+		return FALSE;
 	}
 }

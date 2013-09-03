@@ -5,6 +5,8 @@ class StructNote
 	public $id			= NULL;
 	public $type_id 	= NULL;
 	public $type		= NULL;
+
+	public $natural_id 	= NULL; //Because notes are used for "recent activity" when we display a list we might want "John Smith" instead of "Client 1234"
 	
 	public $user		= NULL;
 	

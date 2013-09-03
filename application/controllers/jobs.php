@@ -43,6 +43,45 @@ class Jobs extends CI_Controller {
 			$this->load->view('jobs/view', array('job' => $job));
 		}
 	}
+
+	function invoice($job_id = NULL)
+	{
+		$this->load->model('Invoice');
+
+		if($job_id == NULL)
+		{
+			$this->Messages->flash('A job ID was not provided, the invoice could not be located.');
+			$this->load->view('jobs/index');
+		}
+		else
+		{
+			$job = $this->Job->get($job_id);
+			
+			$invoice = new StructInvoice();
+
+			$invoice->client = $job->client;
+			$invoice->jobs[] = $job;
+
+			$invoice_id = $this->Invoice->commit($invoice);
+
+			if($invoice_id != FALSE)
+			{
+				redirect('invoices/' . $job->client->id . '-' . $invoice_id);
+			}
+			else
+			{
+				$this->Messages->flash('I am sorry, something went wrong with the invoice.', 'error');
+				redirect('jobs/' . $job->id);
+			}
+		}
+	}
+
+	function apply_payment($job_id)
+	{
+		$job = $this->Job->get($job_id);
+
+		$this->load->view('clients/payment', array('jobs' => array($job), 'client' => $job->client));
+	}
 	
 	/**
 	 * Displays a single record for editing

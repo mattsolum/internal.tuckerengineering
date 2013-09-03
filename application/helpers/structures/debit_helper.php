@@ -74,7 +74,7 @@ class StructDebit
 			$this->amount = $this->amount * -1;
 		}
 		
-		log_message('error', 'StructDebit::is_valid() #' . $this->job_id . ' is valid.');
+		//log_message('error', 'StructDebit::is_valid() #' . $this->job_id . ' is valid.');
 		return TRUE;
 	}
 	

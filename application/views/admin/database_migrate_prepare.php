@@ -18,7 +18,7 @@
 	var num_lines = 0;
 	var last_position = 0;
 	var i = 0;
-	var sections = new Array('duplicate', 'client', 'job', 'payment');
+	var sections = new Array('duplicate', 'payment');
 	var current_section = 0;
 	var time_last = new Date();
 	var time_start = new Date();
@@ -50,7 +50,7 @@
 
 		$.ajax({
 			type: 		'GET',
-			url: 		'<?PHP echo(base_url()); ?>/resources/migration/data/' + data_file,
+			url: 		'<?PHP echo(base_url()); ?>resources/migration/data/' + data_file,
 			dataType: 	'text',
 			success: 	function(csv){
 				$.fn.MSDebug(data_file + ' loaded.');
@@ -200,13 +200,13 @@
 		{
 			$.ajax({
 				type: 		'POST',
-				url: 		'http://local/internal.tuckerengineering/api/v2/client/' + client.id + '.json',
+				url: 		'<?PHP echo(base_url()); ?>api/v2/client/' + client.id + '.json',
 				data: 		{data: JSON.stringify(client)},
-				aync: 		true,
+				async: 		true,
 				success: 	function(returned) {
 					if(returned.result == undefined)
 					{
-						add_status('error', returned);
+						add_status('error', returned + ' undefined');
 					}
 
 					if(returned.result == 'success')
@@ -215,11 +215,11 @@
 					}
 					else
 					{
-						add_status('error', returned.data.message);
+						add_status('error', returned.data.message + ' api');
 					}
 				},
 				error: 		function(jqxhr) {
-					add_status('error', jqxhr.responseText);
+					add_status('error', jqxhr.responseText + ' ajax');
 				},
 				complete: 	function() {
 					next(1);
@@ -240,6 +240,8 @@
 			job.client.id = cells[0];
 		}
 
+		//{"id":null,"filename":"WYCHWOOD","date_added":711712800,"date_updated":711712800}
+
 		job.id = cells[1];
 		job.location.number = cells[3];
 		job.location.route = cells[4];
@@ -256,8 +258,23 @@
 
 		job.add_item(cells[2], cells[14]);
 
-		job.add_note(0, 'Document file: ' + cells[12]);
+		//Asset
+		if(cells[12] != '')
+		{
+			job.assets[0] = new Asset();
+
+			job.assets[0].date_added = job.assets[0].date_updated = job.date_added;
+			job.assets[0].filename = cells[12];
+
+			MSDebug(JSON.stringify(job.assets));
+		}
+		
+
 		job.add_note(0, "Imported from the old database. The old information was: " + cells[15]);
+		if(cells[10] != '')
+		{
+			job.add_note(0, "Requested by " + cells[10]);
+		}
 
 		if(!job.is_valid())
 		{
@@ -267,9 +284,75 @@
 
 		$.ajax({
 			type: 		'POST',
-			url: 		'http://local/internal.tuckerengineering/api/v2/migration/job/' + job.id + '.json',
+			url: 		'<?PHP echo(base_url()); ?>api/v2/migration/job/' + job.id + '.json',
 			data: 		{data: JSON.stringify(job)},
-			aync: 		true,
+			async: 		true,
+			success: 	function(returned) {
+				if(returned.result == undefined)
+				{
+					add_status('error', returned + ' undefined');
+				}
+
+				if(returned.result == 'success')
+				{
+					//add_status('info', 'Success! returned id ' + returned.data['id']);
+				}
+				else
+				{
+					add_status('error', returned.data.message + ' api error');
+				}
+			},
+			error: 		function(jqxhr) {
+				add_status('error', jqxhr.responseText + ' ajax error');
+			},
+			complete: 	function() {
+				next(1);
+			}
+		});
+	}
+
+	function payment(line) {
+		var payment = new Payment();
+		var cells = $.csv.toArray(line);
+
+		if(cells[4] == 0)
+		{
+			next(1);
+			return true;
+		}
+
+		payment.client_id = cells[0];
+		var job_id = cells[1];
+
+		payment.date_added = from_datetime(cells[2]);
+
+		MSDebug(payment.date_added);
+
+		var tender = 'Cash';
+
+		if(cells[3] != 0)
+		{
+			tender = 'Check';
+		}
+
+		payment.tender = tender;
+		payment.number = cells[3];
+		payment.amount = cells[4];
+
+		payment.date_posted = from_datetime(cells[5]);
+
+		if(!payment.is_valid())
+		{
+			add_status('error', '[' + payment.client_id + ', ' + payment.job_id + '] ' + payment.amount);
+			next(1);
+			return false;
+		}
+
+		$.ajax({
+			type: 		'POST',
+			url: 		'<?PHP echo(base_url()); ?>api/v2/migration/payment/' + job_id + '.json',
+			data: 		{data: JSON.stringify(payment)},
+			async: 		true,
 			success: 	function(returned) {
 				if(returned.result == undefined)
 				{
@@ -292,37 +375,6 @@
 				next(1);
 			}
 		});
-	}
-
-	function payment(line) {
-		var payment = new Credit();
-		var cells = $.csv.toArray(line);
-
-		if(cells[4] == 0)
-		{
-			return true;
-		}
-
-		payment.client_id = cells[0];
-		payment.job_id = cells[1];
-
-		payment.date_added = from_datetime(cells[2]);
-
-		var tender = 'Cash';
-
-		if(cells[3] != 0)
-		{
-			tender = 'Check';
-		}
-
-		payment.make_payment(cells[4], tender, cells[3]);
-
-		payment.payment.date_posted = from_datetime(cells[5]);
-
-		if(!payment.is_valid())
-		{
-			add_status('error', '[' + payment.client_id + ', ' + payment.job_id + '] ' + payment.amount);
-		}
 	}
 
 	function expand_abbr(state) {
@@ -426,6 +478,8 @@
 
 	function set_progress(percent)
 	{
+		//SUPER hacky, but because earlier me decided to calculate percentage based on a modulo 
+		//This is required so the bar doesn't jump back to zero when it is full.
 		if(percent > 100)
 		{
 			percent = 99.999;

@@ -67,7 +67,7 @@
 			?>
 		</tbody>
 	</table>
-	<a href="#" id="showAllButton">Show all <?PHP echo($num_jobs); ?> jobs</a>
+	<a href="#" id="showAllButton" class="<?PHP if($num_jobs <= 10) echo('deactivate'); ?>"><?PHP echo(($num_jobs <= 10)?'Showing all ':'Show all ' . $num_jobs); ?> jobs</a>
 	<?PHP $this->load->view('sections/notes', array('notes' => $client->notes, 'uri' => 'notes/client/' . $client_slug)); ?>
 	<div class="clear"></div>
 </div>

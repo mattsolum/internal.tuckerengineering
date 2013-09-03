@@ -96,6 +96,15 @@ class ClientAPI extends PrototypeAPI
 			return FALSE;	
 		}
 	}
+
+	public function wash_get()
+	{
+		if($this->API->id != '')
+		{
+			$id = $this->CI->Client->get_id(str_replace('_', ' ', $this->API->id));
+			$this->CI->Event->trigger('client.dirty', $id);
+		}
+	}
 	
 	public function property_get()
 	{

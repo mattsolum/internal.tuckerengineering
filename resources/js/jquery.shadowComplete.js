@@ -153,6 +153,8 @@
 		 * @return {null}
 		 */
 		build: function($this) {
+			$this.attr('autocomplete', 'off');
+			
 			if($this.prop('tagName') == 'INPUT') {
 				//Make sure it is not of a type we cannot work with
 				if($this.prop('tagName').search(/button|checkbox|file|hidden|image|radio|reset|submit/i) == -1)
@@ -181,6 +183,7 @@
 			SCInput.addClass('SCInput');
 			SCInput.addClass('SCSelect');
 			SCInput.attr('type', 'text');
+			SCInput.attr('autocomplete', 'off');
 
 			var source = new Array();
 
@@ -305,6 +308,8 @@
 					},
 					class: 'SCList'
 				}).hide();
+
+			$this.attr('autocomplete', 'off');
 
 			$this.before(SCHint);
 			$this.after(SCList);

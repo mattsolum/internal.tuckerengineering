@@ -55,6 +55,11 @@ class StructPayment
 			return FALSE;
 		}
 
+		if($this->amount == 0)
+		{
+			return FALSE;
+		}
+
 		return TRUE;
 	}
 }

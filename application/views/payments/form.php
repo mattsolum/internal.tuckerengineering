@@ -1,3 +1,5 @@
+<?PHP $total_due = 0; ?>
+
 <form id="apply_payment_form" class="edit_form" action="<?PHP echo($action); ?>" method="POST">
 	<table id="list">
 		<thead>
@@ -9,10 +11,11 @@
 			<?PHP 
 				foreach($jobs AS $key => $job)
 				{
+					$total_due += $job->balance();
 			?>
 			<tr<?PHP if($key % 2 == 1) echo(' class="odd"'); ?>>
 				<td>
-					<input type="checkbox" name="job[]" id="job[<?PHP echo($job->id); ?>]" value="<?PHP echo($job->id); ?>" />
+					<input type="checkbox" name="job[]" id="job[<?PHP echo($job->id); ?>]" value="<?PHP echo($job->id); ?>" checked="checked" />
 				</td>
 				<td>
 					<label for="job[<?PHP echo($job->id); ?>]">#<?PHP echo($job->id); ?></label>
@@ -50,7 +53,7 @@
 			<label class="hint" for="number">Required for checks, must be a numeric.</number>
 		</li>
 		<li>
-			<input type="text" name="amount" title="Amount" class="amount" id="amount" />
+			<input type="text" name="amount" title="Amount" class="amount" id="amount" value="<?PHP echo(($this->input->post('amount') === false)?'$' . number_format(abs($total_due), 2):$this->input->post('amount')); ?>"/>
 			<label class="hint" for="amount">Amount must be formatted as USD. Required.</label>
 		</li>
 	</ul>

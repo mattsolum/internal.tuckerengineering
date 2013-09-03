@@ -175,7 +175,7 @@ class StructAccounting
 		{
 			if(!$debit->is_valid($strict))
 			{
-				log_message('error', 'StructAccounting::is_valid() a debit is invalid.');
+				//log_message('error', 'StructAccounting::is_valid() a debit is invalid.');
 				return FALSE;
 			} 
 		}

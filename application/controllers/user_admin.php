@@ -30,6 +30,7 @@ class user_admin extends CI_Controller {
 
 		if($this->User->is_authed())
 		{
+			$this->Messages->flash('You have been signed out.', 'success');
 			$this->User->de_auth();
 		}
 		else

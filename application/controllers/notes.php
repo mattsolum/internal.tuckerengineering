@@ -59,6 +59,25 @@ class notes extends CI_Controller {
 		redirect(site_url('clients/' . $id));
 	}
 
+	public function job($id)
+	{
+
+		if($this->input->post('note') != FALSE && $id != FALSE)
+		{
+			$message = $this->input->post('note');
+
+			$note = new StructNote();
+			$note->user->id = $this->User->get_user_id();
+			$note->type 	= 'Job';
+			$note->text 	= $message;
+			$note->type_id 	= $id;
+
+			$this->Note->commit($note);
+		}
+
+		redirect(site_url('jobs/' . $id));
+	}
+
 	public function delete($id)
 	{
 		$note = $this->Note->get_by_note($id);

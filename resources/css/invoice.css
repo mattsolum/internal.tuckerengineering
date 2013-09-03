@@ -17,13 +17,19 @@ header {
 header img {
 	padding-left:		1.1%;
 	display: 			block;
-	margin-bottom:		12pt;
+	margin-bottom:		6pt;
 }
 
 #company {
-	display:			none;
+	display: 			block;
+	margin-left:		1.5%;
+	color: 				#666;
+	margin-bottom:		12pt;
 }
 
+#company p {
+	display:			none;
+}
 #client {
 	color:				#666;
 	margin-bottom:		12pt;
@@ -42,6 +48,7 @@ header img {
 #date {
 	color:				#666;
 	margin-top:			12pt;
+	margin-bottom:		12pt;
 }
 
 #date .date {
@@ -49,10 +56,10 @@ header img {
 }
 
 #invoice_number {
-	color:				#666;
-	height:				144pt;
-	line-height:		144pt;
-	font-size:			30pt;
+	color:				#777;
+	height:				108pt;
+	line-height:		108pt;
+	font-size:			28pt;
 }
 
 #invoice_number .number {
@@ -61,7 +68,7 @@ header img {
 }
 
 #invoice_number .number:before {
-	content: 			'0';
+	
 }
 
 #items {
@@ -77,6 +84,7 @@ header img {
 }
 
 #items thead td {
+	padding:			6pt 1%;
 	text-align:			left;
 	color:				#ccc;
 	background-color:	#333;
@@ -88,7 +96,7 @@ header img {
 
 #items td {
 	margin:				0;
-	padding:			1%;
+	padding:			17pt 1% 6pt 1%;
 	width:				61%;
 }
 
@@ -99,6 +107,14 @@ header img {
 #items td:last-child {
 	text-align:			right;
 	width:				15%;
+}
+
+#items tr {
+	border-bottom:		0.25pt solid #ccc;
+}
+
+#items tr:last-child, #items thead tr {
+	border-bottom:		none;
 }
 
 #items address {
@@ -116,11 +132,11 @@ hr {
 }
 
 #totals {
-	margin-top:		24pt;
+	margin-top:			24pt;
 }
 
 #totals td {
-	padding:			1%;
+	padding:			6pt 1%;
 	width:				15%;
 }
 
@@ -147,7 +163,6 @@ hr {
 
 footer {
 	margin-top:			48pt;
-	font-size:			8pt;
 	color:				#666;
 	width:				100%;
 }

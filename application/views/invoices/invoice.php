@@ -1,9 +1,6 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 	<head>
-		<meta charset="utf-8">
-		<title>Invoice</title>
-
 		<link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/reset.css" media="all">
 		<link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/invoice.css" media="all">
 	</head>
@@ -12,9 +9,7 @@
 			<img src="<?PHP echo base_url(); ?>resources/img/color_logo.svg" />
 			<div id="company">
 				<address>
-					1311 Chisholm Trail
-					<br />Suite 303
-					<br />Round Rock, Texas 78681
+					1311 Chisholm Trail, Suite 303, Round Rock, Texas 78681
 				</address>
 				<p>
 					(512) 255-7477
@@ -24,30 +19,26 @@
 				</p>
 			</div>
 			<div id="invoice_number" class="six">
-				Invoice # <span class="number">12345</span>
+				Invoice # <span class="number"><?PHP echo($invoice->slug()); ?></span>
 			</div>
 			<div id="client" class="six">
 				<h1>
-					Superior Foundation Repair
+					<?PHP echo($invoice->client->name); ?>
 				</h1>
 				<address>
-					123 Duval St
-					<br />Pflugerville, Texas 78783
+					<?PHP echo($invoice->client->location->location_string()); ?>
 				</address>
 				<ul>
+					<?PHP foreach($invoice->client->contact AS $contact): ?>
 					<li>
-						Attention Brady Barnet
+						<?PHP if($contact->type == 'contact') echo('Attention '); ?>
+						<?PHP echo($contact->info); ?>
 					</li>
-					<li>
-						(123) 456-7890
-					</li>
-					<li>
-						brady@superiorfoundationrepair.com
-					</li>
+					<?PHP endforeach; ?>
 				</ul>
 			</div>
 			<div id="date" class="six">
-				Date issued: <span class="date">June 20th, 2013</date>
+				Date issued: <span class="date"><?PHP echo(date('n/j/Y', $invoice->date_added)); ?></date>
 			</div>
 			<div class="clear">&nbsp;</span>
 		</header>
@@ -65,14 +56,16 @@
 					</td>
 				</tr>
 			</thead>
+			<?PHP foreach($invoice->jobs AS $job): ?>
 			<tr>
-				<td>#10876</td>
+				<td>#<?PHP echo($job->id); ?></td>
 				<td>
-					Consultation, review of report / Letter
-					<address>1009 Whispering Dr</address>
+					<?PHP echo($job->service()); ?>
+					<address><?PHP echo($job->location->location_string()); ?></address>
 				</td>
-				<td>$550.00</td>
+				<td>$<?PHP echo(number_format($job->accounting->debit_total() * -1, 2)); ?></td>
 			</tr>
+			<?PHP endforeach; ?>
 		</table>
 
 		<table id="totals">
@@ -85,33 +78,25 @@
 
 				</td>
 				<td>
-					$550.00
+					$<?PHP echo(number_format(abs($invoice->debits_total()), 2)); ?>
 				</td>
 			</tr>
+			<?PHP foreach($invoice->payments() AS $payment): ?>
 			<tr>
-				<td></td>
 				<td>
-					Credit
+					<?PHP if($payment['date'] != 0) echo(date('n/j/Y', $payment['date'])); ?>
 				</td>
 				<td>
-
+					<?PHP echo(ucwords($payment['type'])); ?>
 				</td>
 				<td>
-					$0.00
-				</td>
-			</tr>
-			<tr>
-				<td>6/20/2013</td>
-				<td>
-					Payment
+					<?PHP echo(ucwords($payment['tender'])); ?> <?PHP echo(($payment['number'] != '')?' *' . $payment['number']:''); ?>
 				</td>
 				<td>
-					Check *123
-				</td>
-				<td>
-					$550.00
+					$<?PHP echo(number_format($payment['amount'], 2)); ?>
 				</td>
 			</tr>
+			<?PHP endforeach; ?>
 			<tr>
 				<td></td>
 				<td>
@@ -121,7 +106,7 @@
 
 				</td>
 				<td>
-					$0.00
+					$<?PHP echo(number_format(abs($invoice->balance()), 2)); ?>
 				</td>
 			</tr>
 		</table>

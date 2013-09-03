@@ -9,6 +9,7 @@ class Clients extends CI_Controller {
 		$this->load->model('Navigation');
 		$this->load->model('Client');
 		$this->load->model('Job');
+		$this->load->model('Invoice');
 
 		$this->User->check_auth();
 	}
@@ -54,7 +55,12 @@ class Clients extends CI_Controller {
 	public function view($client_id)
 	{
 		$client_id = str_replace('_', ' ', $client_id);
+		//$client_id = $this->Client->get_id($client_id);
+
+		//$this->Event->trigger('client.dirty', $client_id);
+
 		$client = $this->Client->get($client_id);
+
 		$jobs = $this->Job->get_by_client_id($client_id);
 		$num_jobs = $this->Job->number_of_jobs_for_client_id($client_id);
 
@@ -188,9 +194,10 @@ class Clients extends CI_Controller {
 
 	public function apply_payment($client_id)
 	{
+		$id = $client_id;
 		$client_id = str_replace('_', ' ', $client_id);
 		$client = $this->Client->get($client_id);
-		$jobs = $this->Job->get_by_client_id($client_id);
+		$jobs = $this->Job->get_unpaid_jobs_by_client_id($client_id);
 
 		if($this->input->post('tender') != false)
 		{
@@ -205,9 +212,10 @@ class Clients extends CI_Controller {
 			{
 				$jobs = $this->input->post('job');
 
-				/*if($this->Payment->apply_by_job($payment, $jobs))
+				if($this->Payment->apply_by_jobs($payment, $jobs))
 				{
-					//Success!
+					$this->Messages->flash('Payment for $' . number_format($payment->amount, 2) . ' successfully applied.', 'success');
+					redirect('clients/' . $id);
 				}/**/
 			}
 			else
@@ -219,6 +227,45 @@ class Clients extends CI_Controller {
 		else
 		{
 			$this->load->view('clients/payment', array('jobs' => $jobs, 'client' => $client));
+		}
+	}
+
+	public function make_invoice($client_id)
+	{
+		$client_id = str_replace('_', ' ', $client_id);
+		$client = $this->Client->get($client_id);
+		$jobs = $this->Job->get_unpaid_jobs_by_client_id($client_id);
+
+		if($this->input->post('job') != false)
+		{
+			$invoice = new StructInvoice();
+			$job_list = $this->input->post('job');
+
+			foreach($job_list AS $job)
+			{
+				$invoice->jobs[] = $this->Job->get($job);
+			}
+
+			$invoice->client = $client;
+
+			if($invoice->is_valid())
+			{
+				$invoice_id = $this->Invoice->commit($invoice);
+				if($invoice_id)
+				{
+					$this->Messages->flash('Invoice for ' . $client->name . ' created.', 'success');
+					redirect('invoices/' . $client->id . '-' . $invoice_id);
+				}/**/
+			}
+			else
+			{
+				$this->Messages->flash('Something was wrong with the submitted jobs for an invoice.', 'error');
+				$this->load->view('clients/make_invoice', array('jobs' => $jobs, 'client' => $client));
+			}
+		}
+		else
+		{
+			$this->load->view('clients/make_invoice', array('jobs' => $jobs, 'client' => $client));
 		}
 	}
 }

@@ -25,7 +25,7 @@ class Checksum extends CI_Model {
 
 		$old = $this->read($data);
 
-		log_message('error', 'Checksum::compare; #' . $data->id . ' ' . $type . '; ' . $old->hash . ' == ' . $current_hash);
+		//log_message('error', 'Checksum::compare; #' . $data->id . ' ' . $type . '; ' . $old->hash . ' == ' . $current_hash);
 
 		if($old === FALSE || $current_hash == $old->hash)
 		{

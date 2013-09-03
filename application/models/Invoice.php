@@ -20,8 +20,17 @@ class Invoice extends CI_Model {
 	 * @param $invoice_id
 	 * @return StructInvoice
 	 */
-	public function get($invoice_id, $client_id)
+	public function get($invoice_id, $client_id = NULL)
 	{
+		if($client_id == NULL)
+		{
+			$segments = explode('-', $invoice_id);
+
+			$invoice_id = $segments[1];
+			$client_id = $segments[0];
+
+		}
+
 		$invoice 			= new StructInvoice();
 
 		$invoice->id 		= $invoice_id;
@@ -135,7 +144,7 @@ class Invoice extends CI_Model {
 		}
 		else
 		{
-			return TRUE;
+			return $id;
 		}
 	}
 	
@@ -262,6 +271,6 @@ class Invoice extends CI_Model {
 			return $row->invoice_id + 1;
 		}
 
-		return 0;
+		return 1;
 	}
 }

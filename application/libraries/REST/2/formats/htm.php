@@ -2,7 +2,7 @@
 	
 class ApiHtm
 {
-	public $mime = 'application/html';
+	public $mime = 'text/html';
 	public $data = 'HTML module does not exist.';
 	private $API;
 			
