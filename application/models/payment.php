@@ -7,7 +7,8 @@ class Payment extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->CI =& get_instance();	
+		$this->CI =& get_instance();
+		$this->CI->load->model('Note');
 	}
 	
 	public function get($id)
@@ -68,6 +69,13 @@ class Payment extends CI_Model {
 		}
 		
 		return FALSE;
+	}
+	
+	//To apply a payment you must send a StructPayment Object.
+
+	public function apply_by_job($payment, $job_id)
+	{
+		return $this->apply_by_jobs($payment, array($job_id));
 	}
 	
 	public function apply_by_jobs($payment, $jobs)
@@ -165,7 +173,12 @@ class Payment extends CI_Model {
 		$data['tender']		= $payment->tender;
 		$data['number']		= $payment->number;
 		$data['amount']		= $payment->amount;
-		$data['date_added']	= now();
+		$data['date_added']	= ($payment->date_added != null)?$payment->date_added:now();
+
+		if($payment->date_posted != null)
+		{
+			$data['date_posted'] = $payment->date_posted;
+		}
 
 		$this->CI->db->insert('payments', $data);
 
@@ -221,7 +234,7 @@ class Payment extends CI_Model {
 		}
 	}
 
-	private function payment_exists($payment)
+	private function exists($payment)
 	{
 		$where = array();
 
@@ -253,11 +266,13 @@ class Payment extends CI_Model {
 	public function apply_payment($payment, $jobs = NULL)
 	{
 		if(is_int($jobs))
+			
 		{
 			$jobs = array($jobs);
 		}
 
 		$id = $this->commit($payment);
+		$payment->id = $id;
 
 		if($id == FALSE)
 		{
@@ -265,7 +280,7 @@ class Payment extends CI_Model {
 			return FALSE;
 		}
 
-		$balances = $this->CI->accounting->get_balance_by_jobs($jobs);
+		$balances = $this->CI->Accounting->get_balance_by_jobs($jobs);
 
 		$amount_remaining = $this->payment_balance($id);
 
@@ -279,8 +294,18 @@ class Payment extends CI_Model {
 				$credit->amount 	= min($amount_remaining, $balances[$job] * -1);
 				$credit->payment	= $payment;
 				$credit->item		= 'Payment';
-
+				$credit->date_added = ($payment->date_added != null)?$payment->date_added:now();
 				$this->CI->Accounting->create_ledger_item($credit);
+
+				$note = new StructNote();
+
+				$note->user->id = 0;
+				$note->type = 'job';
+				$note->type_id = $job;
+
+				$note->text = $this->CI->User->get_name() . ' applied a payment of $' . number_format($credit->amount, 2) . '.';
+				$this->CI->Note->commit($note);
+
 				$this->CI->Event->trigger('job.dirty', $job);
 
 				$amount_remaining -= $credit->amount;
@@ -297,13 +322,17 @@ class Payment extends CI_Model {
 
 	private function payment_balance($payment_id)
 	{
+		/*
 		$this->CI->db->select_sum('ledger.amount', 'ledger_total');
 		$this->CI->db->select('payments.amount', 'payment_total');
-		$this->CI->db->from('ledger');
 		$this->CI->db->join('payments', 'ledger.payment_id = payments.payment_id');
-		$this->CI->db->where('ledger.payment_id', $payment->id);
+		$this->CI->db->where('ledger.payment_id', $payment_id);
+		*/
 
-		$query = $this->CI->db->get('ledger');
+		$q = 'SELECT SUM(ledger.amount) AS ledger_total, payments.amount AS payment_total FROM ledger JOIN payments ON ledger.payment_id = payments.payment_id WHERE ledger.payment_id = ' . $payment_id;
+
+
+		$query = $this->CI->db->query($q);
 
 		if($query->num_rows() > 0)
 		{

@@ -18,7 +18,23 @@ class History extends CI_Model {
 		//SELECT notes.*, users.name FROM notes JOIN users ON notes.user_id = users.user_id GROUP BY notes.id, notes.type ORDER BY date_added DESC LIMIT 10;
 		$limit = intval($limit);
 
-		$query = $this->CI->db->query('SELECT * FROM (SELECT id, type, note, notes.date_added, users.name FROM notes JOIN users ON notes.user_id = users.user_id ORDER BY notes.date_added DESC) AS t1 GROUP BY id, type ORDER BY date_added DESC LIMIT ' . $limit . ';');
+		//$query = $this->CI->db->query('SELECT * FROM (SELECT id, type, note, notes.date_added, users.name FROM notes JOIN users ON notes.user_id = users.user_id JOIN `search` ON ORDER BY notes.date_added DESC) AS t1 GROUP BY id, type ORDER BY date_added DESC LIMIT ' . $limit . ';');
+		$query = $this->CI->db->query 	(
+										'SELECT * 
+										FROM 
+											(
+												SELECT `notes`.`id` AS `note_id`, `notes`.`type` AS `note_type`, `notes`.`note`, `search`.`keywords`, `notes`.`date_added`, `users`.`name` 
+												FROM `notes` 
+													JOIN `users` 
+													ON `notes`.`user_id` = `users`.`user_id` 
+													JOIN `search` 
+													ON (`notes`.`type` = `search`.`type` && `notes`.`id` = `search`.`id`) 
+												ORDER BY `notes`.`date_added` DESC
+											) AS t1 
+										GROUP BY t1.`note_id`, t1.`note_type` 
+										ORDER BY t1.`date_added` DESC 
+										LIMIT ' . $limit . ';'
+										);
 
 		if($query->num_rows() > 0)
 		{

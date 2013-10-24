@@ -49,6 +49,11 @@ class StructPayment
 		return $string;
 	}
 
+	public function summary() {
+		$number = ($this->number != 0)?' *' . $this->number:'';
+		return ucwords($this->tender) . $number;
+	}
+
 	public function is_valid() {
 		if(($this->tender == 'credit' || $this->tender == 'check') && $this->number == '')
 		{

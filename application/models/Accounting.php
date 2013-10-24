@@ -112,7 +112,7 @@ class Accounting extends CI_Model
 		}
 		else
 		{
-			$data['date_added'] = ($ledger->date_added != '')?$ledger->date_added:now();
+			$data['date_added'] = ($ledger->date_added != null)?$ledger->date_added:now();
 		}
 		
 		$data['date_updated'] = now();
@@ -346,7 +346,12 @@ class Accounting extends CI_Model
 
 		$arr = $this->get_balance_by_jobs($job);
 
-		return array_shift($arr);
+		if($arr != FALSE)
+		{
+			return array_shift($arr);
+		}
+
+		return 0;
 	}
 
 	public function get_balance_by_jobs($jobs)

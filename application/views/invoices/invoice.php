@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/reset.css" media="all">
-		<link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/invoice.css" media="all">
+		<link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/invoice_pt.css" media="all">
 	</head>
 	<body>
 		<header>
@@ -43,27 +43,25 @@
 			<div class="clear">&nbsp;</span>
 		</header>
 		<table id="items">
-			<thead>
-				<tr>
-					<td>
-						Job Number
-					</td>
-					<td>
-						Description
-					</td>
-					<td>
-						Subtotal
-					</td>
-				</tr>
-			</thead>
+			<tr class="thead">
+				<td>
+					Job Number
+				</td>
+				<td>
+					Description
+				</td>
+				<td>
+					Subtotal
+				</td>
+			</tr>
 			<?PHP foreach($invoice->jobs AS $job): ?>
 			<tr>
 				<td>#<?PHP echo($job->id); ?></td>
 				<td>
 					<?PHP echo($job->service()); ?>
-					<address><?PHP echo($job->location->location_string()); ?></address>
+					<div class="address"><?PHP echo($job->location->location_string()); ?></div>
 				</td>
-				<td>$<?PHP echo(number_format($job->accounting->debit_total() * -1, 2)); ?></td>
+				<td class="number">$<?PHP echo(number_format($job->accounting->debit_total() * -1, 2)); ?></td>
 			</tr>
 			<?PHP endforeach; ?>
 		</table>
@@ -77,7 +75,7 @@
 				<td>
 
 				</td>
-				<td>
+				<td class="number">
 					$<?PHP echo(number_format(abs($invoice->debits_total()), 2)); ?>
 				</td>
 			</tr>
@@ -92,12 +90,12 @@
 				<td>
 					<?PHP echo(ucwords($payment['tender'])); ?> <?PHP echo(($payment['number'] != '')?' *' . $payment['number']:''); ?>
 				</td>
-				<td>
+				<td class="number">
 					$<?PHP echo(number_format($payment['amount'], 2)); ?>
 				</td>
 			</tr>
 			<?PHP endforeach; ?>
-			<tr>
+			<tr class="due">
 				<td></td>
 				<td>
 					Due
@@ -105,7 +103,7 @@
 				<td>
 
 				</td>
-				<td>
+				<td class="number">
 					$<?PHP echo(number_format(abs($invoice->balance()), 2)); ?>
 				</td>
 			</tr>
@@ -114,7 +112,7 @@
 			<ul>
 				<li>
 					<p>
-						Tucker Engineering, inc.
+						Tucker Engineering, Inc.
 						<br />1311 Chisholm Trail, Suite 303, Round Rock, Texas 78681
 					</p>
 					<p>

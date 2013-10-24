@@ -1,0 +1,351 @@
+html, body {
+	margin:				auto;
+	width:				612pt;
+	min-height:			792pt;
+	line-height:		12pt;
+	font-size:			10pt;
+	font-family: 		Myriad Pro, Myriad, Helvetica, Arial, sans-serif;
+}
+
+header {
+	padding-top: 		4pt;
+	padding-bottom:		12pt;
+	margin-bottom:		48pt;
+	width: 				612pt;
+	border-bottom:		0.25pt solid #ccc;
+}
+
+header img {
+	padding-left:		4pt;
+	display: 			block;
+	margin-bottom:		6pt;
+}
+
+#company {
+	display: 			block;
+	margin-left:		4pt;
+	color: 				#666;
+	margin-bottom:		12pt;
+}
+
+#company p {
+	display:			none;
+}
+#client {
+	color:				#666;
+	margin-bottom:		12pt;
+}
+
+#client h1 {
+	color:				#000;
+	font-weight:		bold;
+	margin-bottom:		12pt;
+}
+
+#client address {
+	margin-bottom:		12pt;
+}
+
+#date {
+	color:				#666;
+	margin-top:			12pt;
+	margin-bottom:		12pt;
+}
+
+#date .date {
+	color:				#000;
+}
+
+#invoice_number {
+	color:				#777;
+	height:				28pt;
+	line-height:		28pt;
+	font-size:			28pt;
+	margin-top:			40pt;
+	margin-bottom:		40pt;
+}
+
+#invoice_number .number {
+	color:				#000;
+	font-weight:		bold;
+}
+
+#invoice_number .number:before {
+	
+}
+
+#items {
+	width:				612pt;
+	border-collapse:	collapse;
+	margin-bottom:		24pt;
+}
+
+#items, #totals {
+	width:				502pt;
+	margin-right:		49pt;
+	margin-left:		49pt;
+}
+
+#items tr.thead td {
+	padding:			6pt 4pt;
+	text-align:			left;
+	color:				#ccc;
+	background-color:	#333;
+}
+
+#items tr.thead td:first-child, #items tr.thead td:last-child {
+	text-align:			left;
+}
+
+#items td {
+	margin:				0;
+	padding:			17pt 4pt 6pt 4pt;
+	width:				400pt;
+}
+
+#items td:first-child {
+	width:				145pt;
+}
+
+#items td.number {
+	text-align:			right;
+	width:				100pt;
+}
+
+#items tr {
+	border-bottom:		0.25pt solid #ccc;
+}
+
+#items tr:last-child, #items thead tr {
+	border-bottom:		none;
+}
+
+#items div.address {
+	color:				#666;
+	margin-left:		12pt;
+	font-size:			8pt;
+}
+
+hr {
+	display:			block;
+	width:				612pt;
+	height:				0.25pt;
+	background-color:	#ccc;
+	border:				none;
+}
+
+#totals {
+	margin-top:			24pt;
+	border-collapse:	collapse;
+	border-width: 		0;
+}
+
+#totals td {
+	padding:			6pt 8pt;
+	width:				100pt;
+	border-collapse:	collapse;
+	border-width: 		0;
+}
+
+#totals td.number {
+	text-align:			right;
+	width:				100pt;
+}
+
+#totals tr.due td {
+	background-color:	#bf492f;
+	color:				#fff;
+	font-weight:		bold;
+}
+
+#totals tr.due td:first-child {
+	background-color:	transparent;
+}
+
+#totals td:first-child {
+	color:				#666;
+	text-align:			right;
+	width: 				298pt;
+}
+
+footer {
+	margin-top:			48pt;
+	color:				#666;
+	width:				612pt;
+}
+
+footer ul {
+	width:				612pt;
+}
+
+footer li {
+	width:				298pt;
+	margin-left: 		4pt;
+	margin-right: 		4pt;
+	float:				left;
+	display:			inline;
+}
+
+.clear {
+	clear:				both;
+}
+
+p {
+	margin-bottom:		12pt;
+}
+
+/*
+ *	Grid
+ */
+
+.one, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .eleven, .twelve
+{
+	margin-left: 		4pt;
+	margin-right: 		4pt;
+	float:				left;
+	display:			inline;
+}
+
+.one {
+	width:				43pt;
+}
+
+.two {
+ 	width:				94pt;
+}
+
+.three {
+	width:				145pt;
+}
+
+.four {
+	width:				196pt;
+}
+
+.five {
+ 	width:				247pt;
+}
+
+.six {
+	width:				298pt;
+}
+
+.seven {
+	width:				349pt;
+}
+
+.eight {
+	width:				400pt;
+}
+
+.nine {
+	width: 				451pt;
+}
+
+.ten {
+	width:				502pt;
+}
+
+.eleven {
+	width:				551pt;
+}
+
+.twelve {
+	width: 				604pt;
+}
+
+.pre_one {
+	padding-left:		51pt;
+}
+
+.pre_two {
+ 	padding-left:		102pt;
+}
+
+.pre_three {
+	padding-left:		153pt;
+}
+
+.pre_four {
+	padding-left:		204pt;
+}
+
+.pre_five {
+ 	padding-left:		255pt;
+}
+
+.pre_six {
+	padding-left:		306pt;
+}
+
+.pre_seven {
+	padding-left:		357pt;
+}
+
+.pre_eight {
+	padding-left:		408pt;
+}
+
+.pre_nine {
+	padding-left:		459pt;
+}
+
+.pre_ten {
+	padding-left:		510pt;
+}
+
+.pre_eleven {
+	padding-left:		557pt;
+}
+
+.pre_twelve {
+	padding-left:		614pt;
+}
+
+.post_one {
+	padding-right:		51pt;
+}
+
+.post_two {
+ 	padding-right:		102pt;
+}
+
+.post_three {
+	padding-right:		153pt;
+}
+
+.post_four {
+	padding-right:		204pt;
+}
+
+.post_five {
+ 	padding-right:		255pt;
+}
+
+.post_six {
+	padding-right:		306pt;
+}
+
+.post_seven {
+	padding-right:		357pt;
+}
+
+.post_eight {
+	padding-right:		408pt;
+}
+
+.post_nine {
+	padding-right:		459pt;
+}
+
+.post_ten {
+	padding-right:		510pt;
+}
+
+.post_eleven {
+	padding-right:		557pt;
+}
+
+.post_twelve {
+	padding-right:		614pt;
+}

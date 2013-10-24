@@ -6,7 +6,10 @@
 			<a href="#print">Print</a>
 		</li>
 		<li>
-			<a href="#save">Save as PDF</a>
+			<a href="<?PHP echo(site_url()); ?>api/v2/invoice/<?PHP echo($invoice->slug()); ?>.pdf?view=invoices/invoice">Save as PDF</a>
+		</li>
+		<li>
+			<a href="<?PHP echo(site_url()); ?>api/v2/invoice/<?PHP echo($invoice->slug()); ?>.rtf?view=invoices/invoice">Save as RTF</a>
 		</li>
 		<li>
 			<a href="#email">Email</a>

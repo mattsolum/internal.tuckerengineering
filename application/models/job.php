@@ -13,6 +13,7 @@ class Job extends CI_Model {
 		$this->CI->load->model('Client');
 		$this->CI->load->model('Property');
 		$this->CI->load->model('Checksum');
+		$this->CI->load->model('Asset');
 	}
 	
 	public function insert($job)
@@ -96,6 +97,12 @@ class Job extends CI_Model {
 			return FALSE;
 		}
 		
+		//Insert assets
+		foreach($job->assets AS $asset)
+		{
+			$this->CI->Asset->commit($asset, 'job', $data['job_id']);
+		}
+
 		//Insert the data into the jobs table
 		if($id === FALSE)
 		{
@@ -204,6 +211,29 @@ class Job extends CI_Model {
 		$this->CI->db->limit($end);
 		$this->CI->db->order_by('job_id', 'desc');
 		$query = $this->CI->db->get_where('jobs', array('client_id' => $client_id));
+
+		if($query->num_rows() > 0)
+		{
+			foreach($query->result() AS $row)
+			{
+				$jobs[] = $this->get($row->job_id);
+			}
+		}
+
+		return $jobs;
+	}
+
+	public function get_unpaid_jobs_by_client_id($client_id)
+	{
+		$client_id = $this->CI->Client->get_id($client_id);
+		$jobs = array();
+
+		$where = array();
+		$where['client_id'] = $client_id;
+		$where['balance <'] = '0';
+
+		$this->CI->db->order_by('job_id', 'desc');
+		$query = $this->CI->db->get_where('jobs', $where);
 
 		if($query->num_rows() > 0)
 		{

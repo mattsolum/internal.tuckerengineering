@@ -10,6 +10,9 @@
 			<a href="<?PHP echo(site_url('jobs/apply_payment/' . $job->id)); ?>">Apply payment</a>
 		</li>
 		<li>
+			<a href="<?PHP echo(site_url('jobs/refund/' . $job->id)); ?>">Refund</a>
+		</li>
+		<li>
 			<a href="<?PHP echo(site_url('jobs/invoice/' . $job->id)); ?>">View invoice</a>
 		</li>
 	</ul>
@@ -70,6 +73,7 @@
 	</section>
 	<?PHP endif; ?>
 
+	<?PHP if(count($job->assets) > 0): ?>
 	<ul id="assets">
 	<?PHP foreach($job->assets AS $asset): ?>
 		<li>
@@ -77,6 +81,9 @@
 		</li>
 	<?PHP endforeach; ?>
 	</ul>
+	<?PHP endif; ?>
+
+	<?PHP $this->load->view('sections/accounting', array('accounting' => $job->accounting)); ?>
 
 	<?PHP $this->load->view('sections/notes', array('notes' => $job->notes, 'uri' => 'notes/job/' . $job->id)); ?>
 </div>

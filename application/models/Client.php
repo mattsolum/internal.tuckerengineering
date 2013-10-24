@@ -138,7 +138,7 @@ class Client extends CI_Model {
 		}
 		else
 		{
-			log_message('error', '---!! Client->create() SUCCESS ' . $client->id . ' ' . $client->name);
+			//log_message('error', '---!! Client->create() SUCCESS ' . $client->id . ' ' . $client->name);
 			$this->CI->Event->trigger('client.commit.after.create', $this->get($id));
 			return $id;
 		}

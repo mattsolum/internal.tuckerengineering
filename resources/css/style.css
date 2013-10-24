@@ -1078,11 +1078,11 @@ h1.job {
  */
 
 #notes {
-	padding-bottom:		48px;
 	display:			inline;
 	float: 				left;
 	position: 			relative;
-	width:				480px;
+	width:				624px;
+	margin:				0 240px 48px 0;
 	border-radius:		2px;
 	overflow:  			hidden;
 }
@@ -1145,7 +1145,7 @@ h1.job {
 }
 
 #notes input {
-	width:				446px;
+	width:				592px;
 	font-size:			18px;
 	padding-left:		7px;
 	padding-right:		7px;
@@ -1520,6 +1520,41 @@ ul#log li:last-child {
 
 #logs_form .SCButton {
 	margin-left: 		-46px;
+}
+
+/**
+ * ACCOUNTING
+ */
+
+#receipt {
+	margin:				0 240px 48px 0;
+	width:				624px;
+	overflow:			hidden;
+	float: 				left;
+	text-align:			left;
+}
+
+#receipt tr {
+	height: 			48px;
+	line-height: 		48px;
+}
+
+#receipt td {
+	padding:			0 8px;
+}
+
+#receipt .total {
+	/*background-color:	#C3CCA8;*/
+	text-align:			right;
+}
+
+#receipt .total td,
+#receipt td:last-child {
+	text-align:			right;
+}
+
+#receipt tr.odd {
+	background-color: 	#ccc3a9;
 }
 
 /*

@@ -57,9 +57,11 @@ header img {
 
 #invoice_number {
 	color:				#777;
-	height:				108pt;
-	line-height:		108pt;
+	height:				28pt;
+	line-height:		28pt;
 	font-size:			28pt;
+	margin-top:			32pt;
+	margin-bottom:		0;
 }
 
 #invoice_number .number {
@@ -83,14 +85,14 @@ header img {
 	margin-left:		9.83%;
 }
 
-#items thead td {
+#items tr.thead td {
 	padding:			6pt 1%;
 	text-align:			left;
 	color:				#ccc;
 	background-color:	#333;
 }
 
-#items thead td:first-child, #items thead td:last-child {
+#items tr.thead td:first-child, #items tr.thead td:last-child {
 	text-align:			left;
 }
 
@@ -104,7 +106,7 @@ header img {
 	width:				20%;
 }
 
-#items td:last-child {
+#items td.number {
 	text-align:			right;
 	width:				15%;
 }
@@ -117,7 +119,7 @@ header img {
 	border-bottom:		none;
 }
 
-#items address {
+#items div.address {
 	color:				#666;
 	margin-left:		12pt;
 	font-size:			10pt;
@@ -133,25 +135,29 @@ hr {
 
 #totals {
 	margin-top:			24pt;
+	border-collapse:	collapse;
+	border-width: 		0;
 }
 
 #totals td {
 	padding:			6pt 1%;
 	width:				15%;
+	border-collapse:	collapse;
+	border-width: 		0;
 }
 
-#totals td:last-child {
+#totals td.number {
 	text-align:			right;
 	width:				15%;
 }
 
-#totals tr:last-child td {
+#totals tr.due td {
 	background-color:	#bf492f;
 	color:				#fff;
 	font-weight:		bold;
 }
 
-#totals tr:last-child td:first-child {
+#totals tr.due td:first-child {
 	background-color:	transparent;
 }
 

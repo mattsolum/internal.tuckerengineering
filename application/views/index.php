@@ -16,27 +16,26 @@
 				{
 
 				$link = base_url();
-				$row->type = strtolower($row->type);
+				$row->note_type = strtolower($row->note_type);
 
-				switch($row->type)
+				switch($row->note_type)
 				{
 					case 'job':
-						$link .= 'jobs/' . $row->id;
+						$link .= 'jobs/' . $row->note_id;
 						break;
 					case 'client':
-						$link .= 'clients/' . $row->id;
+						$link .= 'clients/' . $row->note_id;
 						break;
 					case 'property':
-						$link .= 'properties/' . $row->id;
+						$link .= 'properties/' . $row->note_id;
 						break;
 				}
+
+				$title = preg_replace('/[^a-zA-Z0-9# ,]/i', '', substr($row->keywords, 0, strpos($row->keywords, "\n")));
 			?>
 			<tr<?PHP if($key % 2 == 1) echo(' class="odd"'); ?>>
 				<td>
-					<a href="<?PHP echo($link); ?>"><?PHP echo($row->type); ?></a>
-				</td>
-				<td>
-					<a href="<?PHP echo($link); ?>">#<?PHP echo($row->id); ?></a>
+					<a href="<?PHP echo($link); ?>"><?PHP echo($title); ?></a>
 				</td>
 				<td>
 					<a href="<?PHP echo($link); ?>"><?PHP echo(substr($row->note, 0, 45)); if(strlen($row->note) > 45) echo('...'); ?></a>
