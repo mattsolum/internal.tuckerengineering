@@ -27,7 +27,7 @@ class Invoice extends CI_Model {
 			$segments = explode('-', $invoice_id);
 
 			$invoice_id = $segments[1];
-			$client_id = $segments[0];
+			$client_id  = $segments[0];
 
 		}
 

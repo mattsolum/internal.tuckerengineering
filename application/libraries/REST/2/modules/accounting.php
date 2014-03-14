@@ -19,6 +19,16 @@ class AccountingAPI extends PrototypeAPI
 	
 	}
 
+	public function batchpay_get($date = null)
+	{
+		return $this->CI->Payment->get_batch_pay($date);
+	}
+
+	public function batchpay_mark_get()
+	{
+		return $this->CI->Payment->mark_batchpay();
+	}
+
 	public function price_get()
 	{
 		$item = preg_replace('[^a-zA-Z0-9 -]', '', $this->API->id);

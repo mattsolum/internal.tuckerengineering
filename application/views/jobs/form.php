@@ -96,7 +96,7 @@
 			<label class="hint" for="jb_item[<?PHP echo($key); ?>]">Amount must be formatted as USD.</label>
 		</li>
 		<?PHP
-		}
+			}
 		?>
 		<li class="new_contact">
 			Add another item <a href="#" tabindex="-1" title="Add another item">+</a>

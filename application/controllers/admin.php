@@ -109,7 +109,7 @@ class Admin extends CI_Controller {
 			$user->set_email($this->input->post('user_email'));
 			if($this->input->post('user_password') == '')
 			{
-				$password = $this->User->generate_password(12);
+				$password = $this->User->generate_password(4);
 				
 			}
 			else
@@ -176,5 +176,23 @@ class Admin extends CI_Controller {
 	private function database_restore()
 	{
 		$this->load->view('admin/database');
+	}
+
+	public function testbed()
+	{
+		$xml = simplexml_load_string(file_get_contents(base_url() . 'api/v2/help.xml'));
+
+		$links = array();
+		$base = base_url() . 'api/v2/';
+
+		foreach($xml->Test->method AS $method)
+		{
+			if($method->request == 'GET')
+			{
+				$links[] = $method->method_name;
+			}
+		}
+
+		$this->load->view('admin/testbed', array('links' => $links, 'base' => $base));
 	}
 }

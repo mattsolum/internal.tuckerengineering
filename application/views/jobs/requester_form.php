@@ -155,7 +155,7 @@
 	</ul>
 	<ul>
 		<li class="submit_container">
-			<input type="submit" value="Next - Property" />
+			<input type="submit" value="Finish" />
 		</li>
 	</ul>
 </form>

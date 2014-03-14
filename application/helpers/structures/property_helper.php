@@ -215,6 +215,19 @@ class StructProperty
 
 		return trim($formatted);
 	}
+
+	public function slug()
+	{
+		$formatted =  ($this->number != '')?$this->number:'';
+		
+		$formatted .=  ($this->route != '')?' ' . $this->route:'';
+		
+		$formatted .= ($this->subpremise != '')?' ' . $this->subpremise:'';
+
+		$formatted .= ($this->locality != '')?' ' . $this->locality:'';
+
+		return strtolower(str_replace(' ', '_', trim($formatted)));
+	}
 	
 	public function set_from_json($json)
 	{

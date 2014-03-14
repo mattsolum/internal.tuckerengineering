@@ -92,7 +92,10 @@ class StructInvoice
 			$str .= "\t" . str_replace("\n", "\n\t", (string)$job) . "\n\n";
 		}
 
-		$str .= 'Total: $' . number_format($this->debits_total(), 2);
+		$str .= "----------------";
+		$str .= "\nBilled:\t$" . number_format($this->debits_total(), 2);
+		$str .= "\nPaid:\t$" . number_format($this->credits_total(), 2);
+		$str .= "\nDue:\t$" . number_format($this->balance(), 2);
 
 		return $str;
 	}
@@ -166,6 +169,22 @@ class StructInvoice
 		foreach($this->jobs AS $job)
 		{
 			$total += $job->accounting->debits_total();
+		}
+
+		return $total;
+	}
+
+	/**
+	 * Sums the totals of all included jobs
+	 * @return float
+	 */
+	public function credits_total()
+	{
+		$total = 0;
+
+		foreach($this->jobs AS $job)
+		{
+			$total += $job->accounting->credits_total();
 		}
 
 		return $total;

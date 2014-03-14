@@ -320,6 +320,63 @@ class Payment extends CI_Model {
 		return TRUE;
 	}
 
+	public function get_batch_pay($date = NULL)
+	{
+		$this->load->model('Client');
+		$this->load->model('Job');
+
+		$batch = array();
+
+		$where = array();
+		$where['date_posted'] = $date;
+
+		if($date == NULL)
+		{
+			$date = now();
+		}
+
+		$query = $this->CI->db->get_where('payments', $where);
+
+		if($query->num_rows() > 0)
+		{
+			foreach($query->result() AS $payment)
+			{
+				$bpayment = new StructBatch();
+				$bpayment->payment = $this->get($payment->payment_id);
+				$bpayment->client = $this->Client->get($bpayment->payment->client_id);
+				$bpayment->jobs = $this->Job->get_by_payment_id($bpayment->payment->id);
+				$bpayment->date = $date;
+
+				$batch[] = $bpayment;
+			}
+		}
+
+		return $batch;
+	}
+
+	public function mark_batchpay()
+	{	
+		$data = array('date_posted' => now());
+
+		$this->CI->db->trans_start();
+		
+		$this->db->where('date_posted', NULL);
+		$this->db->update('payments', $data);
+
+		$this->CI->db->trans_complete();
+		
+		if($this->CI->db->trans_status() === FALSE)
+		{
+			log_message('Error', 'Error in Payment method mark_batchpay: transaction failed.');
+			$this->CI->Messages->flash("An internal error occured, and the payments were not marked as posted.");
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+
 	private function payment_balance($payment_id)
 	{
 		/*

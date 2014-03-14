@@ -206,17 +206,20 @@ function MSDebug(msg) {
 			life: 		3000
 		}, options);
 
+		var check = null;
 		check = function() {
 			var date = new Date();
 
 			$('#flash_messages li').each(function(i){
-				if(mouseover == false && $(this).data('FMTime') <= date.getTime() && $(this).css('margin_top') == 0)
+				//MSDebug(mouseover + '; ' + $(this).data('FMTime') + ' <= ' + date.getTime() + '; ' +  $(this).css('margin-top'));
+				if(mouseover == false && $(this).data('FMTime') <= date.getTime() && parseInt($(this).css('margin-top')) == 0)
 				{
+					//MSDebug('Hide!');
 					methods.hide(this, i);
 				}
 			});
 
-			setTimeout(check, 100);
+			setTimeout(check, 1000);
 		}
 
 		$('#flash_messages li').each(function(i){

@@ -16,7 +16,7 @@
 			<a href="<?PHP echo(site_url('jobs/invoice/' . $job->id)); ?>">View invoice</a>
 		</li>
 	</ul>
-	<address class="job"><?PHP echo($job->location->location_string()); ?></address>
+	<address class="job"><a href="<?PHP echo(site_url('properties/' . $job->location->slug())); ?>"><?PHP echo($job->location->location_string()); ?></a></address>
 
 	<section id="client_information">
 		<h3>Client</h3>

@@ -8,13 +8,11 @@
 		<li>
 			<a href="<?PHP echo(site_url()); ?>api/v2/invoice/<?PHP echo($invoice->slug()); ?>.pdf?view=invoices/invoice">Save as PDF</a>
 		</li>
-		<li>
-			<a href="<?PHP echo(site_url()); ?>api/v2/invoice/<?PHP echo($invoice->slug()); ?>.rtf?view=invoices/invoice">Save as RTF</a>
-		</li>
-		<li>
+		<!--<li>
 			<a href="#email">Email</a>
-		</li>
+		</li>-->
 	</ul>
+	<img id="copy_image" src="<?PHP echo(site_url()); ?>api/v2/invoice/<?PHP echo($invoice->slug()); ?>.png?view=invoices/invoice" />
 	<iframe id="invoice_frame" src="<?PHP echo(site_url()); ?>api/v2/invoice/<?PHP echo($invoice->slug()); ?>.html?view=invoices/invoice">
 
 	</iframe>
@@ -27,6 +25,11 @@
 			var frm = document.getElementById('invoice_frame').contentWindow;
             frm.focus();// focus on contentWindow is needed on some ie versions
             frm.print();
+		}
+		else if($(e.target).prop('href').match('#copy') != null)
+		{
+			var url = $("#invoice_frame").attr('src').replace('html', 'png');
+
 		}
 	});
 </script>

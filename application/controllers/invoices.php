@@ -126,6 +126,14 @@ class Invoices extends CI_Controller {
 		$this->load->view('invoices/print', array('invoice' => $invoice));
 
 	}
+
+	public function batch($date = NULL)
+	{
+		if($date == NULL)
+		{
+			
+		}
+	}
 	
 }
 

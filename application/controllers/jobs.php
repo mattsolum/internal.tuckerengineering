@@ -90,7 +90,7 @@ class Jobs extends CI_Controller {
 	 * @param $job_id
 	 * @return null
 	 */
-	public function edit($job_id, $page = 'client')
+	public function edit($job_id, $page = 'job')
 	{
 		//code
 		$job = $this->Job->get($job_id);
@@ -106,12 +106,39 @@ class Jobs extends CI_Controller {
 				$job->set_from_json(base64_decode($this->session->userdata('job_edit')));
 			}
 
-			if($page == 'client')
+			if($page == 'job')
 			{
 				$this->load->view("jobs/create_1", array('job' => $job));
 			}
+			else if($page == 'client')
+			{
+
+				if($this->input->post() != FALSE)
+				{
+					//Information submitted from last page
+					$job->location = $this->set_property();
+					$job->accounting->debits = $this->set_debits();
+
+					if($this->input->post('jb_note') != '')
+					{
+						$job->add_note($this->User->get_user_id(), $this->input->post('jb_note'));
+					}
+				}
+
+				$this->session->set_userdata('job_edit', base64_encode(json_encode($job)));
+
+				if($job->location->is_valid() && $job->accounting->is_valid(FALSE))
+				{
+					$this->load->view('jobs/create_2', array('job' => $job));
+				}
+				else
+				{
+					redirect(site_url('jobs/create/client'));
+				}
+			}
 			else if($page == 'requester')
 			{
+
 				if($this->input->post() != FALSE)
 				{
 					//Information submitted from last page
@@ -122,14 +149,14 @@ class Jobs extends CI_Controller {
 
 				if($job->client->is_valid())
 				{
-					$this->load->view('jobs/create_2', array('job' => $job));
+					$this->load->view("jobs/create_3", array('job' => $job));
 				}
 				else
 				{
-					redirect(site_url('jobs/edit/' . $job_id . '/client'));
+					redirect(site_url('jobs/create/requester'));
 				}
 			}
-			else if($page == 'job')
+			else if($page == 'final')
 			{
 				if($this->input->post() != FALSE)
 				{
@@ -146,49 +173,38 @@ class Jobs extends CI_Controller {
 
 				$this->session->set_userdata('job_edit', base64_encode(json_encode($job)));
 
-				if($job->requester->is_valid())
-				{
-					$this->load->view("jobs/create_3", array('job' => $job));
-				}
-				else
-				{
-					redirect(site_url('jobs/edit/' . $job_id . '/requester'));
-				}
-			}
-			else if($page == 'final')
-			{
-				if($this->input->post() != FALSE)
-				{
-					//Information submitted from last page
-					$job->location = $this->set_property();
-					$job->accounting->debits = $this->set_debits();
-
-					if($this->input->post('jb_note') != '')
-					{
-						$job->add_note($this->User->get_user_id(), $this->input->post('jb_note'));
-					}
-				}
-
-				$this->session->set_userdata('job_edit', base64_encode(json_encode($job)));
-
 				if($job->is_valid(FALSE))
 				{
-					$this->session->set_userdata('job_edit', FALSE);
-					echo($job);
+					$result = $this->CI->Job->commit($job);
+
+					if($result !== FALSE)
+					{
+						$this->CI->Messages->flash('The job record was successfully added.', 'success');
+						$this->session->set_userdata('job_edit', FALSE);
+						redirect(site_url('jobs/' . $result));
+					}
+					else
+					{
+						$this->CI->Messages->flash('There was an internal error while saving the job record, please try again.', 'error');
+						redirect(site_url('jobs/create/job'));
+					}
 				}
 				else
 				{
 					if(!$job->client->is_valid())
 					{
-						redirect(site_url('jobs/edit/' . $job_id . '/client'));
+						$this->CI->Messages->flash('The given client information was incomplete. Please review the record below.', 'error');
+						redirect(site_url('jobs/create/client'));
 					}
 					elseif(!$job->requester->is_valid())
 					{
-						redirect(site_url('jobs/edit/' . $job_id . '/requester'));
+						$this->CI->Messages->flash('The given requester information was incomplete. Please review the record below.', 'error');
+						redirect(site_url('jobs/create/requester'));
 					}
 					else
 					{
-						redirect(site_url('jobs/edit/' . $job_id . '/job'));
+						$this->CI->Messages->flash('The given job information was incomplete. Please review the record below.', 'error');
+						redirect(site_url('jobs/create/job'));
 					}
 				}
 			}
@@ -200,7 +216,7 @@ class Jobs extends CI_Controller {
 	 * 
 	 * @return null
 	 */
-	public function create($page = 'client')
+	public function create($page = 'job')
 	{
 		$job = new StructJob();
 		if($this->session->userdata('job') != FALSE)
@@ -208,12 +224,45 @@ class Jobs extends CI_Controller {
 			$job->set_from_json(base64_decode($this->session->userdata('job')));
 		}
 
-		if($page == 'client')
+		if($page == 'start_over')
 		{
-			$this->load->view("jobs/create_1", array('job' => $job));
+			$this->session->set_userdata('job', FALSE);
+			redirect(site_url('jobs/create/job'));
+		}
+		else if($page == 'job')
+		{
+			$this->load->view("jobs/job", array('job' => $job));
+		}
+		else if($page == 'client')
+		{
+
+			if($this->input->post() != FALSE)
+			{
+				//Information submitted from last page
+				$job->location = $this->set_property();
+				$job->accounting->debits = $this->set_debits();
+
+				if($this->input->post('jb_note') != '')
+				{
+					$job->add_note($this->User->get_user_id(), $this->input->post('jb_note'));
+				}
+			}
+
+			$this->session->set_userdata('job', base64_encode(json_encode($job)));
+
+			if($job->location->is_valid() && $job->accounting->is_valid(FALSE))
+			{
+				$this->load->view('jobs/client', array('job' => $job));
+			}
+			else
+			{
+				$this->Messages->flash('The address or debits entered were invalid, please check them and resubmit.');
+				redirect(site_url('jobs/create/job'));
+			}
 		}
 		else if($page == 'requester')
 		{
+
 			if($this->input->post() != FALSE)
 			{
 				//Information submitted from last page
@@ -224,14 +273,14 @@ class Jobs extends CI_Controller {
 
 			if($job->client->is_valid())
 			{
-				$this->load->view('jobs/create_2', array('job' => $job));
+				$this->load->view("jobs/requester", array('job' => $job));
 			}
 			else
 			{
 				redirect(site_url('jobs/create/client'));
 			}
 		}
-		else if($page == 'job')
+		else if($page == 'final')
 		{
 			if($this->input->post() != FALSE)
 			{
@@ -248,48 +297,37 @@ class Jobs extends CI_Controller {
 
 			$this->session->set_userdata('job', base64_encode(json_encode($job)));
 
-			if($job->requester->is_valid())
-			{
-				$this->load->view("jobs/create_3", array('job' => $job));
-			}
-			else
-			{
-				redirect(site_url('jobs/create/requester'));
-			}
-		}
-		else if($page == 'final')
-		{
-			if($this->input->post() != FALSE)
-			{
-				//Information submitted from last page
-				$job->location = $this->set_property();
-				$job->accounting->debits = $this->set_debits();
-
-				if($this->input->post('jb_note') != '')
-				{
-					$job->add_note($this->User->get_user_id(), $this->input->post('jb_note'));
-				}
-			}
-
-			$this->session->set_userdata('job', base64_encode(json_encode($job)));
-
 			if($job->is_valid(FALSE))
 			{
-				$this->session->set_userdata('job', FALSE);
-				echo($job);
+				$result = $this->Job->commit($job);
+
+				if($result !== FALSE)
+				{
+					$this->Messages->flash('The job record was successfully added.', 'success');
+					$this->session->set_userdata('job', FALSE);
+					redirect(site_url('jobs/' . $result));
+				}
+				else
+				{
+					$this->Messages->flash('There was an internal error while saving the job record, please try again.', 'error');
+					redirect(site_url('jobs/create/job'));
+				}
 			}
 			else
 			{
 				if(!$job->client->is_valid())
 				{
+					$this->Messages->flash('The given client information was incomplete. Please review the record below.', 'error');
 					redirect(site_url('jobs/create/client'));
 				}
 				elseif(!$job->requester->is_valid())
 				{
+					$this->Messages->flash('The given requester information was incomplete. Please review the record below.', 'error');
 					redirect(site_url('jobs/create/requester'));
 				}
 				else
 				{
+					$this->Messages->flash('The given job information was incomplete. Please review the record below.', 'error');
 					redirect(site_url('jobs/create/job'));
 				}
 			}
@@ -298,7 +336,6 @@ class Jobs extends CI_Controller {
 
 	private function set_debits()
 	{
-		echo('Set debits');
 		$post = $this->input->post();
 		$debits = array();
 

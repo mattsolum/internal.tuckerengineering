@@ -11,7 +11,7 @@ header {
 	padding-bottom:		12pt;
 	margin-bottom:		48pt;
 	width: 				100%;
-	border-bottom:		0.25pt solid #ccc;
+	border-bottom:		1pt solid #ccc;
 }
 
 header img {
@@ -57,11 +57,9 @@ header img {
 
 #invoice_number {
 	color:				#777;
-	height:				28pt;
-	line-height:		28pt;
+	height:				108pt;
+	line-height:		108pt;
 	font-size:			28pt;
-	margin-top:			32pt;
-	margin-bottom:		0;
 }
 
 #invoice_number .number {

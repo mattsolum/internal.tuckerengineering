@@ -183,6 +183,8 @@ class StructJob {
 		{
 			if(!$asset->is_valid())
 			{
+				$CI =& get_instance();
+				$CI->Messages->flash('Asset is invalid.');
 				log_message('error', 'Asset is invalid');
 				return FALSE;
 			}

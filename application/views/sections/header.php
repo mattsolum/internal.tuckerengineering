@@ -2,7 +2,9 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>TE Internal</title>
+		<title><?PHP echo(setting('company.name')); ?> Billing System</title>
+
+		<link rel="icon" type="image/ico" href="<?PHP echo base_url(); ?>resources/icon.ico">
 
 		<script src="<?PHP echo base_url(); ?>resources/js/aggregate.js" type="text/javascript"></script>
 		<script src="<?PHP echo base_url(); ?>resources/js/API.js" type="text/javascript"></script>

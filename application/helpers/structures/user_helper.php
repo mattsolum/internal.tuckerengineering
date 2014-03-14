@@ -110,9 +110,9 @@ class StructUser
 		//So... Just use the middle 72 characters.
 		if(strlen($passphrase) > 72)
 		{
-			$start = ceil((strlen($pphrase) - 72) / 2);
+			$start = ceil((strlen($passphrase) - 72) / 2);
 		
-			$passphrase = substr($pphrase, $start, 72);
+			$passphrase = substr($passphrase, $start, 72);
 		}
 		
 		return $passphrase;

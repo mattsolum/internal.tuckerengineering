@@ -76,4 +76,32 @@ class TestAPI extends PrototypeAPI
 		$id = 261;
 		$this->CI->Event->trigger('job.dirty', $id);
 	}
+
+	public function sendmail_get()
+	{
+		$this->CI->load->library('email');
+		$this->CI->email->from('system@tuckerengineering.net');
+		$this->CI->email->to('matthew@tuckerengineering.net');
+		$this->CI->email->subject('Test of sendmail!');
+		$this->CI->email->message('Hewwo!');
+		$this->CI->email->send();
+
+		echo($this->CI->email->print_debugger());
+	}
+
+	public function password_get()
+	{
+		$length = 4;
+		$this->CI->load->model('User');
+
+		return $this->CI->User->generate_password($length);
+	}
+
+	public function batchpay_get()
+	{
+		return $this->CI->Payment->get_batch_pay();
+		//echo($this->CI->load->view('admin/batchpayslip', array(), true));
+
+		return true;
+	}
 }

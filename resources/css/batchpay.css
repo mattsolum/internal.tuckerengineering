@@ -1,0 +1,345 @@
+html, body {
+	width:				100%;
+	min-height:			100%;
+	line-height:		12pt;
+	font-size:			10pt;
+	font-family: 		Myriad Pro, Myriad, Helvetica, Arial, sans-serif;
+}
+
+header {
+	padding-top: 		1.5%;
+	padding-bottom:		12pt;
+	margin-bottom:		12pt;
+	width: 				100%;
+	border-bottom:		1pt solid #ccc;
+}
+
+header img {
+	padding-left:		1.1%;
+	display: 			block;
+	margin-bottom:		6pt;
+}
+
+#company {
+	display: 			block;
+	margin-left:		1.5%;
+	color: 				#666;
+	margin-bottom:		12pt;
+}
+
+#company p {
+	display:			none;
+}
+#client {
+	color:				#666;
+	margin-bottom:		12pt;
+}
+
+#client h1 {
+	color:				#000;
+	font-weight:		bold;
+	margin-bottom:		12pt;
+}
+
+#client address {
+	margin-bottom:		12pt;
+}
+
+#date {
+	color:				#666;
+	margin-bottom:		12pt;
+}
+
+#date .date {
+	color:				#000;
+}
+
+#invoice_number {
+	color:				#777;
+	height:				108pt;
+	line-height:		108pt;
+	font-size:			28pt;
+}
+
+#invoice_number .number {
+	color:				#000;
+	font-weight:		bold;
+}
+
+#invoice_number .number:before {
+	
+}
+
+#items {
+	width:				100%;
+	border-collapse:	collapse;
+	margin-bottom:		24pt;
+}
+
+#items, #totals {
+	width:				80.33%;
+	margin-right:		9.83%;
+	margin-left:		9.83%;
+}
+
+#items tr.thead td {
+	padding:			6pt 1%;
+	text-align:			left;
+	color:				#ccc;
+	background-color:	#333;
+}
+
+#items tr.thead td:first-child, #items tr.thead td:last-child {
+	text-align:			left;
+}
+
+#items td {
+	margin:				0;
+	padding:			17pt 1% 6pt 1%;
+}
+
+#items td:first-child {
+	width:				20%;
+}
+
+#items td.number {
+	text-align:			right;
+	width:				15%;
+}
+
+#items tr {
+	border-bottom:		0.25pt solid #ccc;
+}
+
+#items tr:last-child, #items thead tr {
+	border-bottom:		none;
+}
+
+#items ul.job_list {
+	margin-left:		12pt;
+	font-size:			10pt;
+}
+
+hr {
+	display:			block;
+	width:				100%;
+	height:				0.25pt;
+	background-color:	#ccc;
+	border:				none;
+}
+
+#totals {
+	margin-top:			24pt;
+	border-collapse:	collapse;
+	border-width: 		0;
+}
+
+#totals td {
+	padding:			6pt 1%;
+	width:				30%;
+	border-collapse:	collapse;
+	border-width: 		0;
+}
+
+#totals td.number {
+	text-align:			right;
+	width:				15%;
+}
+
+#totals tr.due td {
+	background-color:	#bf492f;
+	color:				#fff;
+	font-weight:		bold;
+}
+
+#totals tr.due td:first-child {
+	background-color:	transparent;
+}
+
+#totals td:first-child {
+	color:				#666;
+	text-align:			right;
+	width: 				45%;
+}
+
+footer {
+	margin-top:			48pt;
+	color:				#666;
+	width:				100%;
+}
+
+footer ul {
+	width:				100%;
+}
+
+footer li {
+	margin-left: 		1.5%;
+	margin-right: 		1.5%;
+	float:				left;
+	display:			inline;
+	width:				46.98%;
+}
+
+.clear {
+	clear:				both;
+}
+
+p {
+	margin-bottom:		12pt;
+}
+
+/*
+ *	Grid
+ */
+
+.one, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .eleven, .twelve
+{
+	margin-left: 		1.5%;
+	margin-right: 		1.5%;
+	float:				left;
+	display:			inline;
+}
+
+.one {
+	width:				5.33%;
+}
+
+.two {
+ 	width:				13.66%;
+}
+
+.three {
+	width:				21.99%;
+}
+
+.four {
+	width:				30.33%;
+}
+
+.five {
+ 	width:				38.65%;
+}
+
+.six {
+	width:				46.98%;
+}
+
+.seven {
+	width:				55.31%;
+}
+
+.eight {
+	width:				63.64%;
+}
+
+.nine {
+	width: 				71.97%;
+}
+
+.ten {
+	width:				80.33%;
+}
+
+.eleven {
+	width:				88.63%;
+}
+
+.twelve {
+	width: 				97%;
+}
+
+.pre_one {
+	padding-left:		8.33%;
+}
+
+.pre_two {
+ 	padding-left:		16.66%;
+}
+
+.pre_three {
+	padding-left:		24.99%;
+}
+
+.pre_four {
+	padding-left:		33.33%;
+}
+
+.pre_five {
+ 	padding-left:		41.65%;
+}
+
+.pre_six {
+	padding-left:		49.98%;
+}
+
+.pre_seven {
+	padding-left:		58.31%;
+}
+
+.pre_eight {
+	padding-left:		66.64%;
+}
+
+.pre_nine {
+	padding-left:		74.97%;
+}
+
+.pre_ten {
+	padding-left:		83.33%;
+}
+
+.pre_eleven {
+	padding-left:		91.63%;
+}
+
+.pre_twelve {
+	padding-left:		100%;
+}
+
+.post_one {
+	padding-right:		8.33%;
+}
+
+.post_two {
+ 	padding-right:		16.66%;
+}
+
+.post_three {
+	padding-right:		24.99%;
+}
+
+.post_four {
+	padding-right:		33.33%;
+}
+
+.post_five {
+ 	padding-right:		41.65%;
+}
+
+.post_six {
+	padding-right:		49.98%;
+}
+
+.post_seven {
+	padding-right:		58.31%;
+}
+
+.post_eight {
+	padding-right:		66.64%;
+}
+
+.post_nine {
+	padding-right:		74.97%;
+}
+
+.post_ten {
+	padding-right:		83.33%;
+}
+
+.post_eleven {
+	padding-right:		91.63%;
+}
+
+.post_twelve {
+	padding-right:		100%;
+}

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/reset.css" media="all">
-		<link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/invoice_pt.css" media="all">
+		<link rel="stylesheet" href="<?PHP echo base_url(); ?>resources/css/invoice.css" media="all">
 	</head>
 	<body>
 		<header>

@@ -73,7 +73,7 @@ class Messages extends CI_Model {
 
 	public function post_system_message($to_id, $message)
 	{
-
+		return $this->post_message($to_id, 0, $message);
 	}
 
 	public function post_user_message($to_id, $message)

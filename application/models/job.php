@@ -26,7 +26,7 @@ class Job extends CI_Model {
 	public function commit($job)
 	{
 		//First ensure the job is valid
-		if(!$job->is_valid())
+		if(!$job->is_valid(FALSE))
 		{
 			log_message('error', 'Error commiting job: job is invalid.');
 			return FALSE;
@@ -36,6 +36,7 @@ class Job extends CI_Model {
 		$this->CI->db->trans_start();
 		
 		//Are we updating or creating a job?
+		$action = '';
 		$id = $this->exists($job);
 		if($id !== FALSE)
 		{
@@ -50,14 +51,17 @@ class Job extends CI_Model {
 				return $id;
 			}
 
-			$this->CI->Event->trigger('job.commit.update', $job);
+			$action = 'update';
+
+			$this->CI->Event->trigger('job.commit.before.update', $job);
 			//It exists, keep the date added and assign the old ID
 			$data['job_id'] 	= $id;
 			$data['date_added']	= $job->date_added;
 		}
 		else
 		{
-			$this->CI->Event->trigger('job.commit.create', $job);
+			$action = 'create';
+			$this->CI->Event->trigger('job.commit.before.create', $job);
 			//It does not exist. Set date_added to now.
 			$data['job_id'] 	= ($job->id != null)?$job->id:$this->get_next_index();
 			$data['date_added']	= ($job->date_added != '')?$job->date_added:now();	
@@ -128,6 +132,8 @@ class Job extends CI_Model {
 		}
 		else
 		{
+			$this->CI->Event->trigger('job.commit.after.' . $action, $this->get($id));
+
 			//Update the stored checksum.
 			$this->CI->Checksum->store($job);
 			$this->CI->Event->trigger('job.dirty', $job->id);
@@ -203,6 +209,25 @@ class Job extends CI_Model {
 		}
 	}
 
+	public function get_by_payment_id($payment_id)
+	{
+		$result = array();
+
+		$query = $this->db->get_where('ledger', array('payment_id' => $payment_id));
+
+		if($query->num_rows() > 0)
+		{
+			foreach($query->result() AS $job)
+			{
+				$result[] = $this->get($job->job_id);
+			}
+
+			return $result;
+		}
+
+		return array();
+	}
+
 	public function get_by_client_id($client_id, $end = 10, $start = 0)
 	{
 		$client_id = $this->CI->Client->get_id($client_id);
@@ -211,6 +236,25 @@ class Job extends CI_Model {
 		$this->CI->db->limit($end);
 		$this->CI->db->order_by('job_id', 'desc');
 		$query = $this->CI->db->get_where('jobs', array('client_id' => $client_id));
+
+		if($query->num_rows() > 0)
+		{
+			foreach($query->result() AS $row)
+			{
+				$jobs[] = $this->get($row->job_id);
+			}
+		}
+
+		return $jobs;
+	}
+
+	public function get_by_property_id($property_id, $end = 10, $start = 0)
+	{
+		$jobs = array();
+
+		$this->CI->db->limit($end);
+		$this->CI->db->order_by('date_updated', 'desc');
+		$query = $this->CI->db->get_where('jobs', array('property_id' => $property_id));
 
 		if($query->num_rows() > 0)
 		{

@@ -47,7 +47,7 @@ class Navigation extends CI_Model {
 		$links['View'] 				= 'clients/' . $id;
 		$links['Edit'] 				= 'clients/edit/' . $id;
 		$links['Apply Payment']		= 'clients/apply_payment/' . $id;
-		$links['Make Invoice']		= 'clients/invoice/' . $id;
+		$links['Make Invoice']		= 'clients/make_invoice/' . $id;
 
 		$package_links = $this->CI->Event->trigger('nav.build.client_tools');
 
@@ -114,13 +114,36 @@ class Navigation extends CI_Model {
 		return $links;
 	}
 
+	public function build_user_action_links()
+	{
+		$links = array();
+		$links['Password'] 				= 'user/password';
+		$links['Address']				= 'user/address';
+		$links['View statistics']		= 'user/statistics';
+
+		$package_links = $this->CI->Event->trigger('nav.build.user');
+
+		if($package_links != NULL)
+		{
+			foreach($package_links AS $return)
+			{
+				$links = array_merge($links, $return);
+			}
+		}
+
+		$this->censor($links);
+
+		return $links;
+	}
+
 	public function build_admin_links()
 	{
 		$links = array();
-		$links['User administration'] 			= 'admin/users';
-		$links['Database administration']		= 'admin/database';
-		$links['Logs']							= 'admin/logs';
+		$links['User admin'] 					= 'admin/users';
+		$links['Database admin']				= 'admin/database';
+		$links['View logs']						= 'admin/logs';
 		$links['Config']						= 'admin/config';
+		$links['Testbed']						= 'admin/testbed';
 
 		$package_links = $this->CI->Event->trigger('nav.build.admin');
 
@@ -205,7 +228,7 @@ class Navigation extends CI_Model {
 	{
 		$links = array();
 		$links['Create client'] 		= 'clients/create';
-		$links['Merge clients']			= 'clients/merge';
+		$links['Apply payment']			= 'clients/payment';
 		$links['Search clients']		= 'search/clients';
 
 		$package_links = $this->CI->Event->trigger('nav.build.clients');
@@ -249,7 +272,8 @@ class Navigation extends CI_Model {
 	{
 		$links = array();
 		$links['Create invoice'] 		= 'invoice/create';
-		$links['Apply payment']			= 'payments/invoice';
+		$links['Apply payment']			= 'invoice/payment';
+		$links['Batch pay']				= 'payments/batch';
 
 		$package_links = $this->CI->Event->trigger('nav.build.invoice');
 

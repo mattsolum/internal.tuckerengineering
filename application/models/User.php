@@ -127,6 +127,13 @@ class User extends CI_Model {
 		}
 	}
 	
+	public function check_password($p)
+	{
+		$passphrase = $this->make_passphrase($this->user->get_email(), $p);
+		
+		return $this->hasher->CheckPassword($passphrase, $this->user->get_hash());
+	}
+
 	public function auth($u, $p)
 	{
 		$user = $this->get_user($u);
@@ -210,9 +217,9 @@ class User extends CI_Model {
 		//So... Just use the middle 72 characters.
 		if(strlen($passphrase) > 72)
 		{
-			$start = ceil((strlen($pphrase) - 72) / 2);
+			$start = ceil((strlen($passphrase) - 72) / 2);
 		
-			$passphrase = substr($pphrase, $start, 72);
+			$passphrase = substr($passphrase, $start, 72);
 		}
 		
 		return $passphrase;
@@ -370,6 +377,11 @@ class User extends CI_Model {
 		
 		return FALSE;
 	}
+
+	public function commit($user)
+	{
+		return $this->commit_user($user);
+	}
 	
 	public function commit_user($user)
 	{
@@ -448,7 +460,7 @@ class User extends CI_Model {
 	
 	public function reset_password($user_id)
 	{
-		$new_password = $this->generate_password(12);
+		$new_password = $this->generate_password(4);
 		
 		$user = $this->get_user($user_id);
 		
@@ -458,8 +470,57 @@ class User extends CI_Model {
 		
 		return $new_password;
 	}
-	
+
 	public function generate_password($length)
+	{
+		return $this->generate_passphrase($length);
+	}
+
+	public function generate_passphrase($length)
+	{
+		$filename = 'commonwords.txt';
+		$location = BASEPATH . '../resources/data/';
+		$passphrase = '';
+		$lines = array();
+		$line_no = 0;
+
+		@$f = fopen($location . $filename, 'r');
+
+		if(!$f)
+		{
+			return $this->generate_alphanumeric_password($length);
+		}
+
+		for($i = 0; $i < $length; $i++)
+		{
+			$lines[] = rand(0, 1200);
+		}
+
+		sort($lines, SORT_NUMERIC);
+
+		//var_dump($lines);
+
+		while ($line = fgets($f)) {
+			
+			if($line_no == $lines[0])
+			{
+				$passphrase .= substr($line, 0, -2) . ' ';
+				array_shift($lines);
+
+				if(count($lines) <= 0)
+				{
+					break;
+				}
+			}
+			$line_no++;
+		}
+
+		fclose($f);
+
+		return trim($passphrase);
+	}
+	
+	public function generate_alphanumeric_password($length)
 	{
 		$valid_chars = str_shuffle('abcdefghijklmnopABCDEFGHIJKLMNOP1234567890');
 	
